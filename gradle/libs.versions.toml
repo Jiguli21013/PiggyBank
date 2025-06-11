@@ -1,0 +1,156 @@
+[versions]
+agp = "8.8.2"
+
+kotlin = "2.0.0"
+kotlinxSerializationJson = "1.7.3"
+coreKtx = "1.16.0"
+
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.10.1"
+composeBom = "2025.04.01"
+androidx-lifecycle = "2.8.2"
+kotlinx-immutable = "0.3.7"
+dagger = "2.51.1"
+
+room = "2.6.1"
+ksp = "2.0.0-1.0.21"
+coroutines = "1.7.3"
+
+hilt-navigation-compose = "1.2.0"
+
+#camera/scanner
+cameraCore = "1.4.2"
+cameraMlkitVision = "1.4.2"
+camerax = "1.4.2"
+mlkit-barcode-scanning = "17.3.0"
+accompanistPermissions = "0.34.0"
+
+runtimeSaveableAndroid = "1.8.0"
+uiAndroid = "1.8.0"
+uiGeometryAndroid = "1.8.0"
+uiGraphicsAndroid = "1.8.0"
+
+foundationAndroid = "1.8.0"
+
+material3Android = "1.3.2"
+appcompat = "1.7.0"
+
+navigationCompose = "2.8.9"
+uiToolingPreviewAndroid = "1.8.0"
+
+javax-inject-version = "1"
+navigationCommonAndroid = "2.9.0"
+navigationRuntimeAndroid = "2.9.0"
+
+androidxRuntimeAndroid = "1.8.1"
+
+lifecycleViewmodelAndroid = "2.9.0"
+
+
+kotlinx-datetime = "0.5.0"
+paging = "3.3.6"
+pagingComposeAndroid = "3.3.6"
+uiTooling = "1.8.2"
+window = "1.4.0"
+pagingCommonJvm = "3.3.6"
+
+
+[libraries]
+paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
+paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
+paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+
+
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax-inject-version" }
+
+
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+
+kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable"}
+
+
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+#camera/scanner
+camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "cameraMlkitVision" }
+camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
+mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit-barcode-scanning" }
+
+#For the permission
+accompanistPermissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
+androidx-runtime-saveable-android = { group = "androidx.compose.runtime", name = "runtime-saveable-android", version.ref = "runtimeSaveableAndroid" }
+androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
+androidx-ui-geometry-android = { group = "androidx.compose.ui", name = "ui-geometry-android", version.ref = "uiGeometryAndroid" }
+androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+
+#compose
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+
+compose-material = { module = "androidx.compose.material3:material3" }
+androidx-compose-runtime = { module = "androidx.compose.runtime:runtime" }
+
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version = "2.7.0" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
+
+dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
+dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
+
+androidx-navigation-common-android = { group = "androidx.navigation", name = "navigation-common-android", version.ref = "navigationCommonAndroid" }
+androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
+
+runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "androidxRuntimeAndroid" }
+
+androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
+
+androidx-paging-compose-android = { group = "androidx.paging", name = "paging-compose-android", version.ref = "pagingComposeAndroid" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+androidx-window = { group = "androidx.window", name = "window", version.ref = "window" }
+androidx-paging-common-jvm = { group = "androidx.paging", name = "paging-common-jvm", version.ref = "pagingCommonJvm" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+
+dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
+
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+
+

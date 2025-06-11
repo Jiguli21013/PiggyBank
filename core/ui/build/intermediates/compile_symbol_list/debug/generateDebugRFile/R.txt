@@ -1,0 +1,7 @@
+int drawable ic_history_bottom_bar 0x0
+int drawable ic_scanner_bottom_bar 0x0
+int string title_edit_product 0x0
+int string title_history 0x0
+int string title_insert_product 0x0
+int string title_product_details 0x0
+int string title_scanner 0x0

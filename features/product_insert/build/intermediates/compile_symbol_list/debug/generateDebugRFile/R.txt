@@ -1,0 +1,6 @@
+int string action_back 0x0
+int string action_save 0x0
+int string label_price_by_weight 0x0
+int string label_price_per_kg 0x0
+int string label_product_name 0x0
+int string label_weight_grams 0x0

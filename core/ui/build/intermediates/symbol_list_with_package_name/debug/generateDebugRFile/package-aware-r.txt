@@ -1,0 +1,8 @@
+com.yanchelenko.piggybank.core.ui
+drawable ic_history_bottom_bar
+drawable ic_scanner_bottom_bar
+string title_edit_product
+string title_history
+string title_insert_product
+string title_product_details
+string title_scanner
