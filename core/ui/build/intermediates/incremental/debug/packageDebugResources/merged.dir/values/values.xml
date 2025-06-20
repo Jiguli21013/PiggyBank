@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="title_edit_product">Редактирование товара</string>
-    <string name="title_history">История</string>
-    <string name="title_insert_product">Добавление товара</string>
-    <string name="title_product_details">Детали товара</string>
-    <string name="title_scanner">Сканер</string>
-</resources>

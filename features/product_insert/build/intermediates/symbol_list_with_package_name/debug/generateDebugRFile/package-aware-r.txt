@@ -1,7 +1,0 @@
-com.yanchelenko.piggybank.features.product_insert
-string action_back
-string action_save
-string label_price_by_weight
-string label_price_per_kg
-string label_product_name
-string label_weight_grams
