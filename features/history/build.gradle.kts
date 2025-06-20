@@ -62,6 +62,7 @@ dependencies {
 
     // paging
     implementation(libs.paging.compose)
+    implementation(project(":core:debugUI"))
     debugImplementation(libs.ui.tooling)
 
     kapt(libs.dagger.hilt.compiler)

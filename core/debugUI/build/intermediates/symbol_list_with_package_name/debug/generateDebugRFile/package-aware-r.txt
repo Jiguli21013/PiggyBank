@@ -1,0 +1,1 @@
+com.yanchelenko.piggybank.core.uidebug

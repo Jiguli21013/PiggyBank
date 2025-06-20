@@ -25,6 +25,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.common.extensions.formatIfNonZero
+import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
+import com.yanchelenko.piggybank.core.debugUI.debug.trackMap
 import com.yanchelenko.piggybank.features.product_edit.R
 import com.yanchelenko.piggybank.features.product_edit.presentation.preview.EditProductPreviewProvider
 import com.yanchelenko.piggybank.features.product_edit.presentation.state.EditProductEffect
@@ -77,7 +80,7 @@ internal fun EditProductScreen(
         },
         content = { uiState, sendEvent, innerModifier ->
             EditProductContent(
-                state = uiState,
+                state = uiState.uiProduct,
                 modifier = innerModifier,
                 onEvent = sendEvent
             )
@@ -87,7 +90,7 @@ internal fun EditProductScreen(
 
 @Composable
 fun EditProductContent(
-    state: EditProductUiState,
+    state: ProductUiModel,
     modifier: Modifier = Modifier,
     onEvent: (EditProductEvent) -> Unit
 ) {
@@ -95,85 +98,90 @@ fun EditProductContent(
 
     val productNameLabel = stringResource(R.string.label_product_name)
     val weightLabel = stringResource(R.string.label_weight_grams)
-    val priceLabel = stringResource(R.string.label_price_by_weight, state.uiProduct.weight)
+    val priceLabel = stringResource(R.string.label_price_by_weight, state.weight)
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(dimens.screenPadding),
-        verticalArrangement = Arrangement.SpaceBetween
+    WithDebug(
+        trackMap = state.trackMap(),
+        composableName = "EditProductContent"
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(dimens.sectionSpacing)
+            modifier = modifier
+                .fillMaxSize()
+                .padding(dimens.screenPadding),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            TextField(
-                value = state.uiProduct.productName,
-                onValueChange = { value ->
-                    onEvent(EditProductEvent.ProductNameChanged(name = value))
-                },
-                label = { Text(productNameLabel) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            TextField(
-                value = state.uiProduct.weight.formatIfNonZero(),
-                onValueChange = { value ->
-                    value.toDoubleOrNull()?.let {
-                        onEvent(EditProductEvent.WeightChanged(weight = it))
-                    }
-                },
-                label = { Text(weightLabel) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            TextField(
-                value = state.uiProduct.price.formatIfNonZero(),
-                onValueChange = { value ->
-                    value.toDoubleOrNull()?.let {
-                        onEvent(EditProductEvent.PriceChanged(price = it))
-                    }
-                },
-                label = { Text(priceLabel) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            TextField(
-                value = state.uiProduct.pricePerKg.formatIfNonZero(),
-                onValueChange = {},
-                label = { Text(pricePerKgLabel) },
-                modifier = Modifier.fillMaxWidth(),
-                readOnly = true,
-                enabled = false,
-                textStyle = LocalTextStyle.current.copy(
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    fontSize = dimens.textLarge
-                )
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(dimens.buttonSpacing),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Button(
-                onClick = { onEvent(EditProductEvent.GoBackToScanner) },
-                modifier = Modifier.weight(1f)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(dimens.sectionSpacing)
             ) {
-                Text(backText)
+                TextField(
+                    value = state.productName,
+                    onValueChange = { value ->
+                        onEvent(EditProductEvent.ProductNameChanged(name = value))
+                    },
+                    label = { Text(text = productNameLabel) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
+                    value = state.weight.formatIfNonZero(),
+                    onValueChange = { value ->
+                        value.toDoubleOrNull()?.let {
+                            onEvent(EditProductEvent.WeightChanged(weight = it))
+                        }
+                    },
+                    label = { Text(text = weightLabel) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
+                    value = state.price.formatIfNonZero(),
+                    onValueChange = { value ->
+                        value.toDoubleOrNull()?.let {
+                            onEvent(EditProductEvent.PriceChanged(price = it))
+                        }
+                    },
+                    label = { Text(text = priceLabel) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
+                    value = state.pricePerKg.formatIfNonZero(),
+                    onValueChange = {},
+                    label = { Text(pricePerKgLabel) },
+                    modifier = Modifier.fillMaxWidth(),
+                    readOnly = true,
+                    enabled = false,
+                    textStyle = LocalTextStyle.current.copy(
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        fontSize = dimens.textLarge
+                    )
+                )
             }
 
-            Button(
-                onClick = { onEvent(EditProductEvent.SaveProduct) },
-                modifier = Modifier.weight(1f)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(dimens.buttonSpacing),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(saveText)
+                Button(
+                    onClick = { onEvent(EditProductEvent.GoBackToScanner) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = backText)
+                }
+
+                Button(
+                    onClick = { onEvent(EditProductEvent.SaveProduct) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = saveText)
+                }
             }
         }
     }
@@ -188,7 +196,7 @@ private fun InsertProductMainContentPreview(
 ) {
     PiggyBankTheme {
         EditProductContent(
-            state = state,
+            state = state.uiProduct,
             onEvent = {}
         )
     }

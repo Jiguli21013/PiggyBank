@@ -45,7 +45,9 @@ dependencies {
     implementation(project(":common:ui_models"))
     implementation(project(":common:mappers"))
     implementation(project(":common:extensions"))
+    implementation(project(":common:core_utils"))
 
+    implementation(project(":core:debugUI"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
@@ -74,8 +76,9 @@ dependencies {
     // hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
-    implementation(project(":common:core_utils"))
-    implementation(project(":common:core_utils"))
+
+
+
     debugImplementation(libs.ui.tooling)
 
 

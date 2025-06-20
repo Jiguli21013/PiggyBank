@@ -51,9 +51,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
 
-
     implementation(libs.kotlinx.immutable)
-
 
     // compose
     implementation(platform(libs.compose.bom))
@@ -75,6 +73,8 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
     implementation(project(":common:core_utils"))
+    implementation(project(":core:debugUI"))
+    implementation(project(":core:debugUI"))
     debugImplementation(libs.ui.tooling)
 
 

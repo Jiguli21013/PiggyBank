@@ -60,7 +60,7 @@ class InsertProductScreenViewModel @Inject constructor(
                         price = uiProduct.price
                     )
                     updateUiProduct {
-                        copy(
+                        copy( //todo вместо соpy сделать copyIfChanged
                             weight = event.weight,
                             pricePerKg = pricePerKg
                         )

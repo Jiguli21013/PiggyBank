@@ -28,6 +28,7 @@ include(":core:data")
 include(":core:database")
 include(":core:domain")
 include(":core:ui")
+include(":core:debugUI")
 include(":core:navigation")
 include(":core:permissions")
 

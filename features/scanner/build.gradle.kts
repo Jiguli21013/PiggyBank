@@ -87,6 +87,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
+    implementation(project(":core:debugUI"))
 
     kapt(libs.dagger.hilt.compiler)
 

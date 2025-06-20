@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.common.extensions.formatIfNonZero
+import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
 import com.yanchelenko.piggybank.features.product_insert.R
 import com.yanchelenko.piggybank.features.product_insert.presentation.preview.InsertProductPreviewProvider
 import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductEffect
@@ -33,6 +35,7 @@ import com.yanchelenko.piggybank.features.product_insert.presentation.state.Inse
 import com.yanchelenko.piggynank.core.ui.dimens.LocalDimens
 import com.yanchelenko.piggynank.core.ui.effect.ScreenWithEffect
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.core.debugUI.debug.trackMap
 
 @Composable
 fun InsertProductMainScreen(
@@ -74,7 +77,7 @@ internal fun InsertProductMainScreen(
         },
         content = { uiState, sendEvent, innerModifier ->
             InsertProductContent(
-                state = uiState,
+                state = uiState.uiProduct,
                 modifier = innerModifier,
                 onEvent = sendEvent
             )
@@ -84,7 +87,7 @@ internal fun InsertProductMainScreen(
 
 @Composable
 fun InsertProductContent(
-    state: InsertProductUiState,
+    state: ProductUiModel,
     modifier: Modifier = Modifier,
     onEvent: (InsertProductEvent) -> Unit
 ) {
@@ -92,85 +95,90 @@ fun InsertProductContent(
 
     val productNameLabel = stringResource(R.string.label_product_name)
     val weightLabel = stringResource(R.string.label_weight_grams)
-    val priceLabel = stringResource(R.string.label_price_by_weight, state.uiProduct.weight)
+    val priceLabel = stringResource(R.string.label_price_by_weight, state.weight)
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(dimens.screenPadding),
-        verticalArrangement = Arrangement.SpaceBetween
+    WithDebug(
+        trackMap = state.trackMap(),
+        composableName = "InsertProductContent" //todo
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(dimens.sectionSpacing)
+            modifier = modifier
+                .fillMaxSize()
+                .padding(all = dimens.screenPadding),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            TextField(
-                value = state.uiProduct.productName,
-                onValueChange = { value ->
-                    onEvent(InsertProductEvent.ProductNameChanged(name = value))
-                },
-                label = { Text(productNameLabel) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            TextField(
-                value = state.uiProduct.weight.formatIfNonZero(),
-                onValueChange = { value ->
-                    value.toDoubleOrNull()?.let {
-                        onEvent(InsertProductEvent.WeightChanged(weight = it))
-                    }
-                },
-                label = { Text(weightLabel) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            TextField(
-                value = state.uiProduct.price.formatIfNonZero(),
-                onValueChange = { value ->
-                    value.toDoubleOrNull()?.let {
-                        onEvent(InsertProductEvent.PriceChanged(price = it))
-                    }
-                },
-                label = { Text(priceLabel) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            TextField(
-                value = state.uiProduct.pricePerKg.formatIfNonZero(),
-                onValueChange = {},
-                label = { Text(pricePerKgLabel) },
-                modifier = Modifier.fillMaxWidth(),
-                readOnly = true,
-                enabled = false,
-                textStyle = LocalTextStyle.current.copy(
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    fontSize = dimens.textLarge
-                )
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(dimens.buttonSpacing),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Button(
-                onClick = { onEvent(InsertProductEvent.GoBackToScanner) },
-                modifier = Modifier.weight(1f)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(dimens.sectionSpacing)
             ) {
-                Text(backText)
+                TextField(
+                    value = state.productName,
+                    onValueChange = { value ->
+                        onEvent(InsertProductEvent.ProductNameChanged(name = value))
+                    },
+                    label = { Text(productNameLabel) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
+                    value = state.weight.formatIfNonZero(),
+                    onValueChange = { value ->
+                        value.toDoubleOrNull()?.let {
+                            onEvent(InsertProductEvent.WeightChanged(weight = it))
+                        }
+                    },
+                    label = { Text(text = weightLabel) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
+                    value = state.price.formatIfNonZero(),
+                    onValueChange = { value ->
+                        value.toDoubleOrNull()?.let {
+                            onEvent(InsertProductEvent.PriceChanged(price = it))
+                        }
+                    },
+                    label = { Text(text = priceLabel) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
+                    value = state.pricePerKg.formatIfNonZero(),
+                    onValueChange = {},
+                    label = { Text(text = pricePerKgLabel) },
+                    modifier = Modifier.fillMaxWidth(),
+                    readOnly = true,
+                    enabled = false,
+                    textStyle = LocalTextStyle.current.copy(
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        fontSize = dimens.textLarge
+                    )
+                )
             }
 
-            Button(
-                onClick = { onEvent(InsertProductEvent.SaveProduct) },
-                modifier = Modifier.weight(1f)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(space = dimens.buttonSpacing),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(saveText)
+                Button(
+                    onClick = { onEvent(InsertProductEvent.GoBackToScanner) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = backText)
+                }
+
+                Button(
+                    onClick = { onEvent(InsertProductEvent.SaveProduct) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = saveText)
+                }
             }
         }
     }
@@ -184,7 +192,7 @@ private fun InsertProductMainContentPreview(
 ) {
     PiggyBankTheme {
         InsertProductContent(
-            state = state,
+            state = state.uiProduct,
             onEvent = {}
         )
     }

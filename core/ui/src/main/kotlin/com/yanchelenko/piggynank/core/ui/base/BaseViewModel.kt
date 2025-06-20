@@ -19,8 +19,17 @@ abstract class BaseViewModel<EVENT, STATE, EFFECT>(
     protected val state: STATE
         get() = _uiState.value
 
+    /*
     protected fun setState(reducer: STATE.() -> STATE) {
         _uiState.value = state.reducer()
+    }
+     */
+
+    protected fun setState(reducer: STATE.() -> STATE) {
+        val newState = state.reducer()
+        if (newState != state) {
+            _uiState.value = newState
+        }
     }
 
     private val _effect = Channel<EFFECT>(Channel.BUFFERED)

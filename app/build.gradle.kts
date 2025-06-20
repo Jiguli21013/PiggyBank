@@ -52,9 +52,16 @@ dependencies {
     implementation(project(":features:product_edit"))
 
     implementation(project(":common:ui_models"))
+    implementation(project(":common:core_utils"))
 
     implementation(project(":core:navigation"))
     implementation(project(":core:ui"))
+    debugImplementation(project(":core:debugUI"))
+
+    //debugImplementation(libs.androidx.ui.tooling)
+    //debugImplementation(libs.androidx.ui.test.manifest)
+
+    //implementation(libs.androidx.profileinstaller)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -70,11 +77,10 @@ dependencies {
     implementation(libs.androidx.material3.android)
 
 
-    //debugImplementation(libs.androidx.ui.tooling)
-    //debugImplementation(libs.androidx.ui.test.manifest)
+
 
     implementation(libs.dagger.hilt.android)
-    implementation(project(":common:core_utils"))
+
 
     kapt(libs.dagger.hilt.compiler)
 

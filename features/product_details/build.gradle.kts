@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     implementation(project(":common:core_utils"))
     implementation(project(":common:core_utils"))
+    implementation(project(":core:debugUI"))
     debugImplementation(libs.ui.tooling)
 
 

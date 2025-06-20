@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
 import com.yanchelenko.piggybank.features.scanner.di.hiltBarcodeAnalyzer
 import com.yanchelenko.piggybank.features.scanner.presentation.components.AndroidCameraView
 import com.yanchelenko.piggybank.features.scanner.presentation.state.ScannerEffect
@@ -21,6 +22,7 @@ import com.yanchelenko.piggybank.features.scanner.presentation.state.ScannerEven
 import com.yanchelenko.piggybank.features.scanner.presentation.state.ScannerState
 import com.yanchelenko.piggybank.scanner.presentation.scanner.permission.CameraPermissionDeniedContent
 import com.yanchelenko.piggybank.features.scanner.presentation.utils.BarcodeAnalyzer
+import com.yanchelenko.piggybank.features.scanner.trackMap
 import com.yanchelenko.piggynank.core.ui.components.CenteredLoader
 import com.yanchelenko.piggynank.core.ui.effect.OnResumeEffect
 import com.yanchelenko.piggynank.core.ui.effect.ScreenWithEffect
@@ -76,27 +78,25 @@ fun ScannerScreen(
             }
         },
         content = { uiState, sendEvent, innerModifier ->
-            when (uiState.scannerState) {
-                ScannerState.ReadyToScan -> {
-                    AndroidCameraView(
+            WithDebug(
+                trackMap = uiState.trackMap(),
+                composableName = "ScannerScreen"
+            ) {
+                when (uiState.scannerState) {
+                    ScannerState.ReadyToScan -> AndroidCameraView(
                         modifier = innerModifier.fillMaxSize(),
                         onEvent = sendEvent,
                         barcodeAnalyzer = barcodeAnalyzer
                     )
-                }
 
-                ScannerState.PermissionDenied -> {
-                    CameraPermissionDeniedContent {
+                    ScannerState.PermissionDenied -> CameraPermissionDeniedContent {
                         sendEvent(ScannerEvent.OnCameraSettingsClicked)
                     }
-                }
 
-                ScannerState.Idle -> {
-                    CenteredLoader()
+                    ScannerState.Idle -> CenteredLoader()
+                    ScannerState.Error -> {} // todo
+                    ScannerState.Found -> {} // todo
                 }
-
-                ScannerState.Error -> {} //todo
-                ScannerState.Found -> {}
             }
         }
     )

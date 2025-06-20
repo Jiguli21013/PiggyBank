@@ -21,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
+import com.yanchelenko.piggybank.core.debugUI.debug.trackMap
 import com.yanchelenko.piggybank.features.product_details.R
 import com.yanchelenko.piggybank.features.product_details.presentation.components.InfoRow
 import com.yanchelenko.piggybank.features.product_details.presentation.preview.ProductPreviewProvider
@@ -103,30 +105,35 @@ private fun ProductDetailsContent(
     val editText = stringResource(R.string.action_edit)
     val deleteText = stringResource(R.string.action_delete)
 
-    Column(
-        modifier = modifier.padding(dimens.screenPadding)
+    WithDebug(
+        trackMap = state.trackMap(),
+        composableName = "ProductDetailsContent"
     ) {
-        InfoRow(label = barcodeLabel, value = state.barcode ?: "—")
-        InfoRow(label = nameLabel, value = state.productName)
-        InfoRow(label = weightLabel, value = stringResource(R.string.format_grams, state.weight))
-        InfoRow(label = priceLabel, value = stringResource(R.string.format_price_rub, state.price))
-        InfoRow(label = pricePerKgLabel, value = stringResource(R.string.format_price_rub, state.pricePerKg))
+        Column(
+            modifier = modifier.padding(dimens.screenPadding)
+        ) {
+            InfoRow(label = barcodeLabel, value = state.barcode)
+            InfoRow(label = nameLabel, value = state.productName)
+            InfoRow(label = weightLabel, value = stringResource(R.string.format_grams, state.weight))
+            InfoRow(label = priceLabel, value = stringResource(R.string.format_price_rub, state.price))
+            InfoRow(label = pricePerKgLabel, value = stringResource(R.string.format_price_rub, state.pricePerKg))
 
-        Spacer(modifier = Modifier.height(dimens.sectionSpacing))
+            Spacer(modifier = Modifier.height(dimens.sectionSpacing))
 
-        Row(horizontalArrangement = Arrangement.spacedBy(dimens.buttonSpacing)) {
-            Button(
-                onClick = { onEvent(ProductDetailsEvent.OnEditClicked) },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(editText)
-            }
+            Row(horizontalArrangement = Arrangement.spacedBy(dimens.buttonSpacing)) {
+                Button(
+                    onClick = { onEvent(ProductDetailsEvent.OnEditClicked) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = editText)
+                }
 
-            OutlinedButton(
-                onClick = { onEvent(ProductDetailsEvent.OnDeleteClicked) },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(deleteText)
+                OutlinedButton(
+                    onClick = { onEvent(ProductDetailsEvent.OnDeleteClicked) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = deleteText)
+                }
             }
         }
     }
