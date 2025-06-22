@@ -2,6 +2,7 @@ package com.yanchelenko.piggynank.core.ui.base
 
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModel
+import com.yanchelneko.piggybank.common.core_utils.Logger
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +11,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<EVENT, STATE, EFFECT>(
-    initialState: STATE
+    initialState: STATE,
+    val logger: Logger
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(initialState)
@@ -19,16 +21,16 @@ abstract class BaseViewModel<EVENT, STATE, EFFECT>(
     protected val state: STATE
         get() = _uiState.value
 
-    /*
+    @Suppress("SuspiciousEqualsCombination")
     protected fun setState(reducer: STATE.() -> STATE) {
-        _uiState.value = state.reducer()
-    }
-     */
+        val current = _uiState.value
+        val newState = current.reducer()
 
-    protected fun setState(reducer: STATE.() -> STATE) {
-        val newState = state.reducer()
-        if (newState != state) {
+        if (newState !== current && newState != current) {
+            logger.d(LOG_TAG,"State changed:\n• old = $current\n• new = $newState")
             _uiState.value = newState
+        } else {
+            logger.d(LOG_TAG,"State unchanged:\n• old = $current\n• new = $newState")
         }
     }
 
@@ -42,4 +44,9 @@ abstract class BaseViewModel<EVENT, STATE, EFFECT>(
     }
 
     abstract fun onEvent(event: EVENT)
+
+    companion object {
+        const val LOG_TAG = "BaseViewModel"
+    }
+
 }

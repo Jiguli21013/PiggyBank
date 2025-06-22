@@ -32,8 +32,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":common:ui_models"))
 
+    implementation(project(":common:ui_models_android"))
     debugImplementation(libs.compose.ui)
     debugImplementation(libs.runtime.android)
     debugImplementation(libs.rebugger)

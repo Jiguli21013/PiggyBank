@@ -1,12 +1,14 @@
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 dependencies {
-    // Тут обычно утилиты, расширения и базовые штуки
+    // Утилиты, расширения и базовые вещи
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    // Логи, ошибки, расширения
-    //implementation(libs.timber) // для логирования
+    // kotlinx.serialization
+    implementation(libs.serialization.json)
+    implementation(libs.kotlinx.datetime)
 }

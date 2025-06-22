@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":common:ui_models"))
+    implementation(project(":common:ui_models_android"))
     implementation(project(":common:core_utils"))
     implementation(project(":common:mappers"))
     implementation(project(":common:extensions"))

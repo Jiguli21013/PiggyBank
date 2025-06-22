@@ -52,4 +52,5 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.androidx.paging.compose.android)
     implementation(libs.androidx.window)
+    implementation(project(":common:core_utils"))
 }

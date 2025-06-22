@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.common.extensions.formatIfNonZero
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
 import com.yanchelenko.piggybank.core.debugUI.debug.trackMap
 import com.yanchelenko.piggybank.features.product_edit.R

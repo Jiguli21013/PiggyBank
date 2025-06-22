@@ -8,8 +8,5 @@ java {
 }
 
 dependencies {
-    implementation(project(":common:ui_models"))
-    implementation(project(":core:domain"))
 
-    implementation(libs.kotlinx.datetime)
 }

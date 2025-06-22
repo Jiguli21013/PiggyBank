@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.yanchelenko.piggybank.core.database.ProductsRoomDatabase
 import com.yanchelenko.piggybank.core.database.dao.ProductDao
+import com.yanchelenko.piggynank.core.ui.androidLogcatLogger
+import com.yanchelneko.piggybank.common.core_utils.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,10 +36,6 @@ object AppModule {
         return database.productsDao()
     }
 
-    //@Provides
-    //@Singleton
-    //fun provideAppCoroutineDispatchers(): AppDispatchers = AppDispatchers()
-
-    //@Provides
-    //fun provideLogger(): Logger = AndroidLogcatLogger()
+    @Provides
+    fun provideLogger(): Logger = androidLogcatLogger()
 }

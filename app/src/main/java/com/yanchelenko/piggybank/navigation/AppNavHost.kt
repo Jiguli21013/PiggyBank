@@ -9,7 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.fearues.history.presentation.navigation.historyGraph
 import com.yanchelenko.piggybank.features.product_edit.presentation.navigation.productEditGraph
 import com.yanchelenko.piggybank.features.product_insert.presentation.navigation.productInsertGraph
@@ -24,8 +24,8 @@ import com.yanchelenko.piggybank.navigation.api.ScannerNavigator
 import com.yanchelenko.piggybank.navigation.destinations.AppDestination
 import com.yanchelenko.piggybank.navigation.dispatcher.NavEvent
 import com.yanchelenko.piggybank.navigation.dispatcher.NavigationDispatcher
+import com.yanchelneko.piggybank.common.core_utils.Logger
 import com.yanchelneko.piggybank.common.core_utils.dispatchers.AppDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -39,6 +39,7 @@ fun AppNavHost(
     navController: NavHostController,
     navDispatcher: NavigationDispatcher,
     dispatchers: AppDispatchers,
+    logger: Logger,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -46,8 +47,9 @@ fun AppNavHost(
     LaunchedEffect(Unit) {
         navDispatcher.navEvents
             .debounce(timeoutMillis = NAVIGATION_DEBOUNCE_MS) // защита от двойного клика
-            .distinctUntilChanged() // игнор одинаковых подряд NavEvent
+            .distinctUntilChanged()  // игнор одинаковых подряд NavEvent
             .collect { event ->
+                logger.d("Navigation", "Received NavEvent: ${event.javaClass.simpleName} -> $event")
                 when (event) {
                     is NavEvent.Navigate -> {
                         navController.navigate(event.route) {
@@ -55,19 +57,24 @@ fun AppNavHost(
                             popUpTo(navController.graph.startDestinationId) { saveState = true }
                         }
                     }
+
                     is NavEvent.NavigateAndPopUp -> {
                         navController.popBackStack(event.popUp, inclusive = true)
                         navController.navigate(event.route) {
                             launchSingleTop = true
                         }
                     }
+
                     is NavEvent.NavigateRoot -> {
                         navController.navigate(event.route) {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true
                         }
                     }
-                    NavEvent.NavigateBack -> navController.popBackStack()
+
+                    NavEvent.NavigateBack -> {
+                        navController.popBackStack()
+                    }
                 }
             }
     }

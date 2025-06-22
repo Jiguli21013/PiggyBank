@@ -1,6 +1,6 @@
 package com.yanchelenko.piggybank.core.debugUI.debug
 
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 
 fun ProductUiModel.trackMap(): Map<String, Any?> {
     return mapOf(

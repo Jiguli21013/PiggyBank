@@ -11,11 +11,14 @@
 - [Dagger](https://dagger.dev) + [Hilt](https://dagger.dev/hilt/)
 - [Jetpack Room](https://developer.android.com/jetpack/androidx/releases/room)
 - [Material](https://github.com/material-components/material-components-android)
+-
 
-Основные модули
+Основные модули:
 - core:* - базовые модули приложения для работы с данными
+- common:* - 
 - features:* - все фичи приложения
 - app - сборка приложения
+- di -
 
 В планах:
 1. пересмотреть зависимости в модулях

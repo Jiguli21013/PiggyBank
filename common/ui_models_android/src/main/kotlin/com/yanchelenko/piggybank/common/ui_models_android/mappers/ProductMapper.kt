@@ -1,6 +1,6 @@
-package com.yanchelenko.piggybank.common.mappers
+package com.yanchelenko.piggybank.common.ui_models_android.mappers
 
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.domain.models.Product
 
 fun Product.toUi(): ProductUiModel = ProductUiModel(

@@ -1,6 +1,6 @@
 package com.yanchelenko.piggybank.features.product_edit.presentation.state
 
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 
 sealed class EditProductEvent { //todo почему не sealed interface?
     data class LoadProductByProductId(val productId: Long) : EditProductEvent()

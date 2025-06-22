@@ -31,9 +31,10 @@ object ScreenRegistry {
     private val ROUTE_PLACEHOLDER_REGEX = Regex(pattern = "\\{[^}]+\\}")
     private const val ROUTE_REPLACEMENT = ".*"
 
-    fun resolveScreenMeta(currentRoute: String?): ScreenMeta {
+    fun resolveScreenMeta(
+        currentRoute: String?,
+    ): ScreenMeta {
         if (currentRoute == null) return ScreenMeta("", android.R.string.unknownName)
-
         return screens.firstOrNull { meta ->
             val regexPattern = meta.routeTemplate.replace(
                 regex = ROUTE_PLACEHOLDER_REGEX,

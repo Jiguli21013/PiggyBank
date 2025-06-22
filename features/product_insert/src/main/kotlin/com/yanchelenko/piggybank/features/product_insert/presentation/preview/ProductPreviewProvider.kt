@@ -1,7 +1,7 @@
 package com.yanchelenko.piggybank.features.product_insert.presentation.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductUiState
 import kotlinx.datetime.Clock
 //todo в общий модуль

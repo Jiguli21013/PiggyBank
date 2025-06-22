@@ -46,8 +46,8 @@ include(":di")
 include(":common:core_utils")
 project(":common:core_utils").projectDir = file("common/core_utils")
 
-include(":common:ui_models")
-project(":common:ui_models").projectDir = file("common/ui_models")
+include(":common:ui_models_android")
+project(":common:ui_models_android").projectDir = file("common/ui_models_android")
 
 include(":common:mappers")
 project(":common:mappers").projectDir = file("common/mappers")

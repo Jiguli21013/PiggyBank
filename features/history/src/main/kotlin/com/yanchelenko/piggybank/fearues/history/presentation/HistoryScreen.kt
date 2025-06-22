@@ -14,8 +14,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryEffect
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryEvent
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
-import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.fearues.history.presentation.components.ListItem
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryState
 import com.yanchelenko.piggynank.core.ui.components.CenteredLoader
@@ -90,18 +89,12 @@ fun HistoryMainContent(
             is HistoryState.Error -> { ErrorMessage(message = "some message" ) } //todo
             is HistoryState.Loading -> { CenteredLoader() }
             is HistoryState.Success -> {
-                WithDebug(
-                    trackMap = mapOf("pagingCount" to items.itemCount),
-                    composableName = "HistoryList"
-                ) {
-                    HistoryList(
-                        items = items,
-                        modifier = modifier,
-                        onEvent = onEvent
-                    )
-                }
+                HistoryList(
+                    items = items,
+                    modifier = modifier,
+                    onEvent = onEvent
+                )
             }
         }
     }
 }
-

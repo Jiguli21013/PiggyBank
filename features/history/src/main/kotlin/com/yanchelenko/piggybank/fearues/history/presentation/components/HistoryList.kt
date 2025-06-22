@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
 import com.yanchelenko.piggybank.fearues.history.presentation.preview.ListItemPreviewProvider
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryEvent
 
@@ -26,48 +27,58 @@ internal fun HistoryList(
     modifier: Modifier = Modifier,
     onEvent: (HistoryEvent) -> Unit
 ) {
-    LazyColumn(modifier = modifier) {
-        items(
-            count = items.itemCount,
-            key = { index ->
+    WithDebug(
+        trackMap = mapOf(
+            "itemCount" to items.itemCount,
+            "loadState.refresh" to items.loadState.refresh::class.simpleName,
+            "loadState.append" to items.loadState.append::class.simpleName,
+            "snapshotHash" to items.itemSnapshotList.items.hashCode()
+        ),
+        composableName = "HistoryList"
+    ) {
+        LazyColumn(modifier = modifier) {
+            items(
+                count = items.itemCount,
+                key = { index ->
+                    when (val item = items[index]) {
+                        is ListItem.DateHeader -> "header_${item.date}"
+                        is ListItem.ProductItem -> "product_${item.product.productId}"
+                        else -> "placeholder_$index"
+                    }
+                }
+            ) { index ->
                 when (val item = items[index]) {
-                    is ListItem.DateHeader -> "header_${item.date}"
-                    is ListItem.ProductItem -> "product_${item.product.productId}"
-                    else -> "placeholder_$index"
+                    is ListItem.DateHeader -> DateHeader(date = item.date)
+                    is ListItem.ProductItem -> ProductItem(
+                        product = item.product,
+                        onEvent = onEvent
+                    )
+                    null -> {}
                 }
             }
-        ) { index ->
-            when (val item = items[index]) {
-                is ListItem.DateHeader -> DateHeader(date = item.date)
-                is ListItem.ProductItem -> ProductItem(
-                    product = item.product,
-                    onEvent = onEvent
-                )
-                null -> {}
-            }
-        }
 
-        when (val append = items.loadState.append) {
-            is LoadState.Loading -> item {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp)
-                        .wrapContentWidth(align = Alignment.CenterHorizontally)
-                )
-            }
+            when (val append = items.loadState.append) {
+                is LoadState.Loading -> item {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 16.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                }
 
-            is LoadState.Error -> item {
-                Text(
-                    text = "Ошибка при загрузке: ${append.error.localizedMessage ?: "Неизвестная ошибка"}",
-                    modifier = Modifier
-                        .padding(all = 16.dp)
-                        .fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+                is LoadState.Error -> item {
+                    Text(
+                        text = "Ошибка при загрузке: ${append.error.localizedMessage ?: "Неизвестная ошибка"}", //todo
+                        modifier = Modifier
+                            .padding(all = 16.dp)
+                            .fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
 
-            else -> Unit
+                else -> Unit
+            }
         }
     }
 }

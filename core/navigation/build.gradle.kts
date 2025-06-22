@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":common:ui_models"))
+    implementation(project(":common:ui_models_android"))
     implementation(project(":core:ui"))
 
     implementation(platform(libs.compose.bom))

@@ -1,6 +1,6 @@
 package com.yanchelenko.piggybank.features.product_insert.presentation.state
 
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 
 data class InsertProductUiState(
     val isLoading: Boolean = false,
@@ -9,7 +9,7 @@ data class InsertProductUiState(
     val isSaved: Boolean = false,
     val errorMessage: String? = null,
 
-    val uiProduct: ProductUiModel
+    val uiProduct: ProductUiModel //todo val uiProduct: ProductUiModel? = null
 )
 
 fun InsertProductUiState.updateUiProduct(

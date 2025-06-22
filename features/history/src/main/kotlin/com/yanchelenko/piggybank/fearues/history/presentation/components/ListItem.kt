@@ -1,6 +1,6 @@
 package com.yanchelenko.piggybank.fearues.history.presentation.components
 
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import kotlinx.datetime.LocalDate
 
 sealed class ListItem {

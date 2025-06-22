@@ -30,6 +30,7 @@ dependencies {
 
     implementation(libs.dagger.hilt.android)
     implementation(project(":common:core_utils"))
+    implementation(project(":core:ui"))
     // implementation(libs.androidx.room.runtime.jvm)
 
     kapt(libs.dagger.hilt.compiler)

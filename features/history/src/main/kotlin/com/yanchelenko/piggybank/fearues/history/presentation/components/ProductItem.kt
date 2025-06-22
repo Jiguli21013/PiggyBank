@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.yanchelenko.piggybank.common.ui_models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.fearues.history.presentation.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryEvent
 import com.yanchelenko.piggynank.core.ui.components.ConfirmDeleteDialog
