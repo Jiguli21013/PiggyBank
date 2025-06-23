@@ -99,6 +99,7 @@ class InsertProductScreenViewModel @Inject constructor(
             }
 
             is InsertProductEvent.SaveProduct -> {
+                //todo валидация полей
                 logger.d(LOG_TAG, "Save product triggered")
                 insertProductToDB()
             }
@@ -110,6 +111,11 @@ class InsertProductScreenViewModel @Inject constructor(
 
             is InsertProductEvent.ProductFoundInDB -> {
                 logger.d(LOG_TAG, "Product found in DB: ${event.product}")
+                setState { CommonUiState.Success(data = event.product) }
+            }
+
+            is InsertProductEvent.ProductNotFoundInDB -> {
+                logger.d(LOG_TAG, "Product not found in DB")
                 setState { CommonUiState.Success(data = event.product) }
             }
         }
@@ -131,6 +137,7 @@ class InsertProductScreenViewModel @Inject constructor(
                         ?: "Неизвестная ошибка" //todo
                     logger.e(LOG_TAG, "Failed to load product: $message")
                     sendEffect { InsertProductEffect.ShowMessage(message) }
+                    onEvent(InsertProductEvent.ProductNotFoundInDB(product = ProductUiModel(barcode = barcode)))
                 }
 
                 is RequestResult.InProgress -> {

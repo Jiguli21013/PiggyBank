@@ -5,6 +5,7 @@ import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 sealed class InsertProductEvent { //todo почему не sealed interface?
     data class LoadProductByBarcode(val barcode: String) : InsertProductEvent()
     data class ProductFoundInDB(val product: ProductUiModel) : InsertProductEvent()
+    data class ProductNotFoundInDB(val product: ProductUiModel) : InsertProductEvent()
 
     data class ProductNameChanged(val name: String) : InsertProductEvent()
     data class WeightChanged(val weight: Double) : InsertProductEvent()
