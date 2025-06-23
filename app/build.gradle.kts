@@ -50,12 +50,13 @@ dependencies {
     implementation(project(":features:product_details"))
     implementation(project(":features:product_insert"))
     implementation(project(":features:product_edit"))
-    implementation(project(":common:ui_models_android"))
 
+    implementation(project(":common:ui_models_android"))
     implementation(project(":common:core_utils"))
 
     implementation(project(":core:navigation"))
     implementation(project(":core:ui"))
+
     debugImplementation(project(":core:debugUI"))
 
     //debugImplementation(libs.androidx.ui.tooling)
