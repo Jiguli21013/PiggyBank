@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-
     // Утилиты, расширения и базовые вещи
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
