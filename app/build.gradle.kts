@@ -46,7 +46,6 @@ dependencies {
     
     implementation(project(":features:scanner"))
     implementation(project(":features:history"))
-
     implementation(project(":features:product_details"))
     implementation(project(":features:product_insert"))
     implementation(project(":features:product_edit"))

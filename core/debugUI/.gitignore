@@ -1,0 +1,6 @@
+# Gradle build output
+**/build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
