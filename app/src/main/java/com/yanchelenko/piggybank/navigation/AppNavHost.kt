@@ -46,8 +46,8 @@ fun AppNavHost(
 
     LaunchedEffect(Unit) {
         navDispatcher.navEvents
-            .debounce(timeoutMillis = NAVIGATION_DEBOUNCE_MS) // защита от двойного клика
-            .distinctUntilChanged()
+            .debounce(timeoutMillis = NAVIGATION_DEBOUNCE_MS)
+            //.distinctUntilChanged()
             .collect { event ->
                 logger.d("AppNavHost", "Received NavEvent: ${event.javaClass.simpleName} -> $event")
                 when (event) {

@@ -9,6 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -46,9 +47,8 @@ fun ScannerScreen(
         viewModel.onEvent(event = ScannerEvent.OnCameraPermissionResult(granted = granted))
     }
 
-    OnResumeEffect {
-        viewModel.onEvent(event = ScannerEvent.CheckCameraPermission)
-    }
+    OnResumeEffect { viewModel.onEvent(event = ScannerEvent.CheckCameraPermission) }
+    DisposableEffect(Unit) { onDispose { viewModel.resetLastBarcode() } }
 
     ScreenWithEffect(
         state = state,
@@ -57,9 +57,9 @@ fun ScannerScreen(
         modifier = modifier,
         onEffect = { effect ->
             when (effect) {
-                is ScannerEffect.NavigateToInsertProduct ->
+                is ScannerEffect.NavigateToInsertProduct -> {
                     onNavigateToInsertProduct(effect.barcode)
-
+                }
                 is ScannerEffect.ShowError -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }

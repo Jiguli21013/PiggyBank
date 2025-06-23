@@ -15,30 +15,20 @@ import javax.inject.Inject
 class ScannerViewModel @Inject constructor(
     private val permissionManager: PermissionManager,
     logger: Logger
-) : BaseViewModel<ScannerEvent, ScannerUiState, ScannerEffect>( //todo CommonUiState
+) : BaseViewModel<ScannerEvent, ScannerUiState, ScannerEffect>(
     logger = logger,
     initialState = ScannerUiState()
 ) {
+
+    private var lastScannedBarcode: String? = null
 
     override fun onEvent(event: ScannerEvent) {
         logger.d(LOG_TAG, "Received event: $event")
 
         when (event) {
-            is ScannerEvent.OnBarcodeScanned -> {
-                logger.d(LOG_TAG, "Barcode scanned: ${event.barcode}")
-                sendEffect { ScannerEffect.NavigateToInsertProduct(barcode = event.barcode) }
-            }
-
-            is ScannerEvent.CheckCameraPermission, ScannerEvent.OnCameraPermissionMissing -> {
-                logger.d(LOG_TAG, "Checking camera permission...")
-                checkCameraPermission()
-            }
-
-            is ScannerEvent.OnCameraPermissionResult -> {
-                logger.d(LOG_TAG, "Camera permission result: granted=${event.granted}")
-                handlePermissionResult(granted = event.granted)
-            }
-
+            is ScannerEvent.OnBarcodeScanned -> handleBarcode(event.barcode)
+            is ScannerEvent.CheckCameraPermission, ScannerEvent.OnCameraPermissionMissing -> checkCameraPermission()
+            is ScannerEvent.OnCameraPermissionResult -> handlePermissionResult(event.granted)
             is ScannerEvent.OnCameraSettingsClicked -> {
                 logger.d(LOG_TAG, "Navigating to camera settings")
                 sendEffect { ScannerEffect.OpenCameraSettings }
@@ -46,12 +36,22 @@ class ScannerViewModel @Inject constructor(
         }
     }
 
+    private fun handleBarcode(barcode: String) {
+        if (barcode == lastScannedBarcode) {
+            logger.d(LOG_TAG, "Duplicate barcode scan ignored: $barcode")
+            return
+        }
+
+        lastScannedBarcode = barcode
+        logger.d(LOG_TAG, "Barcode scanned: $barcode")
+        sendEffect { ScannerEffect.NavigateToInsertProduct(barcode) }
+    }
+
     private fun checkCameraPermission() {
         val granted = permissionManager.hasPermission(Manifest.permission.CAMERA)
         logger.d(LOG_TAG, "Permission granted: $granted")
 
         if (granted) {
-            logger.d(LOG_TAG, "Camera is ready to use")
             setState {
                 copy(
                     cameraPermissionState = cameraPermissionState.copy(
@@ -63,7 +63,6 @@ class ScannerViewModel @Inject constructor(
                 )
             }
         } else {
-            logger.d(LOG_TAG, "Requesting system camera permission")
             sendEffect { ScannerEffect.RequestSystemCameraPermission }
         }
     }
@@ -71,11 +70,6 @@ class ScannerViewModel @Inject constructor(
     private fun handlePermissionResult(granted: Boolean) {
         val shouldShowRationale = permissionManager.shouldShowRationale(Manifest.permission.CAMERA)
         val showSettings = !granted && !shouldShowRationale
-
-        logger.d(
-            LOG_TAG,
-            "Handle permission result: granted=$granted, shouldShowRationale=$shouldShowRationale, showSettings=$showSettings"
-        )
 
         setState {
             copy(
@@ -87,6 +81,10 @@ class ScannerViewModel @Inject constructor(
                 scannerState = if (granted) ScannerState.ReadyToScan else ScannerState.PermissionDenied
             )
         }
+    }
+
+    fun resetLastBarcode() {
+        lastScannedBarcode = null
     }
 
     private companion object {
