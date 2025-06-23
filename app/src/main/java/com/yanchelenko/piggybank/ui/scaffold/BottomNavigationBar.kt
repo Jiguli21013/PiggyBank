@@ -2,6 +2,7 @@ package com.yanchelenko.piggybank.ui.scaffold
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -9,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.yanchelenko.piggybank.navigation.destinations.AppDestination
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.IconMedium
 
 @Composable
 fun BottomNavigationBar(
@@ -22,9 +23,13 @@ fun BottomNavigationBar(
         AppDestination.History
     )
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
+    ) {
         items.forEach { destination ->
             val isSelected = currentRoute == destination.route
+
             val iconResId = when (destination) {
                 AppDestination.Scanner -> AppDestination.Scanner.iconResId
                 AppDestination.History -> AppDestination.History.iconResId
@@ -37,7 +42,7 @@ fun BottomNavigationBar(
                 icon = {
                     Icon(
                         painter = painterResource(id = iconResId),
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(size = IconMedium),
                         contentDescription = null
                     )
                 },

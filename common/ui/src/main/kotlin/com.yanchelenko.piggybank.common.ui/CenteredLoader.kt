@@ -1,4 +1,4 @@
-package com.yanchelenko.piggynank.core.ui.components
+package com.yanchelenko.piggybank.common.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

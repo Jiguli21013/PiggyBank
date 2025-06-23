@@ -4,7 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+//todo подумать че с ними делать
 data class Dimens(
     val screenPadding: Dp,
     val sectionSpacing: Dp,

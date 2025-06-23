@@ -36,11 +36,16 @@ dependencies {
     implementation(project(":common:core_utils"))
     implementation(project(":common:mappers"))
     implementation(project(":common:extensions"))
+    implementation(project(":common:ui_state"))
+    implementation(project(":common:ui"))
 
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
+
+    debugImplementation(project(":core:debugUI"))
+    debugImplementation(project(":common:ui_preview"))
 
     implementation(libs.kotlinx.immutable)
 
@@ -62,8 +67,7 @@ dependencies {
 
     // paging
     implementation(libs.paging.compose)
-    implementation(project(":core:debugUI"))
-    implementation(project(":common:ui_state"))
+
     debugImplementation(libs.ui.tooling)
 
     kapt(libs.dagger.hilt.compiler)

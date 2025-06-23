@@ -8,12 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingExtraSmall
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 
 @Composable
 fun ProductField(label: String, value: String) {
-    Row(modifier = Modifier.padding(vertical = 2.dp)) {
+    Row(modifier = Modifier.padding(vertical = PaddingExtraSmall)) {
         Text(
             text = "$label: ",
             style = MaterialTheme.typography.labelMedium,

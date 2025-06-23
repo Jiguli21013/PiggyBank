@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
     implementation(project(":features:history"))
+    implementation(project(":common:ui"))
 
     debugImplementation(project(":core:debugUI"))
     debugImplementation(project(":common:ui_preview"))

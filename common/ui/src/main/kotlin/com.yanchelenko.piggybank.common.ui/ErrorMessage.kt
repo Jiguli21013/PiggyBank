@@ -1,4 +1,4 @@
-package com.yanchelenko.piggynank.core.ui.components
+package com.yanchelenko.piggybank.common.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,7 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingSmall
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingSmall
 
 @Composable
 fun ErrorMessage(
@@ -25,7 +26,7 @@ fun ErrorMessage(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.error)
-                .padding(8.dp),
+                .padding(PaddingSmall),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -36,7 +37,7 @@ fun ErrorMessage(
         }
 
         contentBelow?.let {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(SpacingSmall))
             it()
         }
     }

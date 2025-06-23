@@ -46,13 +46,18 @@ dependencies {
     implementation(project(":common:mappers"))
     implementation(project(":common:extensions"))
     implementation(project(":common:core_utils"))
+    implementation(project(":common:ui"))
+    implementation(project(":common:ui_state"))
 
-    implementation(project(":core:debugUI"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
 
+    debugImplementation(project(":common:ui_preview"))
+    debugImplementation(project(":core:debugUI"))
+
+    debugImplementation(libs.ui.tooling)
 
     implementation(libs.kotlinx.immutable)
 
@@ -76,16 +81,9 @@ dependencies {
     // hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
-    implementation(project(":common:ui_preview"))
-    implementation(project(":common:ui_state"))
-
-
-
-    debugImplementation(libs.ui.tooling)
-
-
-
 
     kapt(libs.dagger.hilt.compiler)
     implementation(libs.kotlinx.datetime)
+
+
 }

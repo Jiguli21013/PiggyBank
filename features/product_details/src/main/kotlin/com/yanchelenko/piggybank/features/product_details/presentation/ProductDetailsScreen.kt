@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,10 +27,15 @@ import com.yanchelenko.piggybank.features.product_details.R
 import com.yanchelenko.piggybank.features.product_details.presentation.components.InfoRow
 import com.yanchelenko.piggybank.features.product_details.presentation.state.ProductDetailsEffect
 import com.yanchelenko.piggybank.features.product_details.presentation.state.ProductDetailsEvent
-import com.yanchelenko.piggynank.core.ui.components.CenteredLoader
-import com.yanchelenko.piggynank.core.ui.components.ConfirmDeletionDialog
-import com.yanchelenko.piggynank.core.ui.dimens.LocalDimens
+import com.yanchelenko.piggybank.common.ui.CenteredLoader
+import com.yanchelenko.piggybank.common.ui.ConfirmDeleteDialog
+import com.yanchelenko.piggynank.core.ui.components.InfoCard
+import com.yanchelenko.piggynank.core.ui.components.PrimaryButton
+import com.yanchelenko.piggynank.core.ui.components.SecondaryButton
 import com.yanchelenko.piggynank.core.ui.effect.ScreenWithEffect
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacerHeight
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 
 @Composable
@@ -79,7 +82,7 @@ internal fun ProductDetailsScreen(
                 is CommonUiState.Success -> {
                     if (showDeleteDialog) {
                         //todo вызывать через навигацию
-                        ConfirmDeletionDialog(
+                        ConfirmDeleteDialog(
                             onConfirm = { sendEvent(ProductDetailsEvent.ConfirmedDelete) },
                             onDismiss = { sendEvent(ProductDetailsEvent.CancelDelete) }
                         )
@@ -110,8 +113,6 @@ private fun ProductDetailsContent(
     state: ProductUiModel,
     onEvent: (ProductDetailsEvent) -> Unit
 ) {
-    val dimens = LocalDimens.current
-
     val barcodeLabel = stringResource(R.string.label_barcode)
     val nameLabel = stringResource(R.string.label_product_name)
     val weightLabel = stringResource(R.string.label_weight)
@@ -129,30 +130,32 @@ private fun ProductDetailsContent(
         composableName = "ProductDetailsContent"
     ) {
         Column(
-            modifier = modifier.padding(dimens.screenPadding)
+            modifier = modifier.padding(all = PaddingMedium)
         ) {
-            InfoRow(label = barcodeLabel, value = state.barcode)
-            InfoRow(label = nameLabel, value = state.productName)
-            InfoRow(label = weightLabel, value = weightValue)
-            InfoRow(label = priceLabel, value = priceValue)
-            InfoRow(label = pricePerKgLabel, value = pricePerKgValue)
+            InfoCard(modifier = Modifier.fillMaxWidth()) {
+                InfoRow(label = barcodeLabel, value = state.barcode)
+                InfoRow(label = nameLabel, value = state.productName)
+                InfoRow(label = weightLabel, value = weightValue)
+                InfoRow(label = priceLabel, value = priceValue)
+                InfoRow(label = pricePerKgLabel, value = pricePerKgValue)
+            }
 
-            Spacer(modifier = Modifier.height(dimens.sectionSpacing))
+            Spacer(modifier = Modifier.height(height = SpacerHeight))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(dimens.buttonSpacing)) {
-                Button(
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(space = SpacingMedium)
+            ) {
+                PrimaryButton(
+                    text = editText,
                     onClick = { onEvent(ProductDetailsEvent.OnEditClicked) },
                     modifier = Modifier.weight(1f)
-                ) {
-                    Text(text = editText)
-                }
-
-                OutlinedButton(
+                )
+                SecondaryButton(
+                    text = deleteText,
                     onClick = { onEvent(ProductDetailsEvent.OnDeleteClicked) },
                     modifier = Modifier.weight(1f)
-                ) {
-                    Text(text = deleteText)
-                }
+                )
             }
         }
     }

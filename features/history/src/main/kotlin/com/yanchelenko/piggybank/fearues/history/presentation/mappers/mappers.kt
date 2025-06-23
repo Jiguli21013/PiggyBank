@@ -7,7 +7,7 @@ import com.yanchelenko.piggybank.common.extensions.toLocalDateInSystemZone
 import com.yanchelenko.piggybank.common.ui_models_android.mappers.toUi
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.domain.models.Product
-import com.yanchelenko.piggybank.fearues.history.presentation.components.ListItem
+import com.yanchelenko.piggybank.fearues.history.presentation.models.ListItem
 
 fun PagingData<Product>.toUiPagingData(): PagingData<ProductUiModel> = this.map { it.toUi() }
 
@@ -17,9 +17,6 @@ fun PagingData<ProductUiModel>.withDateHeaders(): PagingData<ListItem> {
         .insertSeparators { before, after ->
             val beforeDate = before?.product?.addedAt?.toLocalDateInSystemZone()
             val afterDate = after?.product?.addedAt?.toLocalDateInSystemZone()
-            //val beforeDate = before?.product?.addedAt?.value?.toLocalDateTime(TimeZone.currentSystemDefault())?.date
-            //val afterDate = after?.product?.addedAt?.value?.toLocalDateTime(TimeZone.currentSystemDefault())?.date
-
            
             return@insertSeparators when {
                 before == null && afterDate != null -> ListItem.DateHeader(afterDate)

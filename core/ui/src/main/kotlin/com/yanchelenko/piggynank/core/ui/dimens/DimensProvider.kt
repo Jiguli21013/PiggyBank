@@ -5,7 +5,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.window.layout.WindowMetricsCalculator
-
+//todo  для multi-screen / foldable / large-screen устройств.
 @Composable
 fun ProvideDimens(content: @Composable () -> Unit) {
     val context = LocalContext.current

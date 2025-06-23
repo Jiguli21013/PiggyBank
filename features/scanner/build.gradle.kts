@@ -47,13 +47,17 @@ android {
 
 dependencies {
     implementation(project(":common:core_utils"))
+    implementation(project(":common:ui"))
+
     implementation(project(":core:permissions"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
-
     implementation(project(":core:navigation"))
+
     implementation(project(":di"))
+
+    debugImplementation(project(":core:debugUI"))
 
     // ML Kit Barcode Scanning
     implementation(libs.mlkit.barcode.scanning)
@@ -87,7 +91,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
-    implementation(project(":core:debugUI"))
+
 
     kapt(libs.dagger.hilt.compiler)
 

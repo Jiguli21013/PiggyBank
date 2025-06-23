@@ -4,5 +4,8 @@ import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 
 sealed interface HistoryEvent {
     data class OnProductClicked(val product: ProductUiModel) : HistoryEvent
+    data class OnProductDeleteClicked(val product: ProductUiModel) : HistoryEvent
+
     data class OnProductDeleted(val product: ProductUiModel) : HistoryEvent
+    data object OnDeleteDialogDismissed : HistoryEvent
 }

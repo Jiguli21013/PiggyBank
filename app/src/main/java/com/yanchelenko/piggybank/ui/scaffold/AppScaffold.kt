@@ -20,11 +20,7 @@ fun AppScaffold(
     val title = stringResource(id = screenMeta.titleResId)
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = title) }
-            )
-        },
+        topBar = { TopAppBar(title = { Text(text = title) }) },
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = currentRoute,

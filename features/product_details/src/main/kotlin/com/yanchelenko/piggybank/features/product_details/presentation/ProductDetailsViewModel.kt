@@ -89,6 +89,7 @@ class ProductDetailsViewModel @Inject constructor(
 
                     is RequestResult.Error -> {
                         logger.e(LOG_TAG, "Error deleting product: ${result.error?.message}")
+                        //todo
                     }
 
                     is RequestResult.InProgress -> {

@@ -1,0 +1,9 @@
+<resources>
+    <string name="label_product_name">Название</string>
+    <string name="label_product_id">ID</string>
+    <string name="label_barcode">Штрихкод</string>
+    <string name="label_price">Цена</string>
+    <string name="label_weight">Вес</string>
+    <string name="label_price_per_kg">Цена за кг</string>
+    <string name="content_description_delete">Удалить продукт</string>
+</resources>

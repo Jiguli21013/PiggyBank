@@ -52,6 +52,9 @@ project(":common:ui_models_android").projectDir = file("common/ui_models_android
 include(":common:ui_preview")
 project(":common:ui_preview").projectDir = file("common/ui_preview")
 
+include(":common:ui")
+project(":common:ui").projectDir = file("common/ui")
+
 include(":common:ui_state")
 project(":common:ui_state").projectDir = file("common/ui_state")
 

@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common:core_utils"))
     implementation(project(":core:domain"))
 
     implementation(libs.androidx.lifecycle.viewmodel.android)
@@ -46,11 +47,8 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.lifecycle.runtime.compose)
 
-    // Другие библиотеки для UI
-    //implementation(libs.androidx.constraintlayout)
-
     implementation(libs.serialization.json)
     implementation(libs.androidx.paging.compose.android)
     implementation(libs.androidx.window)
-    implementation(project(":common:core_utils"))
+
 }

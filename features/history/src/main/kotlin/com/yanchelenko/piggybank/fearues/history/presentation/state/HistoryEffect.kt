@@ -4,5 +4,6 @@ import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 
 sealed interface HistoryEffect {
     data class NavigateToDetails(val product: ProductUiModel) : HistoryEffect
+    data class NavigateToDialogDeleteProduct(val product: ProductUiModel) : HistoryEffect
     data class ShowError(val message: String) : HistoryEffect
 }

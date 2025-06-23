@@ -19,9 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PiggyBankApp(
-                navDispatcher = navDispatcher
-            )
+            PiggyBankApp(navDispatcher = navDispatcher)
         }
     }
 }

@@ -43,7 +43,7 @@ fun PiggyBankApp(
 
     val coroutineScope = rememberCoroutineScope()
 
-    ProvideDimens {
+    //ProvideDimens { //todo  для multi-screen / foldable / large-screen устройств. пока можно забить
         PiggyBankTheme {
             AppScaffold(
                 screenMeta = screenMeta,
@@ -67,5 +67,5 @@ fun PiggyBankApp(
             }
 
         }
-    }
+    //}
 }

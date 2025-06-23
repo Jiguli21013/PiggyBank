@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
@@ -18,8 +17,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
+import com.yanchelenko.piggybank.fearues.history.presentation.models.ListItem
 import com.yanchelenko.piggybank.fearues.history.presentation.preview.ListItemPreviewProvider
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryEvent
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
 
 @Composable
 internal fun HistoryList(
@@ -62,7 +63,7 @@ internal fun HistoryList(
                     CircularProgressIndicator(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(all = 16.dp)
+                            .padding(all = PaddingMedium)
                             .wrapContentWidth(Alignment.CenterHorizontally)
                     )
                 }
@@ -71,7 +72,7 @@ internal fun HistoryList(
                     Text(
                         text = "Ошибка при загрузке: ${append.error.localizedMessage ?: "Неизвестная ошибка"}", //todo
                         modifier = Modifier
-                            .padding(all = 16.dp)
+                            .padding(all = PaddingMedium)
                             .fillMaxWidth(),
                         color = MaterialTheme.colorScheme.error
                     )

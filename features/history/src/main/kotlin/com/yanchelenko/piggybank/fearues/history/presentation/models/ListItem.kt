@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.fearues.history.presentation.components
+package com.yanchelenko.piggybank.fearues.history.presentation.models
 
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import kotlinx.datetime.LocalDate

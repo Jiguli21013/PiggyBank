@@ -10,7 +10,7 @@ import com.yanchelenko.piggybank.common.ui_models_android.mappers.toDomain
 import com.yanchelenko.piggybank.common.ui_state.CommonUiState
 import com.yanchelenko.piggybank.domain.usecases.DeleteProductUseCase
 import com.yanchelenko.piggybank.fearues.history.domain.GetPagedProductsUseCase
-import com.yanchelenko.piggybank.fearues.history.presentation.components.ListItem
+import com.yanchelenko.piggybank.fearues.history.presentation.models.ListItem
 import com.yanchelenko.piggybank.fearues.history.presentation.mappers.toUiPagingData
 import com.yanchelenko.piggybank.fearues.history.presentation.mappers.withDateHeaders
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryEffect
@@ -61,10 +61,16 @@ class HistoryViewModel @Inject constructor(
                 logger.d(LOG_TAG, "Navigate to product details: id=${event.product.productId}")
                 sendEffect { HistoryEffect.NavigateToDetails(product = event.product) }
             }
-
+            is HistoryEvent.OnProductDeleteClicked -> {
+                logger.d(LOG_TAG, "Navigate dialog to delete product: id=${event.product.productId}")
+                sendEffect { HistoryEffect.NavigateToDialogDeleteProduct(product = event.product) }
+            }
             is HistoryEvent.OnProductDeleted -> {
                 logger.d(LOG_TAG, "Delete product requested: id=${event.product.productId}")
                 deleteProduct(product = event.product)
+            }
+            is HistoryEvent.OnDeleteDialogDismissed -> {
+                logger.d(LOG_TAG, "Delete product dismissed")
             }
         }
     }

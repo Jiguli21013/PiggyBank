@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":common:mappers"))
     implementation(project(":common:core_utils"))
     implementation(project(":common:ui_state"))
+    implementation(project(":common:ui"))
 
 
     implementation(project(":core:domain"))

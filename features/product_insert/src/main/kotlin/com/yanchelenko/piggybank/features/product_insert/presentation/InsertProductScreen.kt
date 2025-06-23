@@ -4,27 +4,23 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.common.extensions.formatIfNonZero
+import com.yanchelenko.piggybank.common.ui.CenteredLoader
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.common.ui_preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.common.ui_state.CommonUiState
@@ -32,11 +28,17 @@ import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
 import com.yanchelenko.piggybank.features.product_insert.R
 import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductEffect
 import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductEvent
-import com.yanchelenko.piggynank.core.ui.dimens.LocalDimens
 import com.yanchelenko.piggynank.core.ui.effect.ScreenWithEffect
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.core.debugUI.debug.trackMap
-import com.yanchelenko.piggynank.core.ui.components.CenteredLoader
+import com.yanchelenko.piggynank.core.ui.components.OutlinedInputField
+import com.yanchelenko.piggynank.core.ui.components.PrimaryButton
+import com.yanchelenko.piggynank.core.ui.components.ReadOnlyField
+import com.yanchelenko.piggynank.core.ui.components.SecondaryButton
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.HeaderHeight
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingExtraLarge
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingMedium
 
 @Composable
 fun InsertProductMainScreen(
@@ -105,8 +107,6 @@ fun InsertProductContent(
     modifier: Modifier = Modifier,
     onEvent: (InsertProductEvent) -> Unit
 ) {
-    val dimens = LocalDimens.current
-
     val productNameLabel = stringResource(R.string.label_product_name)
     val weightLabel = stringResource(R.string.label_weight_grams)
     val priceLabel = stringResource(R.string.label_price_by_weight, state.weight)
@@ -116,83 +116,70 @@ fun InsertProductContent(
 
     WithDebug(
         trackMap = state.trackMap(),
-        composableName = "InsertProductContent" //todo
+        composableName = "InsertProductContent"
     ) {
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(all = dimens.screenPadding),
+                .padding(PaddingMedium),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(space = dimens.sectionSpacing)
-            ) {
-                TextField(
+            Column(verticalArrangement = Arrangement.spacedBy(SpacingExtraLarge)) {
+                OutlinedInputField(
                     value = state.productName,
-                    onValueChange = { value ->
-                        onEvent(InsertProductEvent.ProductNameChanged(name = value))
-                    },
-                    label = { Text(productNameLabel) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+                    onValueChange = { onEvent(InsertProductEvent.ProductNameChanged(it)) },
+                    label = productNameLabel,
+                    keyboardType = KeyboardType.Text,
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                TextField(
+                OutlinedInputField(
                     value = state.weight.formatIfNonZero(),
-                    onValueChange = { value ->
-                        value.toDoubleOrNull()?.let {
-                            onEvent(InsertProductEvent.WeightChanged(weight = it))
+                    onValueChange = {
+                        it.toDoubleOrNull()?.let { weight ->
+                            onEvent(InsertProductEvent.WeightChanged(weight))
                         }
                     },
-                    label = { Text(text = weightLabel) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    label = weightLabel,
+                    keyboardType = KeyboardType.Number,
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                TextField(
+                OutlinedInputField(
                     value = state.price.formatIfNonZero(),
-                    onValueChange = { value ->
-                        value.toDoubleOrNull()?.let {
-                            onEvent(InsertProductEvent.PriceChanged(price = it))
+                    onValueChange = {
+                        it.toDoubleOrNull()?.let { price ->
+                            onEvent(InsertProductEvent.PriceChanged(price))
                         }
                     },
-                    label = { Text(text = priceLabel) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    label = priceLabel,
+                    keyboardType = KeyboardType.Number,
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                TextField(
-                    value = state.pricePerKg.formatIfNonZero(),
-                    onValueChange = {},
-                    label = { Text(text = pricePerKgLabel) },
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = true,
-                    enabled = false,
-                    textStyle = LocalTextStyle.current.copy(
-                        color = Color.Red,
-                        textAlign = TextAlign.Center,
-                        fontSize = dimens.textLarge
-                    )
+                ReadOnlyField(
+                    label = pricePerKgLabel,
+                    value = state.pricePerKg.formatIfNonZero()
                 )
             }
 
+            Spacer(modifier = Modifier.height(HeaderHeight))
+
             Row(
-                horizontalArrangement = Arrangement.spacedBy(space = dimens.buttonSpacing),
+                horizontalArrangement = Arrangement.spacedBy(SpacingMedium),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
+                SecondaryButton(
+                    text = backText,
                     onClick = { onEvent(InsertProductEvent.GoBackToScanner) },
                     modifier = Modifier.weight(1f)
-                ) {
-                    Text(text = backText)
-                }
+                )
 
-                Button(
+                PrimaryButton(
+                    text = saveText,
                     onClick = { onEvent(InsertProductEvent.SaveProduct) },
                     modifier = Modifier.weight(1f)
-                ) {
-                    Text(text = saveText)
-                }
+                )
             }
         }
     }
