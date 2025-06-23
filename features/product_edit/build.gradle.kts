@@ -45,11 +45,18 @@ dependencies {
     implementation(project(":common:ui_models_android"))
     implementation(project(":common:mappers"))
     implementation(project(":common:extensions"))
+    implementation(project(":common:ui_state"))
 
+    implementation(project(":common:core_utils"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
+    implementation(project(":features:history"))
+
+    debugImplementation(project(":core:debugUI"))
+    debugImplementation(project(":common:ui_preview"))
+    debugImplementation(libs.ui.tooling)
 
     implementation(libs.kotlinx.immutable)
 
@@ -72,10 +79,6 @@ dependencies {
     // hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
-    implementation(project(":common:core_utils"))
-    implementation(project(":core:debugUI"))
-    implementation(project(":core:debugUI"))
-    debugImplementation(libs.ui.tooling)
 
 
 

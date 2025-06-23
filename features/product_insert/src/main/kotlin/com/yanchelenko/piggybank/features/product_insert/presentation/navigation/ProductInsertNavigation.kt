@@ -3,6 +3,7 @@ package com.yanchelenko.piggybank.features.product_insert.presentation.navigatio
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.yanchelenko.piggybank.features.product_insert.presentation.InsertProductMainScreen
@@ -18,10 +19,10 @@ fun NavGraphBuilder.productInsertGraph(insertProductNavigator: InsertProductNavi
         popEnterTransition = { slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(300)) },
         popExitTransition = { slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(300)) }
     ) {
-        InsertProductMainScreen(
-            onNavigateBack = {
-                insertProductNavigator.navigateToScanner()
-            }
-        )
+        val onNavigateBack = remember(insertProductNavigator) {
+            { insertProductNavigator.navigateToScanner() }
+        }
+
+        InsertProductMainScreen(onNavigateBack = onNavigateBack)
     }
 }

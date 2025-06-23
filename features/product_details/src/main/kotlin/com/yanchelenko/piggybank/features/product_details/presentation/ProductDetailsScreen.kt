@@ -21,13 +21,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_preview.ProductPreviewProvider
+import com.yanchelenko.piggybank.common.ui_state.CommonUiState
 import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
 import com.yanchelenko.piggybank.core.debugUI.debug.trackMap
 import com.yanchelenko.piggybank.features.product_details.R
 import com.yanchelenko.piggybank.features.product_details.presentation.components.InfoRow
-import com.yanchelenko.piggybank.features.product_details.presentation.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.features.product_details.presentation.state.ProductDetailsEffect
 import com.yanchelenko.piggybank.features.product_details.presentation.state.ProductDetailsEvent
+import com.yanchelenko.piggynank.core.ui.components.CenteredLoader
 import com.yanchelenko.piggynank.core.ui.components.ConfirmDeletionDialog
 import com.yanchelenko.piggynank.core.ui.dimens.LocalDimens
 import com.yanchelenko.piggynank.core.ui.effect.ScreenWithEffect
@@ -55,6 +57,7 @@ internal fun ProductDetailsScreen(
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
+
     val effectFlow = viewModel.effect
     var showDeleteDialog by remember { mutableStateOf(value = false) }
 
@@ -72,19 +75,31 @@ internal fun ProductDetailsScreen(
             }
         },
         content = { uiState, sendEvent, innerModifier ->
-
-            if (showDeleteDialog) {
-                ConfirmDeletionDialog(
-                    onConfirm = { sendEvent(ProductDetailsEvent.ConfirmedDelete) },
-                    onDismiss = { sendEvent(ProductDetailsEvent.CancelDelete) }
-                )
+            when (uiState) {
+                is CommonUiState.Success -> {
+                    if (showDeleteDialog) {
+                        //todo вызывать через навигацию
+                        ConfirmDeletionDialog(
+                            onConfirm = { sendEvent(ProductDetailsEvent.ConfirmedDelete) },
+                            onDismiss = { sendEvent(ProductDetailsEvent.CancelDelete) }
+                        )
+                    }
+                    ProductDetailsContent(
+                        state = uiState.data,
+                        modifier = innerModifier,
+                        onEvent = sendEvent
+                    )
+                }
+                is CommonUiState.Initializing -> {
+                    CenteredLoader()
+                }
+                is CommonUiState.Loading -> {
+                    CenteredLoader()
+                }
+                is CommonUiState.Error -> {
+                    //todo
+                }
             }
-
-            ProductDetailsContent(
-                state = uiState,
-                modifier = innerModifier,
-                onEvent = sendEvent
-            )
         }
     )
 }
@@ -105,6 +120,10 @@ private fun ProductDetailsContent(
     val editText = stringResource(R.string.action_edit)
     val deleteText = stringResource(R.string.action_delete)
 
+    val weightValue = stringResource(R.string.format_grams, state.weight)
+    val priceValue = stringResource(R.string.format_price_rub, state.price)
+    val pricePerKgValue = stringResource(R.string.format_price_rub, state.pricePerKg)
+
     WithDebug(
         trackMap = state.trackMap(),
         composableName = "ProductDetailsContent"
@@ -114,9 +133,9 @@ private fun ProductDetailsContent(
         ) {
             InfoRow(label = barcodeLabel, value = state.barcode)
             InfoRow(label = nameLabel, value = state.productName)
-            InfoRow(label = weightLabel, value = stringResource(R.string.format_grams, state.weight))
-            InfoRow(label = priceLabel, value = stringResource(R.string.format_price_rub, state.price))
-            InfoRow(label = pricePerKgLabel, value = stringResource(R.string.format_price_rub, state.pricePerKg))
+            InfoRow(label = weightLabel, value = weightValue)
+            InfoRow(label = priceLabel, value = priceValue)
+            InfoRow(label = pricePerKgLabel, value = pricePerKgValue)
 
             Spacer(modifier = Modifier.height(dimens.sectionSpacing))
 

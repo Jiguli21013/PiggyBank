@@ -1,10 +1,9 @@
-package com.yanchelenko.piggybank.features.product_details.presentation.preview
+package com.yanchelenko.piggybank.common.ui_preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import kotlinx.datetime.Clock
 
-//todo вынести в common
 class ProductPreviewProvider : PreviewParameterProvider<ProductUiModel> {
     override val values = sequenceOf(
         ProductUiModel(

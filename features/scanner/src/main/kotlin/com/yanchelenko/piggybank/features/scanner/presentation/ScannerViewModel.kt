@@ -15,7 +15,7 @@ import javax.inject.Inject
 class ScannerViewModel @Inject constructor(
     private val permissionManager: PermissionManager,
     logger: Logger
-) : BaseViewModel<ScannerEvent, ScannerUiState, ScannerEffect>(
+) : BaseViewModel<ScannerEvent, ScannerUiState, ScannerEffect>( //todo CommonUiState
     logger = logger,
     initialState = ScannerUiState()
 ) {

@@ -44,12 +44,20 @@ android {
 dependencies {
     implementation(project(":common:ui_models_android"))
     implementation(project(":common:mappers"))
+    implementation(project(":common:core_utils"))
+    implementation(project(":common:ui_state"))
 
 
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
+    implementation(project(":features:history"))
+
+    debugImplementation(project(":common:ui_preview"))
+    debugImplementation(project(":core:debugUI"))
+    debugImplementation(libs.ui.tooling)
+
 
     implementation(libs.kotlinx.immutable)
 
@@ -61,23 +69,18 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.androidx.ui.tooling.preview.android)
-
     implementation(libs.androidx.navigation.runtime.android)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
 
     implementation(libs.serialization.json)
 
     // hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
-    implementation(project(":common:core_utils"))
-    implementation(project(":common:core_utils"))
-    implementation(project(":core:debugUI"))
-    debugImplementation(libs.ui.tooling)
-
+    //todo    debugImplementation ?
+    implementation(libs.androidx.benchmark.common)
 
 
     kapt(libs.dagger.hilt.compiler)

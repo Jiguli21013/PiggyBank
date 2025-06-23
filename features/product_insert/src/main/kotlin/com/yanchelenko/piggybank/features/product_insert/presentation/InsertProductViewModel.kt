@@ -2,18 +2,18 @@ package com.yanchelenko.piggybank.features.product_insert.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.yanchelenko.piggybank.common.ui_models_android.mappers.toDomain
 import com.yanchelenko.piggybank.common.ui_models_android.mappers.toUi
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_state.CommonUiState
+import com.yanchelenko.piggybank.common.ui_state.getDataOrLog
 import com.yanchelenko.piggybank.domain.exceptions.BaseDomainException
 import com.yanchelenko.piggybank.domain.usecases.GetPricePerKgUseCase
 import com.yanchelenko.piggybank.features.product_insert.domain.usecases.GetProductByBarcodeUseCase
 import com.yanchelenko.piggybank.features.product_insert.domain.usecases.InsertNewProductUseCase
-import com.yanchelenko.piggybank.features.product_insert.presentation.mappers.toDomain
 import com.yanchelenko.piggynank.core.ui.base.BaseViewModel
 import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductEffect
 import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductEvent
-import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductUiState
-import com.yanchelenko.piggybank.features.product_insert.presentation.state.updateUiProduct
 import com.yanchelenko.piggybank.navigation.destinations.AppDestination
 import com.yanchelenko.piggynank.core.ui.mapper.toUserMessage
 import com.yanchelneko.piggybank.common.core_utils.Logger
@@ -29,21 +29,16 @@ class InsertProductScreenViewModel @Inject constructor(
     private val getPricePerKgUseCase: GetPricePerKgUseCase,
     logger: Logger,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<InsertProductEvent, InsertProductUiState, InsertProductEffect>(
+) : BaseViewModel<InsertProductEvent, CommonUiState<ProductUiModel>, InsertProductEffect>(
     logger = logger,
-    initialState = InsertProductUiState(
-        uiProduct = ProductUiModel(
-            barcode = savedStateHandle.get<String>(AppDestination.InsertProduct.arguments.first().name) ?: ""
-        )
-    )
+    initialState = CommonUiState.Initializing
 ) {
 
     init {
-        //todo вынести в евенты или еффекты ?
-        logger.d(LOG_TAG, "Init with barcode: ${state.uiProduct.barcode}")
-        state.uiProduct.barcode.let {
-            onEvent(event = InsertProductEvent.LoadProductByBarcode(barcode = it))
-        }
+        val barcode = savedStateHandle.get<String>(AppDestination.InsertProduct.arguments.first().name)
+            ?: error("barcode is missing in SavedStateHandle") //todo error вынести куда-то ?
+        logger.d(LOG_TAG, "Init with barcode: $barcode")
+        onEvent(event = InsertProductEvent.LoadProductByBarcode(barcode = barcode))
     }
 
     override fun onEvent(event: InsertProductEvent) {
@@ -57,24 +52,24 @@ class InsertProductScreenViewModel @Inject constructor(
 
             is InsertProductEvent.ProductNameChanged -> {
                 logger.d(LOG_TAG, "Product name changed: ${event.name}")
-                setState {
-                    updateUiProduct {
-                        copy(productName = event.name)
-                    }
+                uiState.value.getDataOrLog(LOG_TAG, logger) { product ->
+                    setState { CommonUiState.Success(data = product.copy(productName = event.name)) }
                 }
             }
-            //todo вместо соpy сделать copyIfChanged
+
             is InsertProductEvent.WeightChanged -> {
                 logger.d(LOG_TAG, "Weight changed: ${event.weight}")
-                setState {
-                    val pricePerKg = getPricePerKgUseCase(
-                        weightGrams = event.weight,
-                        price = uiProduct.price
-                    )
-                    updateUiProduct {
-                        copy(
-                            weight = event.weight,
-                            pricePerKg = pricePerKg
+                uiState.value.getDataOrLog(LOG_TAG, logger) { product ->
+                    setState {
+                        val pricePerKg = getPricePerKgUseCase(
+                            weightGrams = event.weight,
+                            price = product.price
+                        )
+                        CommonUiState.Success(
+                            data = product.copy(
+                                weight = event.weight,
+                                pricePerKg = pricePerKg
+                            )
                         )
                     }
                 }
@@ -82,15 +77,17 @@ class InsertProductScreenViewModel @Inject constructor(
 
             is InsertProductEvent.PriceChanged -> {
                 logger.d(LOG_TAG, "Price changed: ${event.price}")
-                setState {
-                    val pricePerKg = getPricePerKgUseCase(
-                        weightGrams = uiProduct.weight,
-                        price = event.price
-                    )
-                    updateUiProduct {
-                        copy(
-                            price = event.price,
-                            pricePerKg = pricePerKg
+                uiState.value.getDataOrLog(LOG_TAG, logger) { product ->
+                    setState {
+                        val pricePerKg = getPricePerKgUseCase(
+                            weightGrams = product.weight,
+                            price = event.price
+                        )
+                        CommonUiState.Success(
+                            data = product.copy(
+                                price = event.price,
+                                pricePerKg = pricePerKg
+                            )
                         )
                     }
                 }
@@ -98,11 +95,7 @@ class InsertProductScreenViewModel @Inject constructor(
 
             is InsertProductEvent.CurrencyChanged -> {
                 logger.d(LOG_TAG, "Currency changed")
-                setState {
-                    updateUiProduct {
-                        copy()
-                    }
-                }
+                //todo
             }
 
             is InsertProductEvent.SaveProduct -> {
@@ -112,27 +105,12 @@ class InsertProductScreenViewModel @Inject constructor(
 
             is InsertProductEvent.GoBackToScanner -> {
                 logger.d(LOG_TAG, "Go back to scanner requested")
-                setState {
-                    copy(isSaved = false)
-                }
                 sendEffect { InsertProductEffect.NavigateBackToScanner }
             }
 
             is InsertProductEvent.ProductFoundInDB -> {
                 logger.d(LOG_TAG, "Product found in DB: ${event.product}")
-                setState {
-                    updateUiProduct {
-                        copy(
-                            productId = event.product.productId,
-                            barcode = event.product.barcode,
-                            productName = event.product.productName,
-                            weight = event.product.weight,
-                            price = event.product.price,
-                            pricePerKg = event.product.pricePerKg,
-                            addedAt = event.product.addedAt
-                        )
-                    }
-                }
+                setState { CommonUiState.Success(data = event.product) }
             }
         }
     }
@@ -150,7 +128,7 @@ class InsertProductScreenViewModel @Inject constructor(
                 is RequestResult.Error -> {
                     val message = (result.error as? BaseDomainException)?.toUserMessage()
                         ?: result.error?.message
-                        ?: "Неизвестная ошибка"
+                        ?: "Неизвестная ошибка" //todo
                     logger.e(LOG_TAG, "Failed to load product: $message")
                     sendEffect { InsertProductEffect.ShowMessage(message) }
                 }
@@ -163,29 +141,30 @@ class InsertProductScreenViewModel @Inject constructor(
     }
 
     private fun insertProductToDB() {
-        logger.d(LOG_TAG, "Start inserting product to DB: ${state.uiProduct}")
-        viewModelScope.launch {
-            setState { copy(isSaving = true, errorMessage = null) }
+        uiState.value.getDataOrLog(LOG_TAG, logger) { product ->
+            logger.d(LOG_TAG, "Start inserting product to DB: $product")
+            viewModelScope.launch {
+                when (val result = insertNewProductUseCase(product = product.toDomain())) {
+                    is RequestResult.Success -> {
+                        logger.d(LOG_TAG, "Product successfully inserted")
+                        setState { CommonUiState.Success(data = product) }
+                        sendEffect { InsertProductEffect.ShowMessage(message = "Продукт успешно сохранён") } //todo
+                        sendEffect { InsertProductEffect.NavigateBackToScanner }
+                    }
 
-            when (val result = insertNewProductUseCase(product = state.toDomain())) {
-                is RequestResult.Success -> {
-                    logger.d(LOG_TAG, "Product successfully inserted")
-                    setState { copy(isSaving = false, isSaved = true) }
-                    sendEffect { InsertProductEffect.ShowMessage(message = "Продукт успешно сохранён") }
-                    sendEffect { InsertProductEffect.NavigateBackToScanner }
-                }
+                    is RequestResult.Error -> {
+                        val message = (result.error as? BaseDomainException)?.toUserMessage()
+                            ?: result.error?.message
+                            ?: "Ошибка при сохранении" //todo
+                        logger.e(LOG_TAG, "Insert failed: $message")
+                        setState { CommonUiState.Error(message = message) }
+                        sendEffect { InsertProductEffect.ShowMessage(message) }
+                    }
 
-                is RequestResult.Error -> {
-                    val message = (result.error as? BaseDomainException)?.toUserMessage()
-                        ?: result.error?.message
-                        ?: "Ошибка при сохранении"
-                    logger.e(LOG_TAG, "Insert failed: $message")
-                    setState { copy(isSaving = false, errorMessage = message) }
-                    sendEffect { InsertProductEffect.ShowMessage(message) }
-                }
-
-                is RequestResult.InProgress -> {
-                    logger.d(LOG_TAG, "Insert in progress...")
+                    is RequestResult.InProgress -> {
+                        logger.d(LOG_TAG, "Insert in progress...")
+                        setState { CommonUiState.Loading }
+                    }
                 }
             }
         }

@@ -26,16 +26,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.common.extensions.formatIfNonZero
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_preview.ProductPreviewProvider
+import com.yanchelenko.piggybank.common.ui_state.CommonUiState
 import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
 import com.yanchelenko.piggybank.features.product_insert.R
-import com.yanchelenko.piggybank.features.product_insert.presentation.preview.InsertProductPreviewProvider
 import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductEffect
 import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductEvent
-import com.yanchelenko.piggybank.features.product_insert.presentation.state.InsertProductUiState
 import com.yanchelenko.piggynank.core.ui.dimens.LocalDimens
 import com.yanchelenko.piggynank.core.ui.effect.ScreenWithEffect
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.core.debugUI.debug.trackMap
+import com.yanchelenko.piggynank.core.ui.components.CenteredLoader
 
 @Composable
 fun InsertProductMainScreen(
@@ -76,11 +77,24 @@ internal fun InsertProductMainScreen(
             }
         },
         content = { uiState, sendEvent, innerModifier ->
-            InsertProductContent(
-                state = uiState.uiProduct,
-                modifier = innerModifier,
-                onEvent = sendEvent
-            )
+            when (uiState) {
+                is CommonUiState.Success -> {
+                    InsertProductContent(
+                        state = uiState.data,
+                        modifier = innerModifier,
+                        onEvent = sendEvent
+                    )
+                }
+                is CommonUiState.Initializing -> {
+                    CenteredLoader()
+                }
+                is CommonUiState.Loading -> {
+                    CenteredLoader()
+                }
+                is CommonUiState.Error -> {
+                    //todo
+                }
+            }
         }
     )
 }
@@ -111,7 +125,7 @@ fun InsertProductContent(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(dimens.sectionSpacing)
+                verticalArrangement = Arrangement.spacedBy(space = dimens.sectionSpacing)
             ) {
                 TextField(
                     value = state.productName,
@@ -187,12 +201,11 @@ fun InsertProductContent(
 @Preview(showBackground = true)
 @Composable
 private fun InsertProductMainContentPreview(
-    @PreviewParameter(InsertProductPreviewProvider::class)
-    state: InsertProductUiState
+    @PreviewParameter(ProductPreviewProvider::class) product: ProductUiModel
 ) {
     PiggyBankTheme {
         InsertProductContent(
-            state = state.uiProduct,
+            state = product,
             onEvent = {}
         )
     }

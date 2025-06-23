@@ -5,7 +5,7 @@ package com.yanchelneko.piggybank.common.core_utils
  * который может происходить из нескольких источников
  */
 public sealed class RequestResult<out E : Any>(public open val data: E? = null) {
-    public class InProgress<E : Any>( //todo loader for all screens
+    public class InProgress<E : Any>(
         data: E? = null,
     ) : RequestResult<E>(data)
 

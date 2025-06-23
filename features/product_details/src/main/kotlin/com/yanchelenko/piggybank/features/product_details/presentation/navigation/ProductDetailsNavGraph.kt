@@ -3,6 +3,7 @@ package com.yanchelenko.piggybank.features.product_details.presentation.navigati
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -20,13 +21,19 @@ fun NavGraphBuilder.productDetailsGraph(productDetailsNavigator: ProductDetailsN
         popEnterTransition = { slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(300)) },
         popExitTransition = { slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(300)) }
     ) {
+        // remember for stability to prevent ProductDetailsScreen from recomposing 3 times unnecessarily
+        val onNavigateToEditProduct = remember(productDetailsNavigator) {
+            { productId: Long -> productDetailsNavigator.navigateToEditProduct(productId) }
+        }
+        // remember for stability to prevent ProductDetailsScreen from recomposing 3 times unnecessarily
+        val onNavigateBack = remember(productDetailsNavigator) {
+            { productDetailsNavigator.navigateBack() }
+        }
+
         ProductDetailsScreen(
-            onNavigateToEditProduct = { productId ->
-                productDetailsNavigator.navigateToEditProduct(productId)
-            },
-            onNavigateBack = {
-                productDetailsNavigator.navigateBack()
-            }
+            onNavigateToEditProduct = onNavigateToEditProduct,
+            onNavigateBack = onNavigateBack
         )
     }
 }
+

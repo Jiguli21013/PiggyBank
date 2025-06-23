@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yanchelenko.piggybank.common.ui_models_android.mappers.toDomain
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_state.CommonUiState
+import com.yanchelenko.piggybank.common.ui_state.getDataOrLog
 import com.yanchelenko.piggybank.domain.usecases.DeleteProductUseCase
 import com.yanchelenko.piggybank.features.product_details.presentation.state.ProductDetailsEffect
 import com.yanchelenko.piggybank.features.product_details.presentation.state.ProductDetailsEvent
@@ -23,8 +25,8 @@ class ProductDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val deleteProductUseCase: DeleteProductUseCase,
     logger: Logger
-) : BaseViewModel<ProductDetailsEvent, ProductUiModel, ProductDetailsEffect>(
-    initialState = ProductUiModel(barcode = ""), //todo initializing state
+) : BaseViewModel<ProductDetailsEvent, CommonUiState<ProductUiModel>, ProductDetailsEffect>(
+    initialState = CommonUiState.Initializing,
     logger = logger
 ) {
 
@@ -41,56 +43,57 @@ class ProductDetailsViewModel @Inject constructor(
                     logger.e(LOG_TAG, "Failed to parse product JSON: ${e.message}")
                     null
                 }
-            } ?: error("ProductUiModel not found or corrupted in SavedStateHandle")
+            } ?: error("ProductUiModel not found or corrupted in SavedStateHandle") //todo error
 
         logger.d(LOG_TAG, "Parsed product: $product")
 
-        setState { product }
+        setState { CommonUiState.Success(data = product) }
     }
 
     override fun onEvent(event: ProductDetailsEvent) {
         logger.d(LOG_TAG, "Event received: ${event::class.simpleName}")
-
         when (event) {
             is ProductDetailsEvent.OnEditClicked -> {
-                logger.d(LOG_TAG, "Edit requested for productId=${state.productId}")
-                sendEffect { ProductDetailsEffect.NavigateToEdit(productId = state.productId) }
+                uiState.value.getDataOrLog(LOG_TAG, logger) { product ->
+                    logger.d(LOG_TAG, "Edit requested for productId=${product.productId}")
+                    sendEffect { ProductDetailsEffect.NavigateToEdit(productId = product.productId) }
+                }
             }
-
             is ProductDetailsEvent.OnDeleteClicked -> {
                 logger.d(LOG_TAG, "Delete dialog requested")
                 sendEffect { ProductDetailsEffect.ShowDeleteDialog }
             }
-
             is ProductDetailsEvent.CancelDelete -> {
                 logger.d(LOG_TAG, "Delete canceled")
                 sendEffect { ProductDetailsEffect.CloseDeleteDialog }
             }
-
             is ProductDetailsEvent.ConfirmedDelete -> {
-                logger.d(LOG_TAG, "Confirmed delete for productId=${state.productId}")
-                deleteProductFromDB()
+                uiState.value.getDataOrLog(LOG_TAG, logger) { product ->
+                    logger.d(LOG_TAG, "Confirmed delete for productId=${product.productId}")
+                    deleteProductFromDB()
+                }
             }
         }
     }
 
     private fun deleteProductFromDB() {
-        val current = uiState.value
-        logger.d(LOG_TAG, "Attempting to delete product: $current")
+        uiState.value.getDataOrLog(logTag = LOG_TAG, logger = logger) { product ->
+            logger.d(LOG_TAG, "Attempting to delete product: $product")
 
-        viewModelScope.launch {
-            when (val result = deleteProductUseCase.invoke(product = current.toDomain())) {
-                is RequestResult.Success -> {
-                    logger.d(LOG_TAG, "Product successfully deleted")
-                    sendEffect { ProductDetailsEffect.NavigateBack }
-                }
+            viewModelScope.launch {
+                when (val result = deleteProductUseCase(product.toDomain())) {
+                    is RequestResult.Success -> {
+                        logger.d(LOG_TAG, "Product successfully deleted")
+                        sendEffect { ProductDetailsEffect.NavigateBack }
+                    }
 
-                is RequestResult.Error -> {
-                    logger.e(LOG_TAG, "Error deleting product: ${result.error?.message}")
-                }
+                    is RequestResult.Error -> {
+                        logger.e(LOG_TAG, "Error deleting product: ${result.error?.message}")
+                    }
 
-                is RequestResult.InProgress -> {
-                    logger.d(LOG_TAG, "Delete in progress")
+                    is RequestResult.InProgress -> {
+                        logger.d(LOG_TAG, "Delete in progress")
+                    }
                 }
             }
         }

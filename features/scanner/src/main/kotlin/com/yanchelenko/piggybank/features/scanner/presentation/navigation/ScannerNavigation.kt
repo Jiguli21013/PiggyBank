@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.yanchelenko.piggybank.features.scanner.presentation.ScannerScreen
@@ -19,10 +20,12 @@ fun NavGraphBuilder.scannerGraph(scannerNavigator: ScannerNavigator) {
         popEnterTransition = { slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(300)) },
         popExitTransition = { slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(300)) }
     ) {
+        val onNavigateToInsertProduct = remember(scannerNavigator) {
+            { barcode: String -> scannerNavigator.navigateToInsertProduct(barcode = barcode) }
+        }
+
         ScannerScreen(
-            onNavigateToInsertProduct = { barcode ->
-                scannerNavigator.navigateToInsertProduct(barcode = barcode)
-            }
+            onNavigateToInsertProduct = onNavigateToInsertProduct
         )
     }
 }

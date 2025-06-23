@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -15,8 +16,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryEffect
 import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryEvent
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_state.CommonUiState
 import com.yanchelenko.piggybank.fearues.history.presentation.components.ListItem
-import com.yanchelenko.piggybank.fearues.history.presentation.state.HistoryState
 import com.yanchelenko.piggynank.core.ui.components.CenteredLoader
 import com.yanchelenko.piggynank.core.ui.components.ErrorMessage
 import com.yanchelenko.piggynank.core.ui.effect.ScreenWithEffect
@@ -45,7 +46,8 @@ internal fun HistoryMainScreen(
     val effectFlow = viewModel.effect
     val context = LocalContext.current
 
-    val items = viewModel.items.collectAsLazyPagingItems()
+    val pagingFlow = remember { viewModel.pagedItems() }
+    val items = pagingFlow.collectAsLazyPagingItems()
 
     LaunchedEffect(items.loadState) {
         viewModel.onLoadStateChanged(
@@ -79,22 +81,23 @@ internal fun HistoryMainScreen(
 @Composable
 fun HistoryMainContent(
     modifier: Modifier = Modifier,
-    currentHistoryState: HistoryState,
+    currentHistoryState: CommonUiState<Unit>,
     items: LazyPagingItems<ListItem>,
     onEvent: (HistoryEvent) -> Unit
 ) {
     Column(modifier = modifier) {
         when (currentHistoryState) {
-            is HistoryState.None -> Unit
-            is HistoryState.Error -> { ErrorMessage(message = "some message" ) } //todo
-            is HistoryState.Loading -> { CenteredLoader() }
-            is HistoryState.Success -> {
+            is CommonUiState.Success -> {
                 HistoryList(
                     items = items,
                     modifier = modifier,
                     onEvent = onEvent
                 )
             }
+            is CommonUiState.Initializing -> { CenteredLoader() }
+            is CommonUiState.Loading -> { CenteredLoader() }
+            is CommonUiState.Error -> { ErrorMessage(message = "some message" ) } //todo
+
         }
     }
 }

@@ -76,6 +76,8 @@ dependencies {
     // hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
+    implementation(project(":common:ui_preview"))
+    implementation(project(":common:ui_state"))
 
 
 

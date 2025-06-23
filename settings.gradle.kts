@@ -49,6 +49,12 @@ project(":common:core_utils").projectDir = file("common/core_utils")
 include(":common:ui_models_android")
 project(":common:ui_models_android").projectDir = file("common/ui_models_android")
 
+include(":common:ui_preview")
+project(":common:ui_preview").projectDir = file("common/ui_preview")
+
+include(":common:ui_state")
+project(":common:ui_state").projectDir = file("common/ui_state")
+
 include(":common:mappers")
 project(":common:mappers").projectDir = file("common/mappers")
 

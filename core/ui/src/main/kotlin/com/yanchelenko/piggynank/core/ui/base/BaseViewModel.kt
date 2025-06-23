@@ -21,17 +21,12 @@ abstract class BaseViewModel<EVENT, STATE, EFFECT>(
     protected val state: STATE
         get() = _uiState.value
 
-    @Suppress("SuspiciousEqualsCombination")
     protected fun setState(reducer: STATE.() -> STATE) {
         val current = _uiState.value
         val newState = current.reducer()
 
-        if (newState !== current && newState != current) {
-            logger.d(LOG_TAG,"State changed:\n• old = $current\n• new = $newState")
-            _uiState.value = newState
-        } else {
-            logger.d(LOG_TAG,"State unchanged:\n• old = $current\n• new = $newState")
-        }
+        logger.d(LOG_TAG, "State changed:\n• old = $current\n• new = $newState")
+        _uiState.value = newState
     }
 
     private val _effect = Channel<EFFECT>(Channel.BUFFERED)

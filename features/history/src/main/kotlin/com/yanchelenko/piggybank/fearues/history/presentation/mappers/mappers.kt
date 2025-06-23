@@ -17,6 +17,10 @@ fun PagingData<ProductUiModel>.withDateHeaders(): PagingData<ListItem> {
         .insertSeparators { before, after ->
             val beforeDate = before?.product?.addedAt?.toLocalDateInSystemZone()
             val afterDate = after?.product?.addedAt?.toLocalDateInSystemZone()
+            //val beforeDate = before?.product?.addedAt?.value?.toLocalDateTime(TimeZone.currentSystemDefault())?.date
+            //val afterDate = after?.product?.addedAt?.value?.toLocalDateTime(TimeZone.currentSystemDefault())?.date
+
+           
             return@insertSeparators when {
                 before == null && afterDate != null -> ListItem.DateHeader(afterDate)
 

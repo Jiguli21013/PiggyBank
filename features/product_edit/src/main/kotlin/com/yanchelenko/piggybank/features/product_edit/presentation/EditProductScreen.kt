@@ -26,13 +26,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.common.extensions.formatIfNonZero
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
+import com.yanchelenko.piggybank.common.ui_preview.ProductPreviewProvider
+import com.yanchelenko.piggybank.common.ui_state.CommonUiState
 import com.yanchelenko.piggybank.core.debugUI.debug.WithDebug
 import com.yanchelenko.piggybank.core.debugUI.debug.trackMap
 import com.yanchelenko.piggybank.features.product_edit.R
-import com.yanchelenko.piggybank.features.product_edit.presentation.preview.EditProductPreviewProvider
 import com.yanchelenko.piggybank.features.product_edit.presentation.state.EditProductEffect
 import com.yanchelenko.piggybank.features.product_edit.presentation.state.EditProductEvent
-import com.yanchelenko.piggybank.features.product_edit.presentation.state.EditProductUiState
+import com.yanchelenko.piggynank.core.ui.components.CenteredLoader
 import com.yanchelenko.piggynank.core.ui.dimens.LocalDimens
 import com.yanchelenko.piggynank.core.ui.effect.ScreenWithEffect
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
@@ -79,11 +80,24 @@ internal fun EditProductScreen(
             }
         },
         content = { uiState, sendEvent, innerModifier ->
-            EditProductContent(
-                state = uiState.uiProduct,
-                modifier = innerModifier,
-                onEvent = sendEvent
-            )
+            when (uiState) {
+                is CommonUiState.Success -> {
+                    EditProductContent(
+                        state = uiState.data,
+                        modifier = innerModifier,
+                        onEvent = sendEvent
+                    )
+                }
+                is CommonUiState.Initializing -> {
+                    CenteredLoader()
+                }
+                is CommonUiState.Loading -> {
+                    CenteredLoader()
+                }
+                is CommonUiState.Error -> {
+                    //todo
+                }
+            }
         }
     )
 }
@@ -191,12 +205,11 @@ fun EditProductContent(
 @Preview(showBackground = true)
 @Composable
 private fun InsertProductMainContentPreview(
-    @PreviewParameter(EditProductPreviewProvider::class)
-    state: EditProductUiState
+        @PreviewParameter(ProductPreviewProvider::class) product: ProductUiModel
 ) {
     PiggyBankTheme {
         EditProductContent(
-            state = state.uiProduct,
+            state = product,
             onEvent = {}
         )
     }
