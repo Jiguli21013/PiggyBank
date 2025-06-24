@@ -28,7 +28,9 @@ Planned features:
 3.	Integrate baseInlineProfiler
 
 ## Screenshots
-<img src=".github/images/scan.jpg" alt="Scan Screen" width="576"/>
-<img src=".github/images/add_product.jpg" alt="Add Product" width="576"/>
-<img src=".github/images/product_details.jpg" alt="Product Details" width="576"/>
-<img src=".github/images/history.jpg" alt="History" width="576"/>
+<p>
+  <img src=".github/images/scan.webp" alt="Scan Screen" width="192"/>
+  <img src=".github/images/add_product.webp" alt="Add Product" width="192"/>
+  <img src=".github/images/product_details.webp" alt="Product Details" width="192"/>
+  <img src=".github/images/history.webp" alt="History" width="192"/>
+</p>
