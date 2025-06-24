@@ -1,6 +1,6 @@
-Приложения позволяет пользователю сканировать штрих коды продуктов и сохранить значения в локальную бд.
+The application allows users to scan product barcodes and save the data to a local database.
 
-Технологический стек:
+Tech stack:
 - Android SDK
 - [Android Jetpack](https://developer.android.com/jetpack)
 - [Kotlin 2.0](https://kotlinlang.org/docs/whatsnew20.html)
@@ -15,15 +15,20 @@
 - [ML Kit Barcode Scanning](https://developers.google.com/ml-kit/vision/barcode-scanning)
 - [ML Kit + CameraX Integration](https://developers.google.com/ml-kit/vision/camera-integration)
 
-Основные модули:
-- core:* - базовые модули приложения для работы с данными
-- common:* - 
-- features:* - все фичи приложения
-- app - сборка приложения
-- di -
+Main modules:
+•	core:* – base modules for working with data
+•	common:* – shared code across features
+•	features:* – all feature-specific modules
+•	app – application assembly
+•	di – dependency injection setup
 
-В планах:
+Planned features:
+1.	Add test coverage
+2.	Settings screen (theme selection, language switching)
+3.	Integrate baseInlineProfiler
 
-1. покрыть тестами
-2. настройки (выбор темы, смена языка)
-3. внедрить baseInlineProfiler# PiggyBank
+## Screenshots
+<img src=".github/images/scan.jpg" alt="Scan Screen" width="576"/>
+<img src=".github/images/add_product.jpg" alt="Add Product" width="576"/>
+<img src=".github/images/product_details.jpg" alt="Product Details" width="576"/>
+<img src=".github/images/history.jpg" alt="History" width="576"/>

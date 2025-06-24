@@ -14,9 +14,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.yanchelenko.piggybank.features.scanner.R
 import com.yanchelenko.piggybank.features.scanner.presentation.state.ScannerEvent
 import com.yanchelenko.piggybank.features.scanner.presentation.utils.BarcodeAnalyzer
 import kotlinx.coroutines.delay
@@ -72,6 +74,6 @@ fun AndroidCameraView(
         }
         DrawRectangle(rect = boundingRect?.toComposeRect())
     } else {
-        BlinkingCenteredText(text = "Наведите на штрих-код")
+        BlinkingCenteredText(text = stringResource(R.string.hint_point_to_barcode))
     }
 }

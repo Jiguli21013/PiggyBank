@@ -7,7 +7,7 @@ import java.util.Locale
 
 fun LocalDate.formatAsHeader(
     pattern: String = "dd MMMM yyyy", //todo
-    locale: Locale = Locale.forLanguageTag("ru") //todo
+    locale: Locale = Locale.getDefault()
 ): String {
     val formatter = SimpleDateFormat(pattern, locale)
     val calendar = Calendar.getInstance().apply {

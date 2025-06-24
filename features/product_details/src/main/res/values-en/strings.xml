@@ -1,0 +1,16 @@
+<resources>
+    <!-- Labels -->
+    <string name="label_barcode">Barcode</string>
+    <string name="label_product_name">Name</string>
+    <string name="label_weight">Weight</string>
+    <string name="label_price">Price</string>
+    <string name="label_price_per_kg">Price per kg</string>
+
+    <!-- Actions -->
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+
+    <!-- Format strings -->
+    <string name="format_grams">%1$.0f g</string>
+    <string name="format_price_rub">%1$.2f ₽</string>
+</resources>

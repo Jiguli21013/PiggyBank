@@ -1,0 +1,9 @@
+<resources>
+    <string name="label_product_name">Product Name</string>
+    <string name="label_weight_grams">Weight (grams)</string>
+    <string name="label_price_by_weight">Price for the current weight in grams: %1$s</string>
+    <string name="label_price_per_kg">Final price per kilogram</string>
+
+    <string name="action_back">Back</string>
+    <string name="action_save">Save</string>
+</resources>
