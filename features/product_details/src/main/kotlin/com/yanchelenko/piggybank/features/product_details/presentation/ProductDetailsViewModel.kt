@@ -34,6 +34,8 @@ class ProductDetailsViewModel @Inject constructor(
         val productJsonKey = AppDestination.ProductDetails.arguments.first().name
         logger.d(LOG_TAG, "Fetching product from SavedStateHandle with key: $productJsonKey")
 
+        // как будто бы легче кидать idшник и заново запрашивать
+        // а то тут чот страшное происходит
         val product: ProductUiModel = savedStateHandle.get<String>(productJsonKey)
             ?.let {
                 try {

@@ -19,7 +19,9 @@ import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingSmall
 fun ErrorMessage(
     message: String,
     modifier: Modifier = Modifier,
-    contentBelow: @Composable (() -> Unit)? = null
+    contentBelow: @Composable (() -> Unit)? = null // nit: хз насколько это вообще нужно,
+// как будто мы должны передать просто данные, а вьюшка сама все сформирует,
+// а так получается мы формируем как она будет выглядеть в месте вызова
 ) {
     Column(modifier = modifier) {
         Box(
@@ -38,7 +40,7 @@ fun ErrorMessage(
 
         contentBelow?.let {
             Spacer(modifier = Modifier.height(SpacingSmall))
-            it()
+            it() // nit: давай не использовать it в компоузе))
         }
     }
 }

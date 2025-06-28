@@ -24,6 +24,7 @@ import com.yanchelneko.piggybank.common.core_utils.dispatchers.DefaultDispatcher
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
 
+// наверное это тоже в ui лучше перенести, так то это является экраном
 @Composable
 fun PiggyBankApp(
     navDispatcher: NavigationDispatcher,
@@ -45,6 +46,7 @@ fun PiggyBankApp(
 
     //ProvideDimens { //todo  для multi-screen / foldable / large-screen устройств. пока можно забить
         PiggyBankTheme {
+            // что думаешь насчет того, чтобы заинлайнить AppScaffold?
             AppScaffold(
                 screenMeta = screenMeta,
                 currentRoute = currentRoute,

@@ -18,7 +18,8 @@ fun NavGraphBuilder.productEditGraph(editProductNavigator: EditProductNavigator)
         exitTransition = { slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(300)) },
         popEnterTransition = { slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(300)) },
         popExitTransition = { slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(300)) }
-    ) {
+    ) { entry ->
+        entry.savedStateHandle // тут тоже можно использовать savedStateHandle
         val onNavigateBack = remember(editProductNavigator) {
             { editProductNavigator.navigateBack() }
         }

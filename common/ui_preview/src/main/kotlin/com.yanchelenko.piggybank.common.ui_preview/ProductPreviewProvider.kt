@@ -4,6 +4,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import kotlinx.datetime.Clock
 
+// кажется не нужен отдельный модуль,
+// нужно делать там где используется вьюшка,
+// иначе для каждого фича модуля придется подключать огромный модуль с провайдерами
 class ProductPreviewProvider : PreviewParameterProvider<ProductUiModel> {
     override val values = sequenceOf(
         ProductUiModel(

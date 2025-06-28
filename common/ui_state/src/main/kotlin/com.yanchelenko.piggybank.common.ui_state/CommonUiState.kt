@@ -9,6 +9,8 @@ sealed interface CommonUiState<out T> {
     data class Success<T>(val data: T) : CommonUiState<T>
 }
 
+// nit: чот странное))
+// плюс судя по названию функции она должна возвращать что-то, а она этого не делает
 inline fun <T> CommonUiState<T>.getDataOrLog(
     logTag: String,
     logger: Logger,
@@ -20,6 +22,8 @@ inline fun <T> CommonUiState<T>.getDataOrLog(
     }
 }
 
+// nit: мне вот кажется, что для таких методов не нужен логер,
+// это общие утилитарные методы и мы ставим зависимость от некого инстанса логера
 inline fun <T> CommonUiState<T>.updateDataSuccess(
     logTag: String,
     logger: Logger,
@@ -27,7 +31,7 @@ inline fun <T> CommonUiState<T>.updateDataSuccess(
 ): CommonUiState<T> {
     return when (this) {
         is CommonUiState.Success -> {
-            val newData = data.transform()
+            val newData = transform(data) // кстати можно вот так))
             if (newData == data) {
                 logger.d(logTag, "Data unchanged, skipping state update")
                 this

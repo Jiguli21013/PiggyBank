@@ -26,9 +26,9 @@ import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
 internal fun HistoryList(
     items: LazyPagingItems<ListItem>,
     modifier: Modifier = Modifier,
-    onEvent: (HistoryEvent) -> Unit
+    onEvent: (HistoryEvent) -> Unit // этот вторым
 ) {
-    WithDebug(
+    WithDebug( // это в каждой функции будет эта обретка?
         trackMap = mapOf(
             "itemCount" to items.itemCount,
             "loadState.refresh" to items.loadState.refresh::class.simpleName,
@@ -87,7 +87,7 @@ internal fun HistoryList(
 // only for @Preview
 @Preview
 @Composable
-fun PreviewHistoryListContent(
+fun PreviewHistoryListContent( // private nit: Preview обычно суффикс
     @PreviewParameter(ListItemPreviewProvider::class, limit = 1)
     items: List<ListItem>
 ) {

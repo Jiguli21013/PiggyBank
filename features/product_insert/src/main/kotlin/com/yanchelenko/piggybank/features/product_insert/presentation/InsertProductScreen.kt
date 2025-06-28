@@ -55,8 +55,8 @@ fun InsertProductMainScreen(
 
 @Composable
 internal fun InsertProductMainScreen(
-    viewModel: InsertProductScreenViewModel,
-    modifier: Modifier = Modifier,
+    viewModel: InsertProductScreenViewModel,//
+    modifier: Modifier = Modifier,//
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -104,7 +104,7 @@ internal fun InsertProductMainScreen(
 @Composable
 fun InsertProductContent(
     state: ProductUiModel,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,//
     onEvent: (InsertProductEvent) -> Unit
 ) {
     val productNameLabel = stringResource(R.string.label_product_name)
@@ -114,7 +114,7 @@ fun InsertProductContent(
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
 
-    WithDebug(
+    WithDebug(//
         trackMap = state.trackMap(),
         composableName = "InsertProductContent"
     ) {

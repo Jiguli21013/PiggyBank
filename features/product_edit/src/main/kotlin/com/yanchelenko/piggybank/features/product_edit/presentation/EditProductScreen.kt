@@ -42,7 +42,7 @@ import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 
 @Composable
 fun EditProductScreen(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier, // второй (правило для modifier - он должен быть первым параметром с заданным значением по умолчанию)
     onNavigateBack: () -> Unit
 ) {
     val viewModel: EditProductViewModel = hiltViewModel()
@@ -56,8 +56,8 @@ fun EditProductScreen(
 
 @Composable
 internal fun EditProductScreen(
-    viewModel: EditProductViewModel,
-    modifier: Modifier = Modifier,
+    viewModel: EditProductViewModel,//
+    modifier: Modifier = Modifier, // третий
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -107,7 +107,7 @@ internal fun EditProductScreen(
 @Composable
 fun EditProductContent(
     state: ProductUiModel,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,//
     onEvent: (EditProductEvent) -> Unit
 ) {
     val productNameLabel = stringResource(R.string.label_product_name)
@@ -117,7 +117,7 @@ fun EditProductContent(
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
 
-    WithDebug(
+    WithDebug(//
         trackMap = state.trackMap(),
         composableName = "EditProductContent"
     ) {

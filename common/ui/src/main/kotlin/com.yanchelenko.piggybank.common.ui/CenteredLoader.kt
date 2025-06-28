@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 
+// ну вот в коре тоже есть ui модуль с элементами, почему не там?
 @Composable
 fun CenteredLoader(
     modifier: Modifier = Modifier

@@ -2,6 +2,7 @@ package com.yanchelneko.piggybank.common.core_utils.dispatchers
 
 import kotlinx.coroutines.CoroutineDispatcher
 
+// чот не понял, зачем нам value class, почему не использовать только интерфейс Provider
 @JvmInline
 value class AppDispatchers(
     val provider: Provider
