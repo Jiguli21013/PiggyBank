@@ -3,6 +3,8 @@ package com.yanchelenko.piggynank.core.ui
 import android.util.Log
 import com.yanchelneko.piggybank.common.core_utils.Logger
 
+// зачем анонимный класс?
+// кажется он должен быть не в ui, можно отдельный модуль/пакет
 public fun androidLogcatLogger(): Logger =
     object : Logger {
         override fun d(

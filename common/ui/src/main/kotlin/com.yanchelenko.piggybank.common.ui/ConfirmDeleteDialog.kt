@@ -11,7 +11,7 @@ import com.yanchelenko.piggybank.common.ui.R
 @Composable
 fun ConfirmDeleteDialog(
     onConfirm: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit // modifier третим
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,

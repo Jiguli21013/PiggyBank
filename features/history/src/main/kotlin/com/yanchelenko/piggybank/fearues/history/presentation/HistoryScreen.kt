@@ -42,7 +42,7 @@ fun HistoryMainScreen(
 @Composable
 internal fun HistoryMainScreen(
     modifier: Modifier = Modifier,
-    viewModel: HistoryViewModel,
+    viewModel: HistoryViewModel, // надо бы избавиться от передачи viewModel здесь, а то вьюшка не тестируемая
     onNavigateToProductDetails: (ProductUiModel) -> Unit
 ) {
     var dialogProduct by remember { mutableStateOf<ProductUiModel?>(null) }

@@ -11,7 +11,7 @@ public interface Logger {
     /**
      Ошибки, исключения, сбои
      */
-    public fun e(
+    public fun e( // нужно добавить ошибку в качестве параметра с типом Throwable?
         tag: String,
         message: String
     )

@@ -54,7 +54,7 @@ fun ProductDetailsScreen(
 
 @Composable
 internal fun ProductDetailsScreen(
-    viewModel: ProductDetailsViewModel,
+    viewModel: ProductDetailsViewModel, // viewModel
     modifier: Modifier = Modifier,
     onNavigateToEditProduct: (Long) -> Unit,
     onNavigateBack: () -> Unit

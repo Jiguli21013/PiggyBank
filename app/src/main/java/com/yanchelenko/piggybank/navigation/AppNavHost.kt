@@ -47,7 +47,7 @@ fun AppNavHost(
     LaunchedEffect(Unit) {
         navDispatcher.navEvents
             .debounce(timeoutMillis = NAVIGATION_DEBOUNCE_MS)
-            //.distinctUntilChanged()
+            //.distinctUntilChanged() // почему законментил?
             .collect { event ->
                 logger.d("AppNavHost", "Received NavEvent: ${event.javaClass.simpleName} -> $event")
                 when (event) {

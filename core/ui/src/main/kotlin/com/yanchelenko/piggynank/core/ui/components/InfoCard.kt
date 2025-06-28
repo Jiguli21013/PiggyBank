@@ -14,7 +14,7 @@ import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
 fun InfoCard(
     modifier: Modifier = Modifier,
     padding: PaddingValues = PaddingValues(PaddingMedium),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit // этот первый в списке
 ) {
     Surface(
         modifier = modifier,

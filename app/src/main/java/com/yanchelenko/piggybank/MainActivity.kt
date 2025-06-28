@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// оно тут вроде не нужно)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

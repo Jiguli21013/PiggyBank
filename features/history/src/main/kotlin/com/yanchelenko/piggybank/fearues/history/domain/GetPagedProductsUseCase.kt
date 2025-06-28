@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
+// этот кажется лишний, просто перевызов метода
 class GetPagedProductsUseCase @Inject constructor(
     private val repository: ProductsRepository,
     private val logger: Logger

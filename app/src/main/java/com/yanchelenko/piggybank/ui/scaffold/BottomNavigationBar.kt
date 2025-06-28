@@ -18,6 +18,7 @@ fun BottomNavigationBar(
     currentRoute: String?,
     onItemSelected: (String) -> Unit
 ) {
+    // а не надо ли обернуть в remember?
     val items = listOf(
         AppDestination.Scanner,
         AppDestination.History

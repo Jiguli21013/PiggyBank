@@ -2,6 +2,8 @@ package com.yanchelenko.piggybank.common.ui_models_android.mappers
 
 import com.yanchelenko.piggybank.common.ui_models_android.models.ProductUiModel
 import com.yanchelenko.piggybank.domain.models.Product
+// почему ui_models_android, в модуле нет ничего из android-а
+// выглядит что эти модели и их маппинг это вроде фича специфическое уже, по идее не должны быть в общем модуле, посмотрю дальше
 
 fun Product.toUi(): ProductUiModel = ProductUiModel(
     productId = this.id,
