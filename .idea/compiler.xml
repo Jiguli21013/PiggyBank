@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="17" />
+    <bytecodeTargetLevel target="21">
+      <module name="ScanRealPrice.common.core_utils.main" target="21" />
+      <module name="ScanRealPrice.common.core_utils.test" target="21" />
+      <module name="ScanRealPrice.common.extensions.main" target="21" />
+      <module name="ScanRealPrice.common.extensions.test" target="21" />
+      <module name="ScanRealPrice.common.ui_models_android.main" target="21" />
+      <module name="ScanRealPrice.common.ui_models_android.test" target="21" />
+      <module name="ScanRealPrice.common.ui_state.main" target="21" />
+      <module name="ScanRealPrice.common.ui_state.test" target="21" />
+      <module name="ScanRealPrice.core.domain.main" target="21" />
+      <module name="ScanRealPrice.core.domain.test" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

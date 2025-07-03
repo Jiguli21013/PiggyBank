@@ -15,12 +15,39 @@ Tech stack:
 - [ML Kit Barcode Scanning](https://developers.google.com/ml-kit/vision/barcode-scanning)
 - [ML Kit + CameraX Integration](https://developers.google.com/ml-kit/vision/camera-integration)
 
-Main modules:
-•	core:* – base modules for working with data
-•	common:* – shared code across features
-•	features:* – all feature-specific modules
-•	app – application assembly
-•	di – dependency injection setup
+modules/
+├── base/
+│   ├── infrastructure       
+│   ├── ui_kit               
+│   └── ui_model             
+│
+├── core/
+│   ├── core_api             
+│   ├── core_factory         
+│   ├── core_impl            
+│   └── database              
+│
+├── features/
+│   ├── history/
+│   │   ├── history_api     
+│   │   └── history_impl     
+│   │
+│   ├── product_details/
+│   │   ├── product_details_api
+│   │   └── product_details_impl
+│   │
+│   ├── product_edit/
+│   │   ├── product_edit_api
+│   │   └── product_edit_impl
+│   │
+│   ├── product_insert/
+│   │   ├── product_insert_api
+│   │   └── product_insert_impl
+│   │
+│   └── scanner/
+│       ├── scanner_api
+│       └── scanner_impl
+│
 
 Planned features:
 1.	Add test coverage

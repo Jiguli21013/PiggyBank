@@ -1,6 +1,0 @@
-<resources>
-    <string name="dialog_title_delete">Удаление</string>
-    <string name="dialog_text_delete_confirmation">Вы уверены, что хотите удалить этот товар?</string>
-    <string name="action_delete">Удалить</string>
-    <string name="action_cancel">Отмена</string>
-</resources>

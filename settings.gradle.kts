@@ -19,48 +19,62 @@ dependencyResolutionManagement {
 }
 
 
-rootProject.name = "PiggyBank"
+rootProject.name = "ScanRealPrice"
 
 include(":app")
 
-// core
-include(":core:data")
-include(":core:database")
-include(":core:domain")
-include(":core:ui")
-include(":core:debugUI")
-include(":core:navigation")
-include(":core:permissions")
+// Core (API + Impl + Factory)
+include(":modules:core:core_api")
+include(":modules:core:core_impl")
+include(":modules:core:core_factory")
+include(":modules:core:database")
 
-// features
-include(":features:scanner")
-include(":features:history")
-include(":features:product_details")
-include(":features:product_insert")
-include(":features:product_edit")
+project(":modules:core:core_api").projectDir = file("modules/core/core_api")
+project(":modules:core:core_impl").projectDir = file("modules/core/core_impl")
+project(":modules:core:core_factory").projectDir = file("modules/core/core_factory")
+project(":modules:core:database").projectDir = file("modules/core/database")
 
-// di
-include(":di")
+// Base (Reusable infrastructure & UI)
+include(":modules:base:ui_kit")
+include(":modules:base:ui_model")
+include(":modules:base:infrastructure")
 
-// common
-include(":common:core_utils")
-project(":common:core_utils").projectDir = file("common/core_utils")
+project(":modules:base:ui_kit").projectDir = file("modules/base/ui_kit")
+project(":modules:base:ui_model").projectDir = file("modules/base/ui_model")
+project(":modules:base:infrastructure").projectDir = file("modules/base/infrastructure")
 
-include(":common:ui_models_android")
-project(":common:ui_models_android").projectDir = file("common/ui_models_android")
+// Features: Scanner (API + Impl)
+include(":modules:features:scanner:scanner_api")
+include(":modules:features:scanner:scanner_impl")
 
-include(":common:ui_preview")
-project(":common:ui_preview").projectDir = file("common/ui_preview")
+project(":modules:features:scanner:scanner_api").projectDir = file("modules/features/scanner/scanner_api")
+project(":modules:features:scanner:scanner_impl").projectDir = file("modules/features/scanner/scanner_impl")
 
-include(":common:ui")
-project(":common:ui").projectDir = file("common/ui")
+// Features: History (API + Impl)
+include(":modules:features:history:history_api")
+include(":modules:features:history:history_impl")
 
-include(":common:ui_state")
-project(":common:ui_state").projectDir = file("common/ui_state")
+project(":modules:features:history:history_api").projectDir = file("modules/features/history/history_api")
+project(":modules:features:history:history_impl").projectDir = file("modules/features/history/history_impl")
 
-include(":common:mappers")
-project(":common:mappers").projectDir = file("common/mappers")
+// Features: Product Insert (API + Impl)
+include(":modules:features:product_insert:product_insert_api")
+include(":modules:features:product_insert:product_insert_impl")
 
-include(":common:extensions")
-project(":common:extensions").projectDir = file("common/extensions")
+project(":modules:features:product_insert:product_insert_api").projectDir = file("modules/features/product_insert/product_insert_api")
+project(":modules:features:product_insert:product_insert_impl").projectDir = file("modules/features/product_insert/product_insert_impl")
+
+// Features: Product Edit (API + Impl)
+include(":modules:features:product_edit:product_edit_api")
+include(":modules:features:product_edit:product_edit_impl")
+
+project(":modules:features:product_edit:product_edit_api").projectDir = file("modules/features/product_edit/product_edit_api")
+project(":modules:features:product_edit:product_edit_impl").projectDir = file("modules/features/product_edit/product_edit_impl")
+
+// Features: Product Details (API + Impl)
+include(":modules:features:product_details:product_details_api")
+include(":modules:features:product_details:product_details_impl")
+
+project(":modules:features:product_details:product_details_api").projectDir = file("modules/features/product_details/product_details_api")
+project(":modules:features:product_details:product_details_impl").projectDir = file("modules/features/product_details/product_details_impl")
 

@@ -19,6 +19,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -40,21 +42,32 @@ android {
 }
 
 dependencies {
-    implementation(project(":di"))
-    
-    implementation(project(":features:scanner"))
-    implementation(project(":features:history"))
-    implementation(project(":features:product_details"))
-    implementation(project(":features:product_insert"))
-    implementation(project(":features:product_edit"))
+    // todo проверить какие модули не нужны тут
 
-    implementation(project(":common:ui_models_android"))
-    implementation(project(":common:core_utils"))
+    implementation(project(":modules:core:database"))
+    implementation(project(":modules:core:core_api"))
+    implementation(project(":modules:core:core_impl"))
+    implementation(project(":modules:core:core_factory"))
 
-    implementation(project(":core:navigation"))
-    implementation(project(":core:ui"))
+    implementation(project(":modules:base:ui_kit"))
+    implementation(project(":modules:base:ui_model"))
+    implementation(project(":modules:base:infrastructure"))
 
-    debugImplementation(project(":core:debugUI"))
+    implementation(project(":modules:features:history:history_api"))
+    implementation(project(":modules:features:history:history_impl"))
+
+    implementation(project(":modules:features:scanner:scanner_api"))
+    implementation(project(":modules:features:scanner:scanner_impl"))
+
+    implementation(project(":modules:features:product_edit:product_edit_api"))
+    implementation(project(":modules:features:product_edit:product_edit_impl"))
+
+    implementation(project(":modules:features:product_insert:product_insert_api"))
+    implementation(project(":modules:features:product_insert:product_insert_impl"))
+
+    implementation(project(":modules:features:product_details:product_details_api"))
+    implementation(project(":modules:features:product_details:product_details_impl"))
+
 
     //debugImplementation(libs.androidx.ui.tooling)
     //debugImplementation(libs.androidx.ui.test.manifest)
