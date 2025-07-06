@@ -53,8 +53,10 @@ internal fun HistoryList(
         ) { index ->
             when (val item = items[index]) {
                 is ListItem.DateHeaderUiModel -> DateHeader(
-                    modifier = modifier,
                     date = item.date,
+                    modifier = modifier.animateItem(
+                        placementSpec = tween(durationMillis = LONG)
+                    )
                 )
                 is ListItem.ProductItemUiModel -> ProductItem(
                     product = item.product,
