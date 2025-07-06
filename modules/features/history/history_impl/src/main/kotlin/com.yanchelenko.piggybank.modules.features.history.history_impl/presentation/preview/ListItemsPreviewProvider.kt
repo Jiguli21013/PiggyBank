@@ -11,10 +11,10 @@ import kotlinx.datetime.toLocalDateTime
 class ListItemPreviewProvider : PreviewParameterProvider<List<ListItem>> {
     override val values: Sequence<List<ListItem>> = sequenceOf(
         listOf(
-            ListItem.DateHeader(
+            ListItem.DateHeaderUiModel(
                 date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
             ),
-            ListItem.ProductItem(
+            ListItem.ProductItemUiModel(
                 ProductUiModel(
                     productId = 1L,
                     barcode = "1234567890",
@@ -25,7 +25,7 @@ class ListItemPreviewProvider : PreviewParameterProvider<List<ListItem>> {
                     addedAt = Instant.DISTANT_PAST
                 )
             ),
-            ListItem.ProductItem(
+            ListItem.ProductItemUiModel(
                 ProductUiModel(
                     productId = 2L,
                     barcode = "0987654321",

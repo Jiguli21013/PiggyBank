@@ -4,6 +4,6 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import kotlinx.datetime.LocalDate
 
 sealed class ListItem {
-    data class DateHeader(val date: LocalDate) : ListItem()
-    data class ProductItem(val product: ProductUiModel) : ListItem()
+    data class DateHeaderUiModel(val date: LocalDate) : ListItem()
+    data class ProductItemUiModel(val product: ProductUiModel) : ListItem()
 }

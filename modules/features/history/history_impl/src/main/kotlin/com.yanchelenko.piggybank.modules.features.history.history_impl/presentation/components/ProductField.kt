@@ -12,8 +12,15 @@ import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingExtraSmall
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 
 @Composable
-fun ProductField(label: String, value: String) {
-    Row(modifier = Modifier.padding(vertical = PaddingExtraSmall)) {
+fun ProductField(
+    modifier: Modifier = Modifier,
+    label: String,
+    value: String
+) {
+    Row(
+        modifier = modifier
+            .padding(vertical = PaddingExtraSmall)
+    ) {
         Text(
             text = "$label: ",
             style = MaterialTheme.typography.labelMedium,

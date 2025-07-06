@@ -1,8 +1,9 @@
-package com.yanchelenko.piggybank.features.product_details.presentation.state
+package com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state
 
 sealed interface ProductDetailsEffect {
     data class NavigateToEdit(val productId: Long) : ProductDetailsEffect
-    object ShowDeleteDialog : ProductDetailsEffect
-    object CloseDeleteDialog : ProductDetailsEffect
-    object NavigateBack : ProductDetailsEffect
+    data object ShowDeleteDialog : ProductDetailsEffect
+    data object CloseDeleteDialog : ProductDetailsEffect
+    data object DeletionAnimation : ProductDetailsEffect
+    data object NavigateBack : ProductDetailsEffect
 }

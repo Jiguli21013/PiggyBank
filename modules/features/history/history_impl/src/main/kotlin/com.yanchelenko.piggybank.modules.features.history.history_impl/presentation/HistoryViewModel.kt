@@ -13,6 +13,7 @@ import com.yanchelenko.piggybank.modules.features.history.history_impl.presentat
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.state.HistoryEvent
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
+import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteProductUseCase
@@ -77,17 +78,17 @@ class HistoryViewModel @Inject constructor(
             logger.d(LOG_TAG, "Attempting to delete product from DB: $product")
 
             when (val result = deleteProductUseCase(product.toDomain())) {
-                is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.Success -> {
+                is RequestResult.Success -> {
                     logger.d(LOG_TAG, "Product deleted successfully: id=${product.productId}")
-                    //sendEffect { HistoryEffect.ShowMessage("Продукт удалён") }
+                    sendEffect { HistoryEffect.ShowMessage("Продукт удалён") } //todo from res
                 }
 
-                is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.Error -> {
+                is RequestResult.Error -> {
                     logger.e(LOG_TAG, "Error deleting product: ${result.error?.message}")
                     sendEffect { HistoryEffect.ShowError("Ошибка при удалении") } //todo
                 }
 
-                is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.InProgress -> {
+                is RequestResult.InProgress -> {
                     logger.d(LOG_TAG, "Deletion in progress")
                 }
             }

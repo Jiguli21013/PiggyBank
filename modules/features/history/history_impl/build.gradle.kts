@@ -41,14 +41,13 @@ dependencies {
 
     implementation(project(":modules:features:history:history_api"))
 
-    implementation(libs.kotlinx.immutable)// вроде не нужно
-
     // compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.material)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.lifecycle.runtime.compose)
+    //todo debug
     implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -60,6 +59,7 @@ dependencies {
 
     // paging
     implementation(libs.paging.compose)
+    implementation(libs.foundation.layout.android)
 
 
     debugImplementation(libs.ui.tooling)

@@ -24,9 +24,12 @@ import com.yanchelenko.piggynank.core.ui.theme.Dimens.ElevationSmall
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun DateHeader(date: LocalDate, modifier: Modifier = Modifier) {
+fun DateHeader(
+    modifier: Modifier,
+    date: LocalDate,
+) {
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         Surface(
@@ -38,7 +41,9 @@ fun DateHeader(date: LocalDate, modifier: Modifier = Modifier) {
                     horizontal = PaddingMedium,
                     vertical = PaddingSmall
                 )
-                .height(HeaderHeight)
+                .height(
+                    height = HeaderHeight
+                )
         ) {
             Text(
                 text = remember(date) { date.formatAsHeader() },
@@ -62,6 +67,7 @@ fun PreviewDateHeader() {
             year = 2025,
             monthNumber = 6,
             dayOfMonth = 6
-        )
+        ),
+        modifier = Modifier
     )
 }

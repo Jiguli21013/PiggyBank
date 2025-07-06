@@ -1,5 +1,8 @@
 package com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.features.product_details.presentation.components.InfoRow
-import com.yanchelenko.piggybank.features.product_details.presentation.state.ProductDetailsEffect
+import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEffect
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEvent
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.ConfirmDeleteDialog
@@ -35,6 +38,8 @@ import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.R
 import com.theapache64.rebugger.Rebugger
+import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.FAST
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.trackMap
 
 @Composable
@@ -53,15 +58,17 @@ fun ProductDetailsScreen(
 
 @Composable
 internal fun ProductDetailsScreen(
-    viewModel: ProductDetailsViewModel,
     modifier: Modifier = Modifier,
+    viewModel: ProductDetailsViewModel,
     onNavigateToEditProduct: (Long) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
     val effectFlow = viewModel.effect
+
     var showDeleteDialog by remember { mutableStateOf(value = false) }
+    var isContentVisible by remember { mutableStateOf(value = true) }
 
     ScreenWithEffect(
         state = state,
@@ -71,9 +78,10 @@ internal fun ProductDetailsScreen(
         onEffect = { effect ->
             when (effect) {
                 is ProductDetailsEffect.NavigateToEdit -> onNavigateToEditProduct(effect.productId)
-                is ProductDetailsEffect.NavigateBack -> { onNavigateBack.invoke() }
                 is ProductDetailsEffect.ShowDeleteDialog -> { showDeleteDialog = true }
                 is ProductDetailsEffect.CloseDeleteDialog -> { showDeleteDialog = false }
+                is ProductDetailsEffect.DeletionAnimation -> { isContentVisible = false }
+                is ProductDetailsEffect.NavigateBack -> onNavigateBack.invoke()
             }
         },
         content = { uiState, sendEvent, innerModifier ->
@@ -83,21 +91,29 @@ internal fun ProductDetailsScreen(
                         //todo вызывать через навигацию
                         ConfirmDeleteDialog(
                             modifier = innerModifier,
-                            onConfirm = { sendEvent(ProductDetailsEvent.ConfirmedDelete) },
-                            onDismiss = { sendEvent(ProductDetailsEvent.CancelDelete) }
+                            onConfirm = { sendEvent(ProductDetailsEvent.DialogConfirmedDelete) },
+                            onDismiss = { sendEvent(ProductDetailsEvent.DialogCancelDelete) }
                         )
                     }
-                    ProductDetailsContent(
-                        state = uiState.data,
-                        modifier = innerModifier,
-                        onEvent = sendEvent
-                    )
+
+                    AnimatedVisibility(
+                        visible = isContentVisible,
+                        exit = fadeOut(animationSpec = tween(durationMillis = FAST)),
+                        modifier = innerModifier
+                    ) {
+                        ProductDetailsContent(
+                            state = uiState.data,
+                            modifier = innerModifier,
+                            onEvent = sendEvent
+                        )
+                    }
+
                 }
                 is CommonUiState.Initializing -> {
-                    com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader()
+                    CenteredLoader()
                 }
                 is CommonUiState.Loading -> {
-                    com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader()
+                    CenteredLoader()
                 }
                 is CommonUiState.Error -> {
                     //todo

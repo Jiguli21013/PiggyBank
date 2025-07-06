@@ -5,8 +5,9 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 sealed interface ProductDetailsEvent {
     data object OnEditClicked : ProductDetailsEvent
     data object OnDeleteClicked : ProductDetailsEvent
-    data object ConfirmedDelete : ProductDetailsEvent
-    data object CancelDelete : ProductDetailsEvent
+
+    data object DialogConfirmedDelete : ProductDetailsEvent
+    data object DialogCancelDelete : ProductDetailsEvent
 
     data class LoadProductByProductId(val productId: Long) : ProductDetailsEvent
     data class ProductFoundInDB(val product: ProductUiModel) : ProductDetailsEvent

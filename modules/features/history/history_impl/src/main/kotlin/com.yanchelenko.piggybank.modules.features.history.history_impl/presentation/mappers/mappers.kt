@@ -13,16 +13,16 @@ fun PagingData<Product>.toUiPagingData(): PagingData<ProductUiModel> = this.map 
 
 fun PagingData<ProductUiModel>.withDateHeaders(): PagingData<ListItem> {
     return this
-        .map { ListItem.ProductItem(it) }
+        .map { ListItem.ProductItemUiModel(it) }
         .insertSeparators { before, after ->
             val beforeDate = before?.product?.addedAt?.toLocalDateInSystemZone()
             val afterDate = after?.product?.addedAt?.toLocalDateInSystemZone()
            
             return@insertSeparators when {
-                before == null && afterDate != null -> ListItem.DateHeader(afterDate)
+                before == null && afterDate != null -> ListItem.DateHeaderUiModel(afterDate)
 
                 beforeDate != null && afterDate != null && beforeDate != afterDate ->
-                    ListItem.DateHeader(afterDate)
+                    ListItem.DateHeaderUiModel(afterDate)
 
                 else -> null
             }

@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.main
+package com.yanchelenko.piggybank
 
 import androidx.compose.foundation.layout.consumeWindowInsets
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.NavigationDispatcher
@@ -43,15 +43,13 @@ fun PiggyBankApp(
             currentRoute = currentRoute,
             onNavigationSelected = { route ->
                 logger.d("Navigation", "BottomNav selected: $route")
-                coroutineScope.launch {
-                    navDispatcher.emit(NavEvent.NavigateRoot(route = route))
-                }
+                coroutineScope.launch { navDispatcher.emit(NavEvent.NavigateRoot(route = route)) }
             }
         ) { padding ->
             AppNavHost(
+                logger = logger,
                 navController = navController,
                 navDispatcher = navDispatcher,
-                logger = logger,
                 featureEntries = featureEntries,
                 modifier = Modifier
                     .padding(paddingValues = padding)

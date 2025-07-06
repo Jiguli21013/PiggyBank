@@ -1,6 +1,6 @@
 package com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.components
 
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -17,6 +17,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.theapache64.rebugger.Rebugger
+import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.LONG
+import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.MEDIUM
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.models.ListItem
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.preview.ListItemPreviewProvider
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.state.HistoryEvent
@@ -24,9 +26,9 @@ import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
 
 @Composable
 internal fun HistoryList(
+    modifier: Modifier = Modifier,
     items: LazyPagingItems<ListItem>,
     onEvent: (HistoryEvent) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Rebugger(
         trackMap = mapOf(
@@ -43,17 +45,25 @@ internal fun HistoryList(
             count = items.itemCount,
             key = { index ->
                 when (val item = items[index]) {
-                    is ListItem.DateHeader -> "header_${item.date}"
-                    is ListItem.ProductItem -> "product_${item.product.productId}"
+                    is ListItem.DateHeaderUiModel -> "header_${item.date}"
+                    is ListItem.ProductItemUiModel -> "product_${item.product.productId}"
                     else -> "placeholder_$index"
                 }
             }
         ) { index ->
             when (val item = items[index]) {
-                is ListItem.DateHeader -> DateHeader(date = item.date)
-                is ListItem.ProductItem -> ProductItem(
+                is ListItem.DateHeaderUiModel -> DateHeader(
+                    modifier = modifier,
+                    date = item.date,
+                )
+                is ListItem.ProductItemUiModel -> ProductItem(
                     product = item.product,
-                    onEvent = onEvent
+                    onEvent = onEvent,
+                    modifier = modifier.animateItem(
+                        fadeInSpec = tween(durationMillis = MEDIUM),
+                        placementSpec = tween(durationMillis = LONG),
+                        fadeOutSpec = tween(durationMillis = MEDIUM)
+                    )
                 )
                 null -> {}
             }
@@ -65,17 +75,17 @@ internal fun HistoryList(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = PaddingMedium)
-                        .wrapContentWidth(Alignment.CenterHorizontally)
+                        .wrapContentWidth(align = Alignment.CenterHorizontally)
                 )
             }
 
             is LoadState.Error -> item {
                 Text(
                     text = "Ошибка при загрузке: ${append.error.localizedMessage ?: "Неизвестная ошибка"}", //todo
+                    color = MaterialTheme.colorScheme.error,
                     modifier = Modifier
                         .padding(all = PaddingMedium)
                         .fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.error
                 )
             }
 
@@ -93,20 +103,23 @@ fun PreviewHistoryListContent(
 ) {
     HistoryList(
         list = items,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
     )
 }
 // only for @Preview
 @Composable
 private fun HistoryList(
+    modifier: Modifier = Modifier,
     list: List<ListItem>,
-    modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
         items(list) { item ->
             when (item) {
-                is ListItem.DateHeader -> DateHeader(date = item.date)
-                is ListItem.ProductItem -> ProductItem(
+                is ListItem.DateHeaderUiModel -> DateHeader(
+                    modifier = modifier,
+                    date = item.date,
+                )
+                is ListItem.ProductItemUiModel -> ProductItem(
                     product = item.product,
                     onEvent = {}
                 )

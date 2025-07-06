@@ -2,7 +2,7 @@ package com.yanchelenko.piggybank.modules.features.product_details.product_detai
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.yanchelenko.piggybank.features.product_details.presentation.state.ProductDetailsEffect
+import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEffect
 import com.yanchelenko.piggybank.modules.core.core_api.domain.mapper.toUserMessage
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEvent
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
@@ -18,6 +18,7 @@ import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainExce
 import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,13 +52,14 @@ class ProductDetailsViewModel @Inject constructor(
                 logger.d(LOG_TAG, "Delete dialog requested")
                 sendEffect { ProductDetailsEffect.ShowDeleteDialog }
             }
-            is ProductDetailsEvent.CancelDelete -> {
+            is ProductDetailsEvent.DialogCancelDelete -> {
                 logger.d(LOG_TAG, "Delete canceled")
                 sendEffect { ProductDetailsEffect.CloseDeleteDialog }
             }
-            is ProductDetailsEvent.ConfirmedDelete -> {
+            is ProductDetailsEvent.DialogConfirmedDelete -> {
                 uiState.value.getData { product ->
                     logger.d(LOG_TAG, "Confirmed delete for productId=${product.productId}")
+                    sendEffect { ProductDetailsEffect.CloseDeleteDialog }
                     deleteProductFromDB()
                 }
             }
@@ -103,9 +105,14 @@ class ProductDetailsViewModel @Inject constructor(
 
             viewModelScope.launch {
                 when (val result = deleteProductUseCase(product.toDomain())) {
+
                     is RequestResult.Success -> {
                         logger.d(LOG_TAG, "Product successfully deleted")
+                        sendEffect { ProductDetailsEffect.DeletionAnimation }
+                        logger.d(LOG_TAG, "Animation for deletion")
+                        delay(timeMillis = DELETION_ANIMATION_DELAY_MS)
                         sendEffect { ProductDetailsEffect.NavigateBack }
+                        logger.d(LOG_TAG, "Navigation back")
                     }
 
                     is RequestResult.Error -> {
@@ -123,5 +130,6 @@ class ProductDetailsViewModel @Inject constructor(
 
     private companion object {
         const val LOG_TAG = "ProductDetailsVM"
+        const val DELETION_ANIMATION_DELAY_MS = 200L
     }
 }

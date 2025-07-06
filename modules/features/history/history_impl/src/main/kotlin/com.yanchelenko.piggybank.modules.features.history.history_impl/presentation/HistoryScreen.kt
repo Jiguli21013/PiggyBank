@@ -70,6 +70,7 @@ internal fun HistoryMainScreen(
             when (effect) {
                 is HistoryEffect.NavigateToDetails -> onNavigateToProductDetails(effect.product.productId)
                 is HistoryEffect.NavigateToDialogDeleteProduct -> { dialogProduct = effect.product }
+                is HistoryEffect.ShowMessage -> Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 is HistoryEffect.ShowError -> Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
             }
         },
@@ -77,19 +78,19 @@ internal fun HistoryMainScreen(
             HistoryMainContent(
                 currentHistoryState = uiState,
                 items = items,
+                onEvent = sendEvent,
                 modifier = innerModifier,
-                onEvent = sendEvent
             )
 
             if (dialogProduct != null) {
                 ConfirmDeleteDialog(
                     modifier = innerModifier,
                     onConfirm = {
-                        viewModel.onEvent(HistoryEvent.OnProductDeleted(product = dialogProduct!!))
+                        viewModel.onEvent(event = HistoryEvent.OnProductDeleted(product = dialogProduct!!))
                         dialogProduct = null
                     },
                     onDismiss = {
-                        viewModel.onEvent(HistoryEvent.OnDeleteDialogDismissed)
+                        viewModel.onEvent(event = HistoryEvent.OnDeleteDialogDismissed)
                         dialogProduct = null
                     }
                 )
@@ -103,15 +104,15 @@ fun HistoryMainContent(
     modifier: Modifier = Modifier,
     currentHistoryState: CommonUiState<Unit>,
     items: LazyPagingItems<ListItem>,
-    onEvent: (HistoryEvent) -> Unit
+    onEvent: (HistoryEvent) -> Unit,
 ) {
     Column(modifier = modifier) {
         when (currentHistoryState) {
             is CommonUiState.Success -> {
                 HistoryList(
                     items = items,
+                    onEvent = onEvent,
                     modifier = modifier,
-                    onEvent = onEvent
                 )
             }
             is CommonUiState.Initializing -> {
