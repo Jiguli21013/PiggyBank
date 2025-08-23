@@ -1,11 +1,9 @@
 package com.yanchelenko.piggybank
 
 import androidx.compose.foundation.layout.consumeWindowInsets
-import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.NavigationDispatcher
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,11 +12,10 @@ import androidx.navigation.compose.rememberNavController
 import com.yanchelenko.piggybank.di.hiltFeatureEntries
 import com.yanchelenko.piggybank.di.hiltLogger
 import com.yanchelenko.piggybank.navigation.AppNavHost
+import com.yanchelenko.piggybank.navigation.dispatcher.NavEvent
+import com.yanchelenko.piggybank.navigation.dispatcher.NavigationDispatcher
 import com.yanchelenko.piggybank.ui.AppScaffold
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
-import com.yanchelenko.piggybank.modules.base.infrastructure.dispatchers.AppDispatchers
-import com.yanchelenko.piggybank.modules.base.infrastructure.dispatchers.DefaultDispatchersProvider
-import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.NavEvent
 import kotlinx.coroutines.launch
 
 @Composable
@@ -33,8 +30,6 @@ fun PiggyBankApp(
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
-    //todo подумать че с dispatchers делать
-    val dispatchers = remember { AppDispatchers(DefaultDispatchersProvider()) }
 
     PiggyBankTheme {
         val coroutineScope = rememberCoroutineScope()
@@ -42,7 +37,9 @@ fun PiggyBankApp(
         AppScaffold(
             currentRoute = currentRoute,
             onNavigationSelected = { route ->
+                // может быть достаточно логировать только в AppNavHost ?
                 logger.d("Navigation", "BottomNav selected: $route")
+                // тут нужен main поток, так что все ок
                 coroutineScope.launch { navDispatcher.emit(NavEvent.NavigateRoot(route = route)) }
             }
         ) { padding ->

@@ -5,12 +5,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
-import com.yanchelenko.piggybank.modules.core.core_api.navigation.FeatureEntry
-import com.yanchelenko.piggybank.modules.core.core_api.navigation.NavigationConstants.NAVIGATION_DEBOUNCE_MS
-import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
-import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.NavEvent
-import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.NavigationDispatcher
+import com.yanchelenko.piggybank.logger.Logger
+import com.yanchelenko.piggybank.navigation.NavigationConstants.NAVIGATION_DEBOUNCE_MS
+import com.yanchelenko.piggybank.navigation.destinations.AppDestination
+import com.yanchelenko.piggybank.navigation.dispatcher.NavEvent
+import com.yanchelenko.piggybank.navigation.dispatcher.NavigationDispatcher
 import kotlinx.coroutines.flow.debounce
 
 @Composable
@@ -43,7 +42,9 @@ fun AppNavHost(
                         }
                     }
 
-                    is NavEvent.NavigateBack -> { navController.popBackStack() }
+                    is NavEvent.NavigateBack -> {
+                        navController.popBackStack()
+                    }
                 }
             }
     }

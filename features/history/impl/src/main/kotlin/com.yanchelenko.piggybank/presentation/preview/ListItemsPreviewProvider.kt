@@ -1,0 +1,41 @@
+package com.yanchelenko.piggybank.presentation.preview
+
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.yanchelenko.piggybank.models.Product
+import com.yanchelenko.piggybank.presentation.models.ListItem
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+
+class ListItemPreviewProvider : PreviewParameterProvider<List<ListItem>> {
+    override val values: Sequence<List<ListItem>> = sequenceOf(
+        listOf(
+            ListItem.DateHeaderUiModel(
+                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+            ),
+            ListItem.ProductItemUiModel(
+                Product(
+                    id = 1L,
+                    barcode = "1234567890",
+                    productName = "Молоко",
+                    weight = 1000.0,
+                    price = 90.0,
+                    pricePerKg = 90.0,
+                    addedAt = Instant.DISTANT_PAST
+                )
+            ),
+            ListItem.ProductItemUiModel(
+                Product(
+                    id = 2L,
+                    barcode = "0987654321",
+                    productName = "Хлеб",
+                    weight = 500.0,
+                    price = 40.0,
+                    pricePerKg = 80.0,
+                    addedAt = Instant.DISTANT_PAST
+                )
+            )
+        )
+    )
+}

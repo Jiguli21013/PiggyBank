@@ -8,7 +8,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import com.yanchelenko.piggybank.modules.base.ui_kit.NavigationUiMeta
+import com.yanchelenko.piggybank.NavigationUiMeta
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.yanchelenko.piggybank.modules.base.ui_kit.NavigationUiMeta
-import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
+import com.yanchelenko.piggybank.NavigationUiMeta
+import com.yanchelenko.piggybank.navigation.destinations.AppDestination
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.IconMedium
 
 @Composable
@@ -31,8 +31,10 @@ fun BottomNavigationBar(
         items.forEach { destination ->
             val isSelected = currentRoute == destination.routeForRegistration
 
-            val iconResId = NavigationUiMeta.resolveIconRes(currentRoute = destination.routeForRegistration)
-            val titleResId = NavigationUiMeta.resolveTitleRes(currentRoute = destination.routeForRegistration)
+            val iconResId =
+                NavigationUiMeta.resolveIconRes(currentRoute = destination.routeForRegistration)
+            val titleResId =
+                NavigationUiMeta.resolveTitleRes(currentRoute = destination.routeForRegistration)
 
             if (titleResId != null && iconResId != null) {
                 val titleText = stringResource(id = titleResId)
