@@ -1,6 +1,7 @@
 The application allows users to scan product barcodes and save the data to a local database.
 
 Tech stack:
+
 - Android SDK
 - [Android Jetpack](https://developer.android.com/jetpack)
 - [Kotlin 2.0](https://kotlinlang.org/docs/whatsnew20.html)
@@ -16,40 +17,38 @@ Tech stack:
 - [ML Kit + CameraX Integration](https://developers.google.com/ml-kit/vision/camera-integration)
 
 <pre><code>modules/
-├── base/
-│   ├── infrastructure
-│   ├── ui_kit
-│   └── ui_model
 ├── core/
-│   ├── core_api
-│   ├── core_factory
-│   ├── core_impl
-│   └── database
+│   ├── api
+│   ├── factory
+│   ├── impl
 ├── features/
+│   ├── database
 │   ├── history/
-│   │   ├── history_api
-│   │   └── history_impl
-│   ├── product_details/
-│   │   ├── product_details_api
-│   │   └── product_details_impl
-│   ├── product_edit/
-│   │   ├── product_edit_api
-│   │   └── product_edit_impl
-│   ├── product_insert/
-│   │   ├── product_insert_api
-│   │   └── product_insert_impl
+│   │   ├── api
+│   │   └── impl
+│   ├── product/
+│   │   ├── details/
+│   │   │   ├── api
+│   │   │   └── impl
+│   │   └── edit/
+│   │   │   ├── api
+│   │   │   └── impl
+│   │   └── insert/
+│   │       ├── api
+│   │       └── impl
 │   └── scanner/
-│       ├── scanner_api
-│       └── scanner_impl
-│
+│       ├── api
+│       └── impl
 </code></pre>
 
 Planned features:
-1.	Add test coverage
-2.	Settings screen (theme selection, language switching)
-3.	Integrate baseInlineProfiler
+
+1. Add test coverage
+2. Settings screen (theme selection, language switching)
+3. Integrate baseInlineProfiler
 
 ## Screenshots
+
 <p>
   <img src=".github/images/scan.webp" alt="Scan Screen" width="192"/>
   <img src=".github/images/add_product.webp" alt="Add Product" width="192"/>

@@ -2,10 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.kapt)
-
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -26,7 +24,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -44,29 +45,28 @@ android {
 dependencies {
     // todo проверить какие модули не нужны тут
 
-    implementation(project(":modules:core:database"))
-    implementation(project(":modules:core:core_api"))
-    implementation(project(":modules:core:core_impl"))
-    implementation(project(":modules:core:core_factory"))
+    implementation(project(":features:database"))
+    implementation(project(":core:api"))
+    implementation(project(":core:impl"))
+    implementation(project(":core:factory"))
 
-    implementation(project(":modules:base:ui_kit"))
-    implementation(project(":modules:base:ui_model"))
-    implementation(project(":modules:base:infrastructure"))
+    implementation(project(":ui_kit"))
+    implementation(project(":features:infrastructure"))
 
-    implementation(project(":modules:features:history:history_api"))
-    implementation(project(":modules:features:history:history_impl"))
+    implementation(project(":features:history:api"))
+    implementation(project(":features:history:impl"))
 
-    implementation(project(":modules:features:scanner:scanner_api"))
-    implementation(project(":modules:features:scanner:scanner_impl"))
+    implementation(project(":features:scanner:api"))
+    implementation(project(":features:scanner:impl"))
 
-    implementation(project(":modules:features:product_edit:product_edit_api"))
-    implementation(project(":modules:features:product_edit:product_edit_impl"))
+    implementation(project(":features:product:edit:api"))
+    implementation(project(":features:product:edit:impl"))
 
-    implementation(project(":modules:features:product_insert:product_insert_api"))
-    implementation(project(":modules:features:product_insert:product_insert_impl"))
+    implementation(project(":features:product:insert:api"))
+    implementation(project(":features:product:insert:impl"))
 
-    implementation(project(":modules:features:product_details:product_details_api"))
-    implementation(project(":modules:features:product_details:product_details_impl"))
+    implementation(project(":features:product:details:api"))
+    implementation(project(":features:product:details:impl"))
 
 
     //debugImplementation(libs.androidx.ui.tooling)
@@ -84,15 +84,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-
     implementation(libs.androidx.material3.android)
 
-
-
-
     implementation(libs.dagger.hilt.android)
-
-
     kapt(libs.dagger.hilt.compiler)
 
     implementation(libs.serialization.json)
