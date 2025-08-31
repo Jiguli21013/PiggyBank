@@ -12,7 +12,6 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.updateDataSucce
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toUi
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductByIdUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.UpdateProductUseCase

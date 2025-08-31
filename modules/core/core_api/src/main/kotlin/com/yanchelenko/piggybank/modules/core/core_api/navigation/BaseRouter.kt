@@ -7,18 +7,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 open class BaseRouter(
-    private val dispatcher: NavigationDispatcher
+    private val navigationDispatcher: NavigationDispatcher
 ) : CommonRouter {
 
     override fun navigateBack() {
         CoroutineScope(Dispatchers.Main).launch { //todo dispatchers
-            dispatcher.emit(event = NavEvent.NavigateBack)
+            navigationDispatcher.emit(event = NavEvent.NavigateBack)
         }
     }
 
-    fun navigateTo(destination: String) {
+    override fun navigateTo(destination: String) {
         CoroutineScope(Dispatchers.Main).launch { //todo dispatchers
-            dispatcher.emit(event = NavEvent.Navigate(destination))
+            navigationDispatcher.emit(event = NavEvent.Navigate(destination))
         }
     }
 }

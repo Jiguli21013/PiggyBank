@@ -8,7 +8,6 @@ import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEvent
 import com.yanchelenko.piggybank.modules.core.core_api.domain.mapper.toUserMessage
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainException
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
@@ -17,6 +16,7 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.getData
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toUi
+import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject

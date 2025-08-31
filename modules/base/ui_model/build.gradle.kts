@@ -28,4 +28,5 @@ dependencies {
     // KotlinX serialization и дата-время
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.androidx.annotation.jvm)
 }

@@ -9,7 +9,7 @@ package com.yanchelenko.piggybank.modules.core.core_api.navigation
  *
  * Примеры использования:
  * - navigateBack() — для выхода с текущего экрана
- * - navigateToRoot() — для очистки back stack и возврата к стартовому экрану
+ * - navigateTo() —
  *
  * ---
  *
@@ -21,9 +21,10 @@ package com.yanchelenko.piggybank.modules.core.core_api.navigation
  *
  * Usage examples:
  * - navigateBack() — exits the current screen
- * - navigateToRoot() — clears the back stack and returns to the start screen
+ * - navigateTo() —
  */
 
 interface CommonRouter {
+    fun navigateTo(destination: String)
     fun navigateBack()
 }

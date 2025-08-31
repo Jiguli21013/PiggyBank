@@ -31,7 +31,6 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.PrimaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.SecondaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacerHeight
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingMedium
@@ -41,6 +40,7 @@ import com.theapache64.rebugger.Rebugger
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.FAST
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.trackMap
+import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 
 @Composable
 fun ProductDetailsScreen(

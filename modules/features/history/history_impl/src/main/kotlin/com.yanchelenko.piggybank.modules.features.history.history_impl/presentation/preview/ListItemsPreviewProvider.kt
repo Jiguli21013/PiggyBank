@@ -2,7 +2,6 @@ package com.yanchelenko.piggybank.modules.features.history.history_impl.presenta
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.models.ListItem
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone

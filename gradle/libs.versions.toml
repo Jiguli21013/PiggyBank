@@ -65,6 +65,7 @@ playServicesAnalyticsImpl = "18.2.0"
 navigationCommonJvmstubs = "2.9.0"
 navigationRuntimeJvmstubs = "2.9.0"
 foundationLayoutAndroidVersion = "1.8.0"
+annotationJvm = "1.9.1"
 
 
 
@@ -168,6 +169,7 @@ play-services-analytics-impl = { group = "com.google.android.gms", name = "play-
 androidx-navigation-common-jvmstubs = { group = "androidx.navigation", name = "navigation-common-jvmstubs", version.ref = "navigationCommonJvmstubs" }
 androidx-navigation-runtime-jvmstubs = { group = "androidx.navigation", name = "navigation-runtime-jvmstubs", version.ref = "navigationRuntimeJvmstubs" }
 foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroidVersion" }
+androidx-annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,7 +1,8 @@
-package com.yanchelenko.piggybank.modules.base.ui_kit
+package com.yanchelenko.piggybank.modules.base.ui_model.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.yanchelenko.piggybank.modules.base.ui_model.R
 
 object NavigationUiMeta {
     private data class Meta(
