@@ -4,7 +4,7 @@ plugins {
 
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt.android)
-    alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
 
     alias(libs.plugins.kotlin.serialization)
 }
@@ -81,7 +81,7 @@ dependencies {
     implementation(libs.androidx.benchmark.common)
 
 
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
     implementation(libs.kotlinx.datetime)
 
     debugImplementation(libs.rebugger)

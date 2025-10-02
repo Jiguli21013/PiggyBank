@@ -33,6 +33,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.ReadOnlyField
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.SecondaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.trackMap
+import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacerHeight
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingExtraLarge

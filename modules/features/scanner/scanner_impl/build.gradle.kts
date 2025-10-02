@@ -4,7 +4,7 @@ plugins {
 
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt.android)
-    alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
 
     kotlin("plugin.serialization")
 }
@@ -79,7 +79,7 @@ dependencies {
     implementation(libs.dagger.hilt.android)
 
 
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
 
     // Serialization + time
     implementation(libs.serialization.json)

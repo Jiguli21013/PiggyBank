@@ -6,7 +6,7 @@ pluginManagement {
     }
 
     plugins {
-        kotlin("plugin.serialization") version "1.8.10" // Версия Kotlin — должна совпадать с остальными
+        kotlin("plugin.serialization") version "1.9.25"
     }
 }
 

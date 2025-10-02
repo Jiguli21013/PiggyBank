@@ -2,7 +2,8 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.dagger.hilt.android)
-    alias(libs.plugins.kapt)
+
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -34,5 +35,5 @@ dependencies {
     implementation(libs.paging.runtime)
     implementation(libs.kotlinx.datetime)
 
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
 }
