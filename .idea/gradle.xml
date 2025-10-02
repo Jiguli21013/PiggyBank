@@ -21,6 +21,8 @@
             <option value="$PROJECT_DIR$/modules/core/core_factory" />
             <option value="$PROJECT_DIR$/modules/core/core_impl" />
             <option value="$PROJECT_DIR$/modules/core/database" />
+            <option value="$PROJECT_DIR$/modules/dev_tools" />
+            <option value="$PROJECT_DIR$/modules/dev_tools/ui_debug" />
             <option value="$PROJECT_DIR$/modules/features" />
             <option value="$PROJECT_DIR$/modules/features/history" />
             <option value="$PROJECT_DIR$/modules/features/history/history_api" />

@@ -43,6 +43,7 @@ android {
 
 dependencies {
     // todo проверить какие модули не нужны тут
+    implementation(project(":modules:dev_tools"))
 
     implementation(project(":modules:core:database"))
     implementation(project(":modules:core:core_api"))
@@ -91,6 +92,7 @@ dependencies {
 
 
     implementation(libs.dagger.hilt.android)
+
 
 
     ksp(libs.dagger.hilt.compiler)

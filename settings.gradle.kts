@@ -23,6 +23,9 @@ rootProject.name = "ScanRealPrice"
 
 include(":app")
 
+// Dev tools
+include(":modules:dev_tools")
+
 // Core (API + Impl + Factory)
 include(":modules:core:core_api")
 include(":modules:core:core_impl")
