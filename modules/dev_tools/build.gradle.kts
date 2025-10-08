@@ -30,12 +30,10 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
 
-    // ---- Compose: только ТИПЫ для компиляции (release тоже видит) ----
     compileOnly(platform(libs.compose.bom))
-    compileOnly(libs.androidx.compose.runtime) // @Composable
-    compileOnly(libs.compose.ui)               // Modifier, LocalContext  ← ВАЖНО
+    compileOnly(libs.androidx.compose.runtime)
+    compileOnly(libs.compose.ui)
 
-    // ---- Полный рантайм только для debug ----
     debugImplementation(platform(libs.compose.bom))
     debugImplementation(libs.androidx.compose.runtime)
     debugImplementation(libs.compose.ui)
