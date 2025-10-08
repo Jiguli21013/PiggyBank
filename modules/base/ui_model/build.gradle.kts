@@ -29,4 +29,7 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.annotation.jvm)
+
+    compileOnly(platform(libs.compose.bom))
+    compileOnly(libs.androidx.compose.runtime)
 }

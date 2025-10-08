@@ -2,7 +2,7 @@ package com.yanchelenko.piggybank.modules.core.core_impl.domain
 
 import com.yanchelenko.piggybank.modules.base.infrastructure.extensions.roundTo
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import javax.inject.Inject
 
 class GetPricePerKgUseCaseImpl @Inject constructor(

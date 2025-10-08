@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.FeatureEntry
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.NavigationConstants.NAVIGATION_DEBOUNCE_MS
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination

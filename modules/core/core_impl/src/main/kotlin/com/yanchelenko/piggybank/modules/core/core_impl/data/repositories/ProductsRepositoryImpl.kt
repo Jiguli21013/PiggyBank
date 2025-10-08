@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.models.Product
 import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductsRepository
 import com.yanchelenko.piggybank.modules.core.database.dao.ProductDao

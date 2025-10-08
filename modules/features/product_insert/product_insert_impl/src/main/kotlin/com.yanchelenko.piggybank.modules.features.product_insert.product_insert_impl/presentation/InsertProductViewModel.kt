@@ -8,7 +8,7 @@ import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEvent
 import com.yanchelenko.piggybank.modules.core.core_api.domain.mapper.toUserMessage
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainException
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel

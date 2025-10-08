@@ -2,6 +2,7 @@ package com.yanchelenko.piggybank.modules.base.ui_kit.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
+import com.yanchelenko.piggybank.modules.base.ui_model.models.toStable
 import kotlinx.datetime.Clock
 
 class ProductPreviewProvider : PreviewParameterProvider<ProductUiModel> {
@@ -13,7 +14,7 @@ class ProductPreviewProvider : PreviewParameterProvider<ProductUiModel> {
             weight = 500.0,
             price = 40.0,
             pricePerKg = 80.0,
-            addedAt = Clock.System.now()
+            addedAt = Clock.System.now().toStable()
         )
     )
 }

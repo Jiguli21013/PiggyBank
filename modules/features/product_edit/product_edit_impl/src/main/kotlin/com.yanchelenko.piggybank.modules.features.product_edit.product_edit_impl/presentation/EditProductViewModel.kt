@@ -17,7 +17,7 @@ import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCa
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductByIdUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.UpdateProductUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainException
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

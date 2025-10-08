@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -19,7 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.theapache64.rebugger.Rebugger
+import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.base.infrastructure.extensions.formatIfNonZero
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state.EditProductEffect
@@ -84,10 +85,12 @@ internal fun EditProductScreen(
         content = { uiState, sendEvent, innerModifier ->
             when (uiState) {
                 is CommonUiState.Success -> {
+                    val stableSend: (EditProductEvent) -> Unit by rememberUpdatedState(sendEvent)
+
                     EditProductContent(
                         state = uiState.data,
                         modifier = innerModifier,
-                        onEvent = sendEvent
+                        onEvent = stableSend
                     )
                 }
                 is CommonUiState.Initializing -> {
@@ -110,14 +113,14 @@ fun EditProductContent(
     state: ProductUiModel,
     onEvent: (EditProductEvent) -> Unit
 ) {
+    RebuggerIfDebug(trackMap = state.trackMap(), composableName = "EditProductContent")
+
     val productNameLabel = stringResource(R.string.label_product_name)
     val weightLabel = stringResource(R.string.label_weight_grams)
     val priceLabel = stringResource(R.string.label_price_by_weight, state.weight)
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
-
-    Rebugger(trackMap = state.trackMap(), composableName = "EditProductContent")
 
     Column(
         modifier = modifier

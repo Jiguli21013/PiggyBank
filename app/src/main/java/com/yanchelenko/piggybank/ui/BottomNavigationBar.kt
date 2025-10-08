@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.yanchelenko.piggybank.modules.base.ui_model.navigation.NavigationUiMeta
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.IconMedium
@@ -45,7 +47,9 @@ fun BottomNavigationBar(
                         Icon(
                             painter = icon,
                             contentDescription = titleText,
-                            modifier = Modifier.size(IconMedium)
+                            modifier = Modifier
+                                .size(IconMedium)
+                                .semantics { contentDescription = "nav_${destination.routeForRegistration}" } // for baselineprofile
                         )
                     },
                     label = { Text(text = titleText) }

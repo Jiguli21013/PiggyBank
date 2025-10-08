@@ -1,9 +1,11 @@
 package com.yanchelenko.piggybank.modules.base.ui_model.models
 
-import kotlinx.datetime.Instant
+import androidx.compose.runtime.Immutable
+import com.yanchelenko.piggybank.modules.base.ui_model.models.StableInstant.Companion.DISTANT_PAST
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Contextual
 
+@Immutable
 @Serializable
 data class ProductUiModel(
     val productId: Long = 0L,
@@ -14,5 +16,5 @@ data class ProductUiModel(
     val pricePerKg: Double = 0.0,
 
     @Contextual
-    val addedAt: Instant = Instant.DISTANT_PAST
+    val addedAt: StableInstant = DISTANT_PAST
 )

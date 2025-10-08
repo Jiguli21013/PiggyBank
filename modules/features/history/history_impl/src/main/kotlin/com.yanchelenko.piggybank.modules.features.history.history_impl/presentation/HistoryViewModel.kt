@@ -17,7 +17,7 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResul
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteProductUseCase
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -75,24 +75,24 @@ class HistoryViewModel @Inject constructor(
     }
 
     private fun deleteProduct(product: ProductUiModel) = viewModelScope.launch {
-            logger.d(LOG_TAG, "Attempting to delete product from DB: $product")
+        logger.d(LOG_TAG, "Attempting to delete product from DB: $product")
 
-            when (val result = deleteProductUseCase(product.toDomain())) {
-                is RequestResult.Success -> {
-                    logger.d(LOG_TAG, "Product deleted successfully: id=${product.productId}")
-                    sendEffect { HistoryEffect.ShowMessage("Продукт удалён") } //todo from res
-                }
+        when (val result = deleteProductUseCase(product.toDomain())) {
+            is RequestResult.Success -> {
+                logger.d(LOG_TAG, "Product deleted successfully: id=${product.productId}")
+                sendEffect { HistoryEffect.ShowMessage("Продукт удалён") } //todo from res
+            }
 
-                is RequestResult.Error -> {
-                    logger.e(LOG_TAG, "Error deleting product: ${result.error?.message}")
-                    sendEffect { HistoryEffect.ShowError("Ошибка при удалении") } //todo
-                }
+            is RequestResult.Error -> {
+                logger.e(LOG_TAG, "Error deleting product: ${result.error?.message}")
+                sendEffect { HistoryEffect.ShowError("Ошибка при удалении") } //todo
+            }
 
-                is RequestResult.InProgress -> {
-                    logger.d(LOG_TAG, "Deletion in progress")
-                }
+            is RequestResult.InProgress -> {
+                logger.d(LOG_TAG, "Deletion in progress")
             }
         }
+    }
 
     private companion object {
         const val NO_ITEMS_COUNT = 0

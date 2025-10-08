@@ -15,7 +15,7 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteProductUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductByIdUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainException
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -27,7 +27,7 @@ class ProductDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getProductByProductIdUseCase: GetProductByIdUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
-    private val logger: Logger
+    private val logger: Logger,
 ) : BaseViewModel<ProductDetailsEvent, CommonUiState<ProductUiModel>, ProductDetailsEffect>(
     initialState = CommonUiState.Initializing,
 ) {

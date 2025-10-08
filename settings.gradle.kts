@@ -7,7 +7,11 @@ pluginManagement {
 
     plugins {
         kotlin("plugin.serialization") version "1.9.25"
+        kotlin("jvm") version "2.0.0"
     }
+}
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 dependencyResolutionManagement {
@@ -23,8 +27,12 @@ rootProject.name = "ScanRealPrice"
 
 include(":app")
 
+// Baselineprofile
+include(":modules:baselineprofile")
+
 // Dev tools
 include(":modules:dev_tools")
+project(":modules:dev_tools").projectDir = file("modules/dev_tools")
 
 // Core (API + Impl + Factory)
 include(":modules:core:core_api")

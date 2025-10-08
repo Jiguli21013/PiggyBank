@@ -1,47 +1,48 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.yanchelenko.piggybank.modules.dev_tools"
     compileSdk = 35
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     defaultConfig {
         minSdk = 26
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildTypes {
-        debug { isMinifyEnabled = false }
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
     buildFeatures { compose = true }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-    kotlinOptions { jvmTarget = "21" }
+    kotlinOptions { jvmTarget = "17" }
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(project(":modules:core:core_api"))
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.ui)
-    implementation(libs.compose.material)
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.dagger.hilt.android)
+    ksp(libs.dagger.hilt.compiler)
 
-    implementation(libs.androidx.material3.android)
+    // ---- Compose: только ТИПЫ для компиляции (release тоже видит) ----
+    compileOnly(platform(libs.compose.bom))
+    compileOnly(libs.androidx.compose.runtime) // @Composable
+    compileOnly(libs.compose.ui)               // Modifier, LocalContext  ← ВАЖНО
+
+    // ---- Полный рантайм только для debug ----
+    debugImplementation(platform(libs.compose.bom))
+    debugImplementation(libs.androidx.compose.runtime)
+    debugImplementation(libs.compose.ui)
+    debugImplementation(libs.compose.material)
+    debugImplementation(libs.lifecycle.runtime.compose)
+
+    // Rebugger: API виден всегда, реализация только в debug
+    compileOnly(libs.rebugger)
+    debugApi(libs.rebugger)
 }
