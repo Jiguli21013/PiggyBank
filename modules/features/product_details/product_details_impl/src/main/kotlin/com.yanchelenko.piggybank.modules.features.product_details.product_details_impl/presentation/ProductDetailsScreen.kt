@@ -88,7 +88,7 @@ internal fun ProductDetailsScreen(
             when (uiState) {
                 is CommonUiState.Success -> {
                     if (showDeleteDialog) {
-                        //todo вызывать через навигацию
+                        //todo call this dialog through navigation
                         ConfirmDeleteDialog(
                             modifier = innerModifier,
                             onConfirm = { sendEvent(ProductDetailsEvent.DialogConfirmedDelete) },

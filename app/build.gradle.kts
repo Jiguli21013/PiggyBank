@@ -43,7 +43,6 @@ android {
 }
 
 dependencies {
-    // todo проверить какие модули не нужны тут
     implementation(project(":modules:dev_tools"))
 
     implementation(project(":modules:core:database"))
@@ -74,32 +73,21 @@ dependencies {
     implementation(libs.profileinstaller)
     baselineProfile(project(":modules:baselineprofile"))
 
-
-    //debugImplementation(libs.androidx.ui.tooling)
-    //debugImplementation(libs.androidx.ui.test.manifest)
-
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
-
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
+    // for @Preview
     implementation(libs.androidx.ui.tooling.preview)
 
-
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
-
-
+    implementation(libs.serialization.json)
 
     implementation(libs.dagger.hilt.android)
 
-
-
     ksp(libs.dagger.hilt.compiler)
 
-    implementation(libs.serialization.json)
 }

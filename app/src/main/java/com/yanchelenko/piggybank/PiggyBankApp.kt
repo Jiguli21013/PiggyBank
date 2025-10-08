@@ -33,6 +33,7 @@ fun PiggyBankApp(
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
+
     //todo подумать че с dispatchers делать
     val dispatchers = remember { AppDispatchers(DefaultDispatchersProvider()) }
 

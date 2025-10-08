@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":modules:core:core_api"))
 
     implementation(project(":modules:features:history:history_api"))
+
     compileOnly(project(":modules:dev_tools"))
 
     // compose

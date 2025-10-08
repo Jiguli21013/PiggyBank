@@ -22,6 +22,25 @@ android {
     kotlinOptions {
         jvmTarget = "21"
     }
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+            // Лог в консоль
+            it.testLogging.apply {
+                events("passed", "skipped", "failed")
+                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                showStandardStreams = false
+            }
+        }
+    }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 dependencies {
@@ -36,4 +55,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     ksp(libs.dagger.hilt.compiler)
+
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockk)
 }

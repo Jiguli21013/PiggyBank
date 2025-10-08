@@ -21,9 +21,16 @@ android {
     }
 }
 
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    testLogging { events("passed", "skipped", "failed") }
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.datetime)
     implementation(libs.paging.runtime)
+
+    testImplementation(libs.junit.jupiter)
 }

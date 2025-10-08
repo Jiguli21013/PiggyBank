@@ -30,15 +30,27 @@ android {
         jvmTarget = "21"
     }
 
-    // Отключаем unit-тесты
     testOptions {
         unitTests.all {
-            it.isEnabled = false
+            it.useJUnitPlatform()
+            // Лог в консоль
+            it.testLogging.apply {
+                events("passed", "skipped", "failed")
+                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                showStandardStreams = false
+            }
         }
     }
 
     // Отключаем androidTest, перенаправляя его в фейковый sourceSet
     sourceSets.getByName("androidTest").setRoot("src/disabledAndroidTest")
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 dependencies {
@@ -78,4 +90,8 @@ dependencies {
     ksp(libs.dagger.hilt.compiler)
 
     implementation(libs.kotlinx.datetime)
+
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

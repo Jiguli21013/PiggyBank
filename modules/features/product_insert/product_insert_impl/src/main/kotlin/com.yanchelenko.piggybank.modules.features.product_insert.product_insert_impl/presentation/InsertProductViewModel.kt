@@ -14,6 +14,7 @@ import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.A
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.getData
+import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toUi
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
@@ -148,16 +149,16 @@ class InsertProductScreenViewModel @Inject constructor(
     private fun insertProductToDB() {
         uiState.value.getData { product ->
             logger.d(LOG_TAG, "Start inserting product to DB: $product")
-            viewModelScope.launch {
+            viewModelScope.launch { //todo dispatcher io
                 when (val result = insertNewProductUseCase(product = product.toDomain())) {
-                    is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.Success -> {
+                    is RequestResult.Success -> {
                         logger.d(LOG_TAG, "Product successfully inserted")
                         setState { CommonUiState.Success(data = product) }
                         sendEffect { InsertProductEffect.ShowMessage(message = "Продукт успешно сохранён") } //todo
                         sendEffect { InsertProductEffect.NavigateBackToScanner }
                     }
 
-                    is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.Error -> {
+                    is RequestResult.Error -> {
                         val message = (result.error as? BaseDomainException)?.toUserMessage()
                             ?: result.error?.message
                             ?: "Ошибка при сохранении" //todo
@@ -166,7 +167,7 @@ class InsertProductScreenViewModel @Inject constructor(
                         sendEffect { InsertProductEffect.ShowMessage(message) }
                     }
 
-                    is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.InProgress -> {
+                    is RequestResult.InProgress -> {
                         logger.d(LOG_TAG, "Insert in progress...")
                         setState { CommonUiState.Loading }
                     }
