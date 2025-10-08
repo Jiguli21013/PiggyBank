@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.yanchelenko.piggybank.modules.base.ui_model.navigation.NavigationUiMeta
-import com.yanchelenko.piggybank.modules.dev_tools.FpsOverlay
+import com.yanchelenko.piggybank.modules.dev_tools.fps.FpsOverlay
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,9 +33,8 @@ fun AppScaffold(
 
     Scaffold(
         topBar = {
-            Box(Modifier.fillMaxWidth()) {
+            Box(modifier = Modifier.fillMaxWidth()) {
                 TopAppBar(title = { Text(text = title) })
-
                 FpsOverlay(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)

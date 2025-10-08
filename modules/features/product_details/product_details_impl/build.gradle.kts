@@ -50,8 +50,7 @@ dependencies {
     implementation(project(":modules:base:ui_model"))
 
     implementation(project(":modules:core:core_api"))
-
-
+    compileOnly(project(":modules:dev_tools"))
 
 
     debugImplementation(libs.ui.tooling)
@@ -83,7 +82,4 @@ dependencies {
 
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.kotlinx.datetime)
-
-    debugImplementation(libs.rebugger)
-
 }

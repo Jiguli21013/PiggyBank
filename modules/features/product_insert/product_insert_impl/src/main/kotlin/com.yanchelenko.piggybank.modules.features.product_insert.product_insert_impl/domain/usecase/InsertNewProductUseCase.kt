@@ -2,7 +2,7 @@ package com.yanchelenko.piggybank.modules.features.product_insert.product_insert
 
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.toRequestResult
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.models.Product
 import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductsRepository
 import kotlinx.datetime.Clock

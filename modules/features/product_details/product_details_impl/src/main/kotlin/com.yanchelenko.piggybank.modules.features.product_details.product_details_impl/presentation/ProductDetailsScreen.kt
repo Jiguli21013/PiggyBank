@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.features.product_details.presentation.components.InfoRow
+import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEffect
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEvent
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
@@ -36,7 +37,6 @@ import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacerHeight
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.R
-import com.theapache64.rebugger.Rebugger
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.FAST
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.trackMap
@@ -129,6 +129,8 @@ private fun ProductDetailsContent(
     state: ProductUiModel,
     onEvent: (ProductDetailsEvent) -> Unit
 ) {
+    RebuggerIfDebug(trackMap = state.trackMap(), composableName = "ProductDetailsContent")
+
     val barcodeLabel = stringResource(R.string.label_barcode)
     val nameLabel = stringResource(R.string.label_product_name)
     val weightLabel = stringResource(R.string.label_weight)
@@ -140,8 +142,6 @@ private fun ProductDetailsContent(
     val weightValue = stringResource(R.string.format_grams, state.weight)
     val priceValue = stringResource(R.string.format_price_rub, state.price)
     val pricePerKgValue = stringResource(R.string.format_price_rub, state.pricePerKg)
-
-    Rebugger(trackMap = state.trackMap(), composableName = "ProductDetailsContent")
 
     Column(
         modifier = modifier.padding(all = PaddingMedium)

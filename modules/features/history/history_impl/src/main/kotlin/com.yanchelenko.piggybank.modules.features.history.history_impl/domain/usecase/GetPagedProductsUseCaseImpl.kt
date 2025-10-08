@@ -1,7 +1,7 @@
 package com.yanchelenko.piggybank.modules.features.history.history_impl.domain.usecase
 
 import androidx.paging.PagingData
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.models.Product
 import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductsRepository
 import kotlinx.coroutines.flow.Flow

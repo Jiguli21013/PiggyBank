@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.theapache64.rebugger.Rebugger
+import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEffect
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEvent
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.R
@@ -31,6 +31,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.PrimaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.ReadOnlyField
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.SecondaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
+import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.trackMap
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggynank.core.ui.theme.Dimens.HeaderHeight
@@ -104,16 +105,16 @@ internal fun InsertProductMainScreen(
 fun InsertProductContent(
     state: ProductUiModel,
     modifier: Modifier = Modifier,
-    onEvent: (InsertProductEvent) -> Unit
+    onEvent: (InsertProductEvent) -> Unit,
 ) {
+    RebuggerIfDebug(trackMap = state.trackMap(), composableName = "InsertProductContent")
+
     val productNameLabel = stringResource(R.string.label_product_name)
     val weightLabel = stringResource(R.string.label_weight_grams)
     val priceLabel = stringResource(R.string.label_price_by_weight, state.weight)
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
-
-    Rebugger(trackMap = state.trackMap(), composableName = "InsertProductContent")
 
     Column(
         modifier = modifier
@@ -184,7 +185,7 @@ fun InsertProductContent(
 @Preview(showBackground = true)
 @Composable
 private fun InsertProductMainContentPreview(
-    @PreviewParameter(com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider::class) product: ProductUiModel
+    @PreviewParameter(ProductPreviewProvider::class) product: ProductUiModel
 ) {
     PiggyBankTheme {
         InsertProductContent(

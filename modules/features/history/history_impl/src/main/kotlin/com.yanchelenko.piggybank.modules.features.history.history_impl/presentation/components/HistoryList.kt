@@ -12,11 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.theapache64.rebugger.Rebugger
+import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.LONG
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.MEDIUM
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.models.ListItem
@@ -30,44 +32,56 @@ internal fun HistoryList(
     items: LazyPagingItems<ListItem>,
     onEvent: (HistoryEvent) -> Unit,
 ) {
-    Rebugger(
+
+    RebuggerIfDebug(
+        composableName = "HistoryList",
         trackMap = mapOf(
             "itemCount" to items.itemCount,
             "loadState.refresh" to items.loadState.refresh::class.simpleName,
             "loadState.append" to items.loadState.append::class.simpleName,
             "snapshotHash" to items.itemSnapshotList.items.hashCode()
-        ),
-        composableName = "HistoryList"
+        )
     )
 
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier.semantics { contentDescription = "history_list" }
+    ) {
         items(
             count = items.itemCount,
             key = { index ->
-                when (val item = items[index]) {
-                    is ListItem.DateHeaderUiModel -> "header_${item.date}"
-                    is ListItem.ProductItemUiModel -> "product_${item.product.productId}"
-                    else -> "placeholder_$index"
+                when (val it = items[index]) {
+                    is ListItem.ProductItemUiModel -> "p_${it.product.productId}"
+                    is ListItem.DateHeaderUiModel  -> "d_${it.date}"
+                    else                           -> "ph_$index"
+                }
+            },
+            contentType = { index ->
+                when (items[index]) {
+                    is ListItem.ProductItemUiModel -> "product"
+                    is ListItem.DateHeaderUiModel  -> "date"
+                    else                           -> "placeholder"
                 }
             }
         ) { index ->
             when (val item = items[index]) {
                 is ListItem.DateHeaderUiModel -> DateHeader(
                     date = item.date,
-                    modifier = modifier.animateItem(
-                        placementSpec = tween(durationMillis = LONG)
-                    )
+                    modifier = Modifier
+                        .animateItem(
+                            placementSpec = tween(durationMillis = LONG)
+                        ).semantics { contentDescription = "history_item_${item.date}" }
                 )
                 is ListItem.ProductItemUiModel -> ProductItem(
                     product = item.product,
                     onEvent = onEvent,
-                    modifier = modifier.animateItem(
-                        fadeInSpec = tween(durationMillis = MEDIUM),
-                        placementSpec = tween(durationMillis = LONG),
-                        fadeOutSpec = tween(durationMillis = MEDIUM)
-                    )
+                    modifier = Modifier
+                        .animateItem(
+                            fadeInSpec = tween(durationMillis = MEDIUM),
+                            placementSpec = tween(durationMillis = LONG),
+                            fadeOutSpec = tween(durationMillis = MEDIUM)
+                        ).semantics { contentDescription = "history_item_${item.product.productId}" }
                 )
-                null -> {}
+                null -> {} //todo shimmer ?
             }
         }
 

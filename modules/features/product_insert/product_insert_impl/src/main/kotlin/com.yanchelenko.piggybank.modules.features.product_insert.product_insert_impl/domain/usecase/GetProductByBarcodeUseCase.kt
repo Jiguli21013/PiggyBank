@@ -4,7 +4,7 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResul
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.flatMap
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.toRequestResult
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.ProductNotFoundException
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.models.Product
 import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductsRepository
 import javax.inject.Inject

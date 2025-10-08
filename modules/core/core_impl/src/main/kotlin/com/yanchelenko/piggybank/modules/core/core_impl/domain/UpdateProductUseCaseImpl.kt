@@ -3,7 +3,7 @@ package com.yanchelenko.piggybank.modules.core.core_impl.domain
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.toRequestResult
 import com.yanchelenko.piggybank.modules.core.core_api.domain.UpdateProductUseCase
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.models.Product
 import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductsRepository
 import kotlinx.datetime.Clock

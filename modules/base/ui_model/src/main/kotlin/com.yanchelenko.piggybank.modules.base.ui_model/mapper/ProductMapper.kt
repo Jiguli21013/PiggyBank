@@ -1,6 +1,8 @@
 package com.yanchelenko.piggybank.modules.base.ui_model.mapper
 
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
+import com.yanchelenko.piggybank.modules.base.ui_model.models.toInstant
+import com.yanchelenko.piggybank.modules.base.ui_model.models.toStable
 import com.yanchelenko.piggybank.modules.core.core_api.models.Product
 
 fun Product.toUi(): ProductUiModel = ProductUiModel(
@@ -10,7 +12,7 @@ fun Product.toUi(): ProductUiModel = ProductUiModel(
     weight = this.weight,
     price = this.price,
     pricePerKg = this.pricePerKg,
-    addedAt = this.addedAt
+    addedAt = this.addedAt.toStable()
 )
 
 fun ProductUiModel.toDomain(): Product = Product(
@@ -20,5 +22,5 @@ fun ProductUiModel.toDomain(): Product = Product(
     weight = this.weight,
     price = this.price,
     pricePerKg = this.pricePerKg,
-    addedAt = this.addedAt
+    addedAt = this.addedAt.toInstant()
 )

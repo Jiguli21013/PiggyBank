@@ -7,6 +7,7 @@ plugins {
 
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
@@ -69,11 +70,14 @@ dependencies {
     implementation(project(":modules:features:product_details:product_details_api"))
     implementation(project(":modules:features:product_details:product_details_impl"))
 
+    // Baselineprofile
+    implementation(libs.profileinstaller)
+    baselineProfile(project(":modules:baselineprofile"))
+
 
     //debugImplementation(libs.androidx.ui.tooling)
     //debugImplementation(libs.androidx.ui.test.manifest)
 
-    //implementation(libs.androidx.profileinstaller)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

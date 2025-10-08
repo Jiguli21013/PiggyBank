@@ -2,7 +2,7 @@ package com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presenta
 
 import android.Manifest
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
-import com.yanchelenko.piggybank.modules.core.core_api.logger.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.permissions.PermissionManager
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.state.ScannerEffect
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.state.ScannerEvent
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ScannerViewModel @Inject constructor(
     private val permissionManager: PermissionManager,
-    private val logger: Logger
+    private val logger: Logger,
 ) : BaseViewModel<ScannerEvent, ScannerUiState, ScannerEffect>(
     initialState = ScannerUiState()
 ) {

@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":modules:core:core_api"))
 
     implementation(project(":modules:features:history:history_api"))
+    compileOnly(project(":modules:dev_tools"))
 
     // compose
     implementation(platform(libs.compose.bom))
@@ -61,13 +62,11 @@ dependencies {
     implementation(libs.paging.compose)
     implementation(libs.foundation.layout.android)
 
-
+    //todo это что такое
     debugImplementation(libs.ui.tooling)
 
     ksp(libs.dagger.hilt.compiler)
 
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.datetime)
-
-    debugImplementation(libs.rebugger)
 }
