@@ -19,6 +19,7 @@ import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toUi
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -124,13 +125,13 @@ class InsertProductScreenViewModel @Inject constructor(
         logger.d(LOG_TAG, "Start loading product from DB for barcode=$barcode")
         viewModelScope.launch {
             when (val result = getProductByBarcodeUseCase(barcode)) {
-                is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.Success -> {
+                is RequestResult.Success -> {
                     logger.d(LOG_TAG, "Product loaded successfully: ${result.data}")
                     val uiProduct = result.data.toUi()
                     onEvent(InsertProductEvent.ProductFoundInDB(product = uiProduct))
                 }
 
-                is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.Error -> {
+                is RequestResult.Error -> {
                     val message = (result.error as? BaseDomainException)?.toUserMessage()
                         ?: result.error?.message
                         ?: "Неизвестная ошибка" //todo
@@ -139,7 +140,7 @@ class InsertProductScreenViewModel @Inject constructor(
                     onEvent(InsertProductEvent.ProductNotFoundInDB(product = ProductUiModel(barcode = barcode)))
                 }
 
-                is com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult.InProgress -> {
+                is RequestResult.InProgress -> {
                     logger.d(LOG_TAG, "Loading in progress...")
                 }
             }
@@ -149,7 +150,7 @@ class InsertProductScreenViewModel @Inject constructor(
     private fun insertProductToDB() {
         uiState.value.getData { product ->
             logger.d(LOG_TAG, "Start inserting product to DB: $product")
-            viewModelScope.launch { //todo dispatcher io
+            viewModelScope.launch(Dispatchers.IO) { //todo provider dispatcher io
                 when (val result = insertNewProductUseCase(product = product.toDomain())) {
                     is RequestResult.Success -> {
                         logger.d(LOG_TAG, "Product successfully inserted")
@@ -164,7 +165,7 @@ class InsertProductScreenViewModel @Inject constructor(
                             ?: "Ошибка при сохранении" //todo
                         logger.e(LOG_TAG, "Insert failed: $message")
                         setState { CommonUiState.Error(message = message) }
-                        sendEffect { InsertProductEffect.ShowMessage(message) }
+                        sendEffect { InsertProductEffect.ShowMessage(message = message) }
                     }
 
                     is RequestResult.InProgress -> {

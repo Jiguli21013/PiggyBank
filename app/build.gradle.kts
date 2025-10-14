@@ -25,6 +25,14 @@ android {
     }
 
     buildTypes {
+
+        create("benchmark") {
+            initWith(getByName("release"))
+            isDebuggable = false
+            // AGP 8.2+
+            matchingFallbacks += listOf("release")
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

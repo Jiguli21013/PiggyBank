@@ -3,6 +3,7 @@ package com.yanchelenko.piggybank.modules.features.history.history_impl.presenta
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.components.HistoryList
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -12,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -65,7 +68,9 @@ internal fun HistoryMainScreen(
         state = state,
         effectFlow = effectFlow,
         onEvent = viewModel::onEvent,
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize()
+            .semantics { contentDescription = "history_root" },
         onEffect = { effect ->
             when (effect) {
                 is HistoryEffect.NavigateToDetails -> onNavigateToProductDetails(effect.product.productId)
@@ -112,7 +117,7 @@ fun HistoryMainContent(
                 HistoryList(
                     items = items,
                     onEvent = onEvent,
-                    modifier = modifier,
+                    modifier = modifier
                 )
             }
             is CommonUiState.Initializing -> {

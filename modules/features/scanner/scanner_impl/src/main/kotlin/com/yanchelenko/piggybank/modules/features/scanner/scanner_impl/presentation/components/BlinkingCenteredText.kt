@@ -17,11 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 
-
 //todo move to common ?
 @Composable
 fun BlinkingCenteredText(text: String) {
-    val infiniteTransition = rememberInfiniteTransition(label = "blinking") //todo to res ?
+    val infiniteTransition = rememberInfiniteTransition(label = "blinking")
 
     val alpha by infiniteTransition.animateFloat(
         initialValue = 0.2f,
@@ -33,7 +32,7 @@ fun BlinkingCenteredText(text: String) {
             ),
             repeatMode = RepeatMode.Reverse
         ),
-        label = "alphaAnimation" //todo to res?
+        label = "alphaAnimation"
     )
 
     Box(

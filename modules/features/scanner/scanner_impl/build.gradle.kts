@@ -67,9 +67,6 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.androidx.ui.tooling.preview.android)
 
-    // Permissions //todo vrode ne nado
-    implementation(libs.accompanistPermissions)
-
     // Navigation
     implementation(libs.androidx.navigation.common.android)
     implementation(libs.androidx.navigation.runtime.android)

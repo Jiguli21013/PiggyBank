@@ -8,6 +8,9 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -50,7 +53,9 @@ fun ScannerScreen(
         state = state,
         effectFlow = effectFlow,
         onEvent = viewModel::onEvent,
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize()
+            .semantics { contentDescription = "scanner_root" },
         onEffect = { effect ->
             when (effect) {
                 is ScannerEffect.NavigateToInsertProduct -> {
@@ -82,8 +87,14 @@ fun ScannerScreen(
                     barcodeAnalyzer = barcodeAnalyzer
                 )
 
-                ScannerState.PermissionDenied -> CameraPermissionDeniedContent {
-                    sendEvent(ScannerEvent.OnCameraSettingsClicked)
+                ScannerState.PermissionDenied -> Box(
+                    modifier = innerModifier
+                        .fillMaxSize()
+                        .semantics { contentDescription = "scanner_permission_text" }
+                ) {
+                    CameraPermissionDeniedContent {
+                        sendEvent(ScannerEvent.OnCameraSettingsClicked)
+                    }
                 }
 
                 ScannerState.Idle -> CenteredLoader()

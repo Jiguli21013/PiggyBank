@@ -51,7 +51,7 @@ class GetPricePerKgUseCaseImplTest {
         // arrange
         val weightGrams = 333.3
         val price = 10.0
-        // (10 / 333.3) * 1000 = 30.0030003… → округляем до 30.00
+        // (10 / 333.3) * 1000 = 30.0030003… → 30.00
 
         // act
         val result = useCase(weightGrams, price)

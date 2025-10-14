@@ -11,7 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.R
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingLarge
+import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingLarge
 
 @Composable
 fun CameraPermissionDeniedContent(
@@ -20,14 +23,12 @@ fun CameraPermissionDeniedContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(all = PaddingLarge),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Для работы сканера необходимо разрешение на доступ к камере.") //todo to res
-        Spacer(modifier = Modifier.height(16.dp)) //todo from constants
-        Button(onClick = onOpenSettings) {
-            Text("Открыть настройки") //todo to res
-        }
+        Text(text = stringResource(id = R.string.scanner_permission_text))
+        Spacer(modifier = Modifier.height(height = SpacingLarge))
+        Button(onClick = onOpenSettings) { Text(text = stringResource(id = R.string.scanner_open_settings)) }
     }
 }
