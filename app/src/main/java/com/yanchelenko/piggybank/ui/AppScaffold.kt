@@ -15,12 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.yanchelenko.piggybank.modules.base.ui_model.navigation.NavigationUiMeta
 import com.yanchelenko.piggybank.modules.dev_tools.fps.FpsOverlay
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScaffold(
     currentRoute: String?,
+    cartItemsCount: Int,
     onNavigationSelected: (String) -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -46,7 +47,8 @@ fun AppScaffold(
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = currentRoute,
-                onItemSelected = onNavigationSelected
+                onItemSelected = onNavigationSelected,
+                cartItemsCount = cartItemsCount
             )
         },
         content = content

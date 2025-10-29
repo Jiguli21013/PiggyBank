@@ -10,11 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import com.yanchelenko.piggynank.core.ui.theme.AppShapes
-import com.yanchelenko.piggynank.core.ui.theme.CustomColors.fsad
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.ElevationSmall
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingSmall
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.CustomColors.SurfaceVariantSoft
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.ElevationSmall
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingSmall
 
 @Composable
 fun ReadOnlyField(
@@ -32,7 +32,7 @@ fun ReadOnlyField(
         Surface(
             shape = AppShapes.medium,
             tonalElevation = ElevationSmall,
-            color = fsad,
+            color = SurfaceVariantSoft,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = PaddingSmall)

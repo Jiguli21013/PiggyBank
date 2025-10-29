@@ -1,4 +1,4 @@
-package com.yanchelenko.piggynank.core.ui.theme
+package com.yanchelenko.piggybank.modules.base.ui_kit.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -25,11 +25,14 @@ object AppColors {
 }
 
 object CustomColors {
+    val AddToCart = Color(0xFFC8E6C9)      // мягкий зелёный
+    val RemoveFromCart = Color(0xFFFFCDD2) // мягкий красный
+
     val PrimaryTransparent10: Color
         @Composable
         get() = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
 
-    val fsad: Color
+    val SurfaceVariantSoft: Color
         @Composable
         get() = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
 

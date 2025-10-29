@@ -9,6 +9,9 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppColors
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppTypography
 
 @Composable
 fun PiggyBankTheme(

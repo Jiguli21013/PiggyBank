@@ -3,4 +3,6 @@
     <string name="dialog_text_delete_confirmation">Вы уверены, что хотите удалить этот товар?</string>
     <string name="action_delete">Удалить</string>
     <string name="action_cancel">Отмена</string>
+
+    <string name="label_weight_grams">Вес (грамм)</string>
 </resources>

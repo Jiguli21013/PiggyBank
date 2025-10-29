@@ -4,15 +4,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state.EditProductEffect
 import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state.EditProductEvent
+import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state.EditProductState
 import com.yanchelenko.piggybank.modules.core.core_api.domain.mapper.toUserMessage
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.getData
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.updateDataSuccess
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
-import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toDomain
-import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toUi
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
+import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toDomain
+import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toUi
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductByIdUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.UpdateProductUseCase
@@ -20,6 +20,7 @@ import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainExce
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,7 +31,7 @@ class EditProductViewModel @Inject constructor(
     private val getPricePerKgUseCase: GetPricePerKgUseCase,
     private val logger: Logger,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<EditProductEvent, CommonUiState<ProductUiModel>, EditProductEffect>(
+) : BaseViewModel<EditProductEvent, CommonUiState<EditProductState>, EditProductEffect>(
     initialState = CommonUiState.Initializing
 ) {
 
@@ -52,47 +53,46 @@ class EditProductViewModel @Inject constructor(
             }
 
             is EditProductEvent.ProductNameChanged -> {
-                logger.d(LOG_TAG, "Product name changed: ${event.name}")
+                logger.d(LOG_TAG, "ScannedProduct name changed: ${event.name}")
                 setState {
                     updateDataSuccess {
-                        copy(productName = event.name)
+                        copy(scannedProduct = scannedProduct.copy(productName = event.name))
                     }
                 }
             }
 
             is EditProductEvent.WeightChanged -> {
                 logger.d(LOG_TAG, "Weight changed: ${event.weight}")
-                uiState.value.getData { product ->
+                uiState.value.getData { state ->
                     val newPricePerKg = getPricePerKgUseCase(
                         weightGrams = event.weight,
-                        price = product.price
+                        price = state.scannedProduct.price
                     )
-                    setState {
-                        CommonUiState.Success(
-                            data = product.copy(
-                                weight = event.weight,
-                                pricePerKg = newPricePerKg
-                            )
-                        )
-                    }
+                    val updated = state.scannedProduct.copy(
+                        weight = event.weight,
+                        pricePerKg = newPricePerKg
+                    )
+                    setState { CommonUiState.Success(data = state.copy(scannedProduct = updated)) }
                 }
+            }
+
+            is EditProductEvent.PriceInputChanged -> {
+                logger.d(LOG_TAG, "Price input changed: ${event.input}")
+                setState { updateDataSuccess { copy(priceInput = event.input) } }
             }
 
             is EditProductEvent.PriceChanged -> {
                 logger.d(LOG_TAG, "Price changed: ${event.price}")
-                uiState.value.getData { product ->
+                uiState.value.getData { state ->
                     val newPricePerKg = getPricePerKgUseCase(
-                        weightGrams = product.weight,
+                        weightGrams = state.scannedProduct.weight,
                         price = event.price
                     )
-                    setState {
-                        CommonUiState.Success(
-                            data = product.copy(
-                                price = event.price,
-                                pricePerKg = newPricePerKg
-                            )
-                        )
-                    }
+                    val updated = state.scannedProduct.copy(
+                        price = event.price,
+                        pricePerKg = newPricePerKg
+                    )
+                    setState { CommonUiState.Success(data = state.copy(scannedProduct = updated)) }
                 }
             }
 
@@ -107,18 +107,25 @@ class EditProductViewModel @Inject constructor(
             }
 
             is EditProductEvent.ProductFoundInDB -> {
-                logger.d(LOG_TAG, "Product loaded from DB: ${event.product}")
-                setState { CommonUiState.Success(data = event.product) }
+                logger.d(LOG_TAG, "ScannedProduct loaded from DB: ${event.product}")
+                setState {
+                    CommonUiState.Success(
+                        data = EditProductState(
+                            scannedProduct = event.product,
+                            priceInput = if (event.product.price == 0.0) "" else event.product.price.toString()
+                        )
+                    )
+                }
             }
         }
     }
 
     private fun loadProductByProductId(productId: Long) {
         logger.d(LOG_TAG, "Start DB lookup for productId=$productId")
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             when (val result = getProductByProductIdUseCase(productId)) {
                 is RequestResult.Success -> {
-                    logger.d(LOG_TAG, "Product loaded: ${result.data}")
+                    logger.d(LOG_TAG, "ScannedProduct loaded: ${result.data}")
                     onEvent(EditProductEvent.ProductFoundInDB(product = result.data.toUi()))
                 }
 
@@ -138,14 +145,14 @@ class EditProductViewModel @Inject constructor(
     }
 
     private fun updateProductDB() {
-        uiState.value.getData { product ->
-            logger.d(LOG_TAG, "Start updating product: $product")
+        uiState.value.getData { state ->
+            logger.d(LOG_TAG, "Start updating product: ${state.scannedProduct}")
 
             viewModelScope.launch {
-                when (val result = updateProductUseCase(product.toDomain())) {
+                when (val result = updateProductUseCase(state.scannedProduct.toDomain())) {
                     is RequestResult.Success -> {
-                        logger.d(LOG_TAG, "Product successfully updated")
-                        setState { CommonUiState.Success(data = product) }
+                        logger.d(LOG_TAG, "ScannedProduct successfully updated")
+                        setState { CommonUiState.Success(data = state) }
                         sendEffect { EditProductEffect.ShowMessage("Продукт успешно изменён") } //todo
                         sendEffect { EditProductEffect.NavigateBack }
                     }

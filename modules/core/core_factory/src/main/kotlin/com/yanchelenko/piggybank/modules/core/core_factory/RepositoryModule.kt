@@ -1,7 +1,9 @@
 package com.yanchelenko.piggybank.modules.core.core_factory
 
-import com.yanchelenko.piggybank.modules.core.core_impl.data.repositories.ProductsRepositoryImpl
-import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductsRepository
+import com.yanchelenko.piggybank.modules.core.core_api.repository.CartRepository
+import com.yanchelenko.piggybank.modules.core.core_impl.data.repositories.ScannedScannedProductsRepositoryImpl
+import com.yanchelenko.piggybank.modules.core.core_api.repository.ScannedProductsRepository
+import com.yanchelenko.piggybank.modules.core.core_impl.data.repositories.CartRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +17,12 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindProductsRepository(
-        impl: ProductsRepositoryImpl
-    ): ProductsRepository
+        impl: ScannedScannedProductsRepositoryImpl
+    ): ScannedProductsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCartRepository(
+        impl: CartRepositoryImpl
+    ): CartRepository
 }

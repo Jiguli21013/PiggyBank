@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yanchelenko.piggynank.core.ui.theme.AppShapes
-import com.yanchelenko.piggynank.core.ui.theme.CustomColors.PrimaryTransparent10
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.CustomColors.PrimaryTransparent10
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 
 @Composable
 fun InfoCard(
@@ -20,7 +20,7 @@ fun InfoCard(
         modifier = modifier,
         color = PrimaryTransparent10,
         shape = AppShapes.large
-    ) {
-        Column(modifier = Modifier.padding(padding)) { content() }
-    }
+    ) { Column(modifier = Modifier.padding(paddingValues = padding)) {
+        content()
+    } }
 }

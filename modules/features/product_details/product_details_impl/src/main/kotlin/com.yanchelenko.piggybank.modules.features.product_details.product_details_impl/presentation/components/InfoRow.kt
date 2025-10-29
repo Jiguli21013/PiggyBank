@@ -7,7 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingSmall
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingSmall
 
 @Composable
 fun InfoRow(

@@ -25,6 +25,7 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.extensions.formatIf
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state.EditProductEffect
 import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state.EditProductEvent
+import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state.EditProductState
 import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.R
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
@@ -32,13 +33,15 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.OutlinedInputFie
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.PrimaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.ReadOnlyField
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.SecondaryButton
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.PriceInputField
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.WeightInputField
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
-import com.yanchelenko.piggybank.modules.base.ui_model.mapper.trackMap
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacerHeight
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingExtraLarge
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingMedium
+import com.yanchelenko.piggybank.modules.base.ui_model.mappers.trackMap
+import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacerHeight
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLarge
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 
 @Composable
@@ -110,14 +113,13 @@ internal fun EditProductScreen(
 @Composable
 fun EditProductContent(
     modifier: Modifier = Modifier,
-    state: ProductUiModel,
+    state: EditProductState,
     onEvent: (EditProductEvent) -> Unit
 ) {
-    RebuggerIfDebug(trackMap = state.trackMap(), composableName = "EditProductContent")
+    RebuggerIfDebug(trackMap = state.scannedProduct.trackMap(), composableName = "EditProductContent")
 
     val productNameLabel = stringResource(R.string.label_product_name)
-    val weightLabel = stringResource(R.string.label_weight_grams)
-    val priceLabel = stringResource(R.string.label_price_by_weight, state.weight)
+    val priceLabel = stringResource(R.string.label_price_by_weight, state.scannedProduct.weight.toInt())
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
@@ -132,40 +134,30 @@ fun EditProductContent(
             verticalArrangement = Arrangement.spacedBy(SpacingExtraLarge)
         ) {
             OutlinedInputField(
-                value = state.productName,
+                value = state.scannedProduct.productName,
                 onValueChange = { onEvent(EditProductEvent.ProductNameChanged(it)) },
                 label = productNameLabel,
                 keyboardType = KeyboardType.Text,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            OutlinedInputField(
-                value = state.weight.formatIfNonZero(),
-                onValueChange = {
-                    it.toDoubleOrNull()?.let { weight ->
-                        onEvent(EditProductEvent.WeightChanged(weight))
-                    }
-                },
-                label = weightLabel,
-                keyboardType = KeyboardType.Number,
+            WeightInputField(
+                weight = state.scannedProduct.weight,
+                onWeightChange = { grams -> onEvent(EditProductEvent.WeightChanged(weight = grams)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
-            OutlinedInputField(
-                value = state.price.formatIfNonZero(),
-                onValueChange = {
-                    it.toDoubleOrNull()?.let { price ->
-                        onEvent(EditProductEvent.PriceChanged(price))
-                    }
-                },
+            PriceInputField(
+                value = state.priceInput,
+                onTextChange = { onEvent(EditProductEvent.PriceInputChanged(it)) },
+                onPriceChange = { price -> onEvent(EditProductEvent.PriceChanged(price)) },
                 label = priceLabel,
-                keyboardType = KeyboardType.Number,
                 modifier = Modifier.fillMaxWidth()
             )
 
             ReadOnlyField(
                 label = pricePerKgLabel,
-                value = state.pricePerKg.formatIfNonZero()
+                value = state.scannedProduct.pricePerKg.formatIfNonZero()
             )
         }
 
@@ -192,13 +184,16 @@ fun EditProductContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun InsertProductMainContentPreview(
+private fun EditProductContentPreview(
     @PreviewParameter(ProductPreviewProvider::class)
-    product: ProductUiModel
+    product: ScannedProductUiModel
 ) {
     PiggyBankTheme {
         EditProductContent(
-            state = product,
+            state = EditProductState(
+                scannedProduct = product,
+                priceInput = product.price.formatIfNonZero()
+            ),
             onEvent = {}
         )
     }

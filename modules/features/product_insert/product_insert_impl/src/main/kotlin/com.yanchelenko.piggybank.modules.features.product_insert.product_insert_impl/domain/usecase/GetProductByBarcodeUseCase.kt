@@ -5,23 +5,23 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.result.flatMap
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.toRequestResult
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.ProductNotFoundException
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
-import com.yanchelenko.piggybank.modules.core.core_api.models.Product
-import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductsRepository
+import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
+import com.yanchelenko.piggybank.modules.core.core_api.repository.ScannedProductsRepository
 import javax.inject.Inject
 
 class GetProductByBarcodeUseCase @Inject constructor(
-    private val repository: ProductsRepository,
+    private val repository: ScannedProductsRepository,
     private val logger: Logger
 ) {
-    suspend operator fun invoke(barcode: String): RequestResult<Product> {
+    suspend operator fun invoke(barcode: String): RequestResult<ScannedProduct> {
         return repository
-            .getProductByBarcode(barcode = barcode)
+            .getScannedProductByBarcode(barcode = barcode)
             .flatMap { product ->
                 if (product != null) {
-                    logger.d(LOG_TAG, "Product found: $product")
+                    logger.d(LOG_TAG, "ScannedProduct found: $product")
                     Result.success(value = product)
                 } else {
-                    logger.d(LOG_TAG, "Product not found for barcode: $barcode")
+                    logger.d(LOG_TAG, "ScannedProduct not found for barcode: $barcode")
                     Result.failure(exception = ProductNotFoundException(barcode))
                 }
             }

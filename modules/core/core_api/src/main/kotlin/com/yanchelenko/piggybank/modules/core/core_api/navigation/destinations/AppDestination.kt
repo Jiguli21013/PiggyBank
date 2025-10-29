@@ -13,10 +13,22 @@ sealed interface AppDestination : NavigationDestination {
         fun fullRoute(): String = "scanner"
     }
 
-    data object HistoryDestination : AppDestination {
-        override val routeForRegistration = "history"
+    data object HistoryOfScansDestination : AppDestination {
+        override val routeForRegistration = "history_of_scans"
         override val arguments = emptyList<NamedNavArgument>()
-        fun fullRoute(): String = "history"
+        fun fullRoute(): String = "history_of_scans"
+    }
+
+    data object HistoryOfCartsDestination : AppDestination {
+        override val routeForRegistration = "history_of_carts"
+        override val arguments = emptyList<NamedNavArgument>()
+        fun fullRoute(): String = "history_of_carts"
+    }
+
+    data object CartDestination : NavigationDestination {
+        override val routeForRegistration: String = "cart"
+        override val arguments = emptyList<NamedNavArgument>()
+        fun fullRoute(): String = "cart"
     }
 
     // ---- Parameterized Destinations ----

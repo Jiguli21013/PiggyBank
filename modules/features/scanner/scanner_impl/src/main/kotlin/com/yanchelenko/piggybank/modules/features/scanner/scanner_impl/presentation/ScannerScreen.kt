@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
 import com.yanchelenko.piggybank.modules.base.ui_kit.lifecycle.OnResumeEffect
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
+import com.yanchelenko.piggybank.modules.base.ui_kit.test.UiTestTags
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.data.vision.BarcodeAnalyzer
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.di.barcode.hiltBarcodeAnalyzer
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.components.AndroidCameraView
@@ -55,7 +56,7 @@ fun ScannerScreen(
         onEvent = viewModel::onEvent,
         modifier = modifier
             .fillMaxSize()
-            .semantics { contentDescription = "scanner_root" },
+            .semantics { contentDescription = UiTestTags.SCANNER_ROOT },
         onEffect = { effect ->
             when (effect) {
                 is ScannerEffect.NavigateToInsertProduct -> {
@@ -90,7 +91,7 @@ fun ScannerScreen(
                 ScannerState.PermissionDenied -> Box(
                     modifier = innerModifier
                         .fillMaxSize()
-                        .semantics { contentDescription = "scanner_permission_text" }
+                        .semantics { contentDescription = UiTestTags.SCANNER_PERMISSION }
                 ) {
                     CameraPermissionDeniedContent {
                         sendEvent(ScannerEvent.OnCameraSettingsClicked)

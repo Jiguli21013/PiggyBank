@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,17 +27,22 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.OutlinedInputField
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.PrimaryButton
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.PriceInputField
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.ReadOnlyField
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.SecondaryButton
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.WeightInputField
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
-import com.yanchelenko.piggybank.modules.base.ui_model.mapper.trackMap
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.HeaderHeight
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingExtraLarge
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingMedium
+import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLarge
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
+import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductState
+import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.trackMap
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+
+const val MIN_QUANTITY = 1
+const val MAX_QUANTITY = 99
 
 @Composable
 fun InsertProductMainScreen(
@@ -103,68 +107,66 @@ internal fun InsertProductMainScreen(
 
 @Composable
 fun InsertProductContent(
-    state: ProductUiModel,
+    state: InsertProductState,
     modifier: Modifier = Modifier,
     onEvent: (InsertProductEvent) -> Unit,
 ) {
     RebuggerIfDebug(trackMap = state.trackMap(), composableName = "InsertProductContent")
 
     val productNameLabel = stringResource(R.string.label_product_name)
-    val weightLabel = stringResource(R.string.label_weight_grams)
-    val priceLabel = stringResource(R.string.label_price_by_weight, state.weight)
+    val priceLabel = stringResource(R.string.label_price_by_weight, state.scannedProduct.weight)
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
+
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
 
     Column(
+        verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxSize()
-            .padding(PaddingMedium),
-        verticalArrangement = Arrangement.SpaceBetween
+            .padding(all = PaddingMedium),
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(SpacingExtraLarge)) {
+
             OutlinedInputField(
-                value = state.productName,
-                onValueChange = { onEvent(InsertProductEvent.ProductNameChanged(it)) },
+                value = state.scannedProduct.productName,
+                onValueChange = { onEvent(InsertProductEvent.ProductNameChanged(name = it)) },
                 label = productNameLabel,
                 keyboardType = KeyboardType.Text,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            OutlinedInputField(
-                value = state.weight.formatIfNonZero(),
-                onValueChange = {
-                    it.toDoubleOrNull()?.let { weight ->
-                        onEvent(InsertProductEvent.WeightChanged(weight))
-                    }
-                },
-                label = weightLabel,
-                keyboardType = KeyboardType.Number,
+            WeightInputField(
+                weight = state.scannedProduct.weight,
+                onWeightChange = { onEvent(InsertProductEvent.WeightChanged(it)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
-            OutlinedInputField(
-                value = state.price.formatIfNonZero(),
-                onValueChange = {
-                    it.toDoubleOrNull()?.let { price ->
-                        onEvent(InsertProductEvent.PriceChanged(price))
-                    }
-                },
+            PriceInputField(
+                value = state.priceInput,
                 label = priceLabel,
-                keyboardType = KeyboardType.Number,
+                onTextChange = { onEvent(InsertProductEvent.PriceInputChanged(it)) },
+                onPriceChange = { price -> onEvent(InsertProductEvent.PriceChanged(price)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             ReadOnlyField(
                 label = pricePerKgLabel,
-                value = state.pricePerKg.formatIfNonZero()
+                value = state.scannedProduct.pricePerKg.formatIfNonZero()
             )
         }
 
-        Spacer(modifier = Modifier.height(HeaderHeight))
+        Spacer(modifier = Modifier.weight(1f))
+
+        CartControls(
+            quantity = state.quantity,
+            isInCart = state.isInCart,
+            onEvent = onEvent,
+            modifier = modifier.padding(bottom = SpacingSmall)
+        )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(SpacingMedium),
+            horizontalArrangement = Arrangement.spacedBy(space = SpacingSmall),
             modifier = Modifier.fillMaxWidth()
         ) {
             SecondaryButton(
@@ -185,11 +187,12 @@ fun InsertProductContent(
 @Preview(showBackground = true)
 @Composable
 private fun InsertProductMainContentPreview(
-    @PreviewParameter(ProductPreviewProvider::class) product: ProductUiModel
+    @PreviewParameter(ProductPreviewProvider::class)
+    product: ScannedProductUiModel
 ) {
     PiggyBankTheme {
         InsertProductContent(
-            state = product,
+            state =  InsertProductState(),
             onEvent = {}
         )
     }

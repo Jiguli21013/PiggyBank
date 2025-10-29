@@ -3,4 +3,6 @@
     <string name="dialog_text_delete_confirmation">Are you sure you want to delete this product?</string>
     <string name="action_delete">Delete</string>
     <string name="action_cancel">Cancel</string>
+
+    <string name="label_weight_grams">Weight (grams)</string>
 </resources>

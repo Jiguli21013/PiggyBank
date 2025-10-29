@@ -1,4 +1,4 @@
-package com.yanchelenko.piggynank.core.ui.theme
+package com.yanchelenko.piggybank.modules.base.ui_kit.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,6 +1,6 @@
 package com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state
 
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
+import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 
 sealed interface ProductDetailsEvent {
     data object OnEditClicked : ProductDetailsEvent
@@ -10,5 +10,5 @@ sealed interface ProductDetailsEvent {
     data object DialogCancelDelete : ProductDetailsEvent
 
     data class LoadProductByProductId(val productId: Long) : ProductDetailsEvent
-    data class ProductFoundInDB(val product: ProductUiModel) : ProductDetailsEvent
+    data class ProductFoundInDB(val product: ScannedProductUiModel) : ProductDetailsEvent
 }

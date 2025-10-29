@@ -14,7 +14,7 @@ fun OutlinedInputField(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     OutlinedTextField(
         value = value,
@@ -22,6 +22,6 @@ fun OutlinedInputField(
         label = { Text(label, style = MaterialTheme.typography.labelLarge) },
         modifier = modifier,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        textStyle = MaterialTheme.typography.bodyLarge
+        textStyle = MaterialTheme.typography.bodyLarge,
     )
 }

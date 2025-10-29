@@ -20,6 +20,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.yanchelenko.piggybank.modules.base.ui_kit.test.UiTestTags
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.R
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.data.vision.BarcodeAnalyzer
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.state.ScannerEvent
@@ -68,7 +69,7 @@ fun AndroidCameraView(
         factory = { ctx -> PreviewView(ctx).apply { controller = cameraController } },
         modifier = modifier
             .fillMaxSize()
-            .semantics { contentDescription = "scanner_preview" }
+            .semantics { contentDescription = UiTestTags.SCANNER_PREVIEW }
     )
 
     if (qrCodeDetected && barcode != null) {

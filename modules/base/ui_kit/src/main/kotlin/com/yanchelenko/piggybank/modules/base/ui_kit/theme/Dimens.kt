@@ -1,4 +1,4 @@
-package com.yanchelenko.piggynank.core.ui.theme
+package com.yanchelenko.piggybank.modules.base.ui_kit.theme
 
 import androidx.compose.ui.unit.dp
 
@@ -21,6 +21,11 @@ object Dimens {
     val IconSmall = 20.dp
     val IconMedium = 24.dp
     val IconLarge = 28.dp
+
+    // Round button
+    val RoundButtonSmall = 48.dp
+    val RoundButtonMedium = 58.dp
+    val RoundButtonLarge = 68.dp
 
     // Height
     val HeaderHeight = 30.dp

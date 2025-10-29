@@ -8,7 +8,8 @@ import javax.inject.Inject
 class GetPricePerKgUseCaseImpl @Inject constructor(
     private val logger: Logger
 ) : GetPricePerKgUseCase {
-    override operator fun invoke(weightGrams: Double, price: Double): Double {
+
+    override operator fun invoke(weightGrams: Int, price: Double): Double {
         if (weightGrams <= 0.0) {
             logger.e(LOG_TAG, "Invalid weight: $weightGrams. Returning 0.0")
             return 0.0
@@ -28,7 +29,7 @@ class GetPricePerKgUseCaseImpl @Inject constructor(
     companion object {
         private const val LOG_TAG = "GetPricePerKgUseCaseImpl"
 
-        private const val GRAMS_PER_KILOGRAM = 1000.0
+        private const val GRAMS_PER_KILOGRAM = 1000
         private const val DECIMAL_PRECISION = 2
     }
 }

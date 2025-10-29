@@ -1,0 +1,14 @@
+<resources>
+    <string name="label_store_name">Store</string>
+    <string name="value_store_unknown">Not selected</string>
+    <string name="label_total_items">Items</string>
+    <string name="label_total_price">Total</string>
+    <string name="label_status">Status</string>
+    <string name="value_status_active">Active</string>
+    <string name="value_status_closed">Closed</string>
+    <string name="label_created_at">Created</string>
+    <string name="label_closed_at">Closed at</string>
+    <string name="label_price_per_cart">Price per cart</string>
+
+    <string name="desc_cart_icon">Cart icon</string>
+</resources>

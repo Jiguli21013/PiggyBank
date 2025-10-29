@@ -1,0 +1,7 @@
+<resources>
+    <string name="cart_empty_message">Просканируйте товар \n и \n добавьте в корзину</string>
+
+    <string name="label_price_per_current_weight">Цена за текущий вес</string>
+    <string name="label_price_per_kg">Цена за килограмм</string>
+    <string name="label_total_price">Итоговая цена</string>
+</resources>

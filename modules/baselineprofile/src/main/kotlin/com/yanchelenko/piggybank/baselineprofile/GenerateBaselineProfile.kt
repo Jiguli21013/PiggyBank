@@ -9,6 +9,7 @@ import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import com.yanchelenko.piggybank.modules.base.ui_kit.test.UiTestTags
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,21 +25,6 @@ class GenerateBaselineProfile {
 
     @get:Rule
     val baselineRule = BaselineProfileRule()
-
-    // Centralized semantic tags and ids
-    private object Tags {
-        const val NAV_SCANNER = "nav_scanner"
-        const val NAV_HISTORY = "nav_history"
-
-        const val SCANNER_PREVIEW = "scanner_preview"
-        const val SCANNER_PERMISSION = "scanner_permission_text"
-        const val SCANNER_ROOT = "scanner_root"
-
-        const val HISTORY_LIST = "history_list"
-        const val HISTORY_ROOT = "history_root"
-        const val HISTORY_EMPTY = "history_empty"
-        const val HISTORY_ITEM_PREFIX = "history_item_"
-    }
 
     // Centralized timeouts and small sleeps to avoid magic numbers
     private object Times {
@@ -89,9 +75,9 @@ class GenerateBaselineProfile {
     /** Warm up Scanner screen (preview/permission path). */
     private fun warmUpScanner() {
         sleep(Times.NAP_MED)
-        clickIfExists(desc = Tags.NAV_SCANNER, timeout = Times.MED)
+        clickIfExists(desc = UiTestTags.NAV_SCANNER, timeout = Times.MED)
         // ждём любой из возможных семантик на экране сканера
-        waitAnyDesc(Times.MED, Tags.SCANNER_PREVIEW, Tags.SCANNER_PERMISSION, Tags.SCANNER_ROOT)
+        waitAnyDesc(Times.MED, UiTestTags.SCANNER_PREVIEW, UiTestTags.SCANNER_PERMISSION, UiTestTags.SCANNER_ROOT)
         allowPermissionDialogIfShown()
         device.waitForIdle()
         sleep(Times.NAP_SHORT)
@@ -102,10 +88,15 @@ class GenerateBaselineProfile {
         if (!clickNavHistory()) {
             println("WARN: nav_history not found by common selectors")
         }
-        waitAnyDesc(Times.LONG, Tags.HISTORY_LIST, Tags.HISTORY_ROOT, Tags.HISTORY_EMPTY)
-        val didScroll = scrollDescOrSwipe(Tags.HISTORY_LIST, downTimes = 3, upTimes = 2)
-        if (!didScroll) println("WARN: history_list not found, used screen swipe fallback")
-        clickIfExists(descStartsWith = Tags.HISTORY_ITEM_PREFIX, timeout = Times.SHORT)
+        waitAnyDesc(
+            Times.LONG,
+            UiTestTags.HISTORY_OF_SCANS_LIST,
+            UiTestTags.HISTORY_OF_SCANS_ROOT,
+            UiTestTags.HISTORY_OF_SCANS_EMPTY
+        )
+        val didScroll = scrollDescOrSwipe(UiTestTags.HISTORY_OF_SCANS_LIST, downTimes = 3, upTimes = 2)
+        if (!didScroll) println("WARN: ${UiTestTags.HISTORY_OF_SCANS_LIST} not found, used screen swipe fallback")
+        clickIfExists(descStartsWith = UiTestTags.HISTORY_OF_SCANS_ITEM_PREFIX, timeout = Times.SHORT)
         device.waitForIdle()
         device.pressBack()
         device.waitForIdle()
@@ -113,8 +104,8 @@ class GenerateBaselineProfile {
 
     /** Return to Scanner so that profile captures the main/home screen. */
     private fun returnToScanner() {
-        clickIfExists(desc = Tags.NAV_SCANNER, timeout = Times.MED)
-        waitAnyDesc(Times.MED, Tags.SCANNER_PREVIEW, Tags.SCANNER_ROOT)
+        clickIfExists(desc = UiTestTags.NAV_SCANNER, timeout = Times.MED)
+        waitAnyDesc(Times.MED, UiTestTags.SCANNER_PREVIEW, UiTestTags.SCANNER_ROOT)
         device.waitForIdle()
         sleep(Times.NAP_MED)
     }
@@ -185,12 +176,12 @@ class GenerateBaselineProfile {
 
     private fun clickNavHistory(timeout: Long = 3_000): Boolean {
         val selectors = listOf(
-            By.res("$APP_ID:id/nav_history"),
-            By.res("$APP_ID:id/history"),
-            By.res("$APP_ID:id/menu_history"),
-            By.desc(Tags.NAV_HISTORY),
-            By.text("History"),
-            By.text("История")
+            By.res("$APP_ID:id/nav_history_of_scans"),
+            By.res("$APP_ID:id/history_of_scans"),
+            By.res("$APP_ID:id/menu_history_of_scans"),
+            By.desc(UiTestTags.NAV_HISTORY_OF_SCANS),
+            By.text("History of scans"),
+            By.text("История сканирований")
         )
         for (sel in selectors) {
             device.wait(Until.hasObject(sel), timeout)
@@ -217,21 +208,6 @@ class GenerateBaselineProfile {
         return false
     }
 
-    private fun waitDesc(desc: String, timeout: Long) {
-        device.wait(Until.hasObject(By.desc(desc)), timeout)
-    }
-
-    private fun scrollDesc(listDesc: String, downTimes: Int, upTimes: Int) {
-        device.wait(Until.hasObject(By.desc(listDesc)), Times.SHORT)
-        val list = device.findObject(By.desc(listDesc)) ?: return
-        repeat(downTimes) { list.safeScroll(Direction.DOWN) }
-        repeat(upTimes) { list.safeScroll(Direction.UP) }
-    }
-
-    /**
-     * Tries to scroll a list by contentDescription. If not found, does screen swipes as fallback.
-     * @return true if list scroll happened, false if fallback swipe used.
-     */
     private fun scrollDescOrSwipe(listDesc: String, downTimes: Int, upTimes: Int): Boolean {
         device.wait(Until.hasObject(By.desc(listDesc)), Times.SHORT)
         val list = device.findObject(By.desc(listDesc))

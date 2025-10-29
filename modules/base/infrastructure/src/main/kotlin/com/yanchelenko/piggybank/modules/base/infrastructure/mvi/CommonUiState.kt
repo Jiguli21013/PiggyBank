@@ -3,6 +3,7 @@ package com.yanchelenko.piggybank.modules.base.infrastructure.mvi
 sealed interface CommonUiState<out T> {
     data object Initializing : CommonUiState<Nothing>
     data object Loading : CommonUiState<Nothing>
+
     data class Error<T>(val message: String? = null) : CommonUiState<T>
     data class Success<T>(val data: T) : CommonUiState<T>
 }

@@ -9,10 +9,10 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.getData
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
-import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toDomain
-import com.yanchelenko.piggybank.modules.base.ui_model.mapper.toUi
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
-import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteProductUseCase
+import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toDomain
+import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toUi
+import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
+import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteScannedProductUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductByIdUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainException
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
@@ -26,17 +26,28 @@ import javax.inject.Inject
 class ProductDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getProductByProductIdUseCase: GetProductByIdUseCase,
-    private val deleteProductUseCase: DeleteProductUseCase,
+    private val deleteScannedProductUseCase: DeleteScannedProductUseCase,
     private val logger: Logger,
-) : BaseViewModel<ProductDetailsEvent, CommonUiState<ProductUiModel>, ProductDetailsEffect>(
+) : BaseViewModel<ProductDetailsEvent, CommonUiState<ScannedProductUiModel>, ProductDetailsEffect>(
     initialState = CommonUiState.Initializing,
 ) {
-    init {
-        val productId = savedStateHandle.get<Long>(AppDestination.ProductDetailsDestination.Meta.arguments.first().name)
-            ?: error("productId is missing in SavedStateHandle") //todo error вынести куда-то ?
+    // Cache the productId for later refreshes
+    private val productId: Long
 
-        logger.d(LOG_TAG, "Init with productId=${productId}")
+    init {
+        productId = savedStateHandle.get<Long>(AppDestination.ProductDetailsDestination.Meta.arguments.first().name)
+            ?: error("productId is missing in SavedStateHandle")
+        logger.d(LOG_TAG, "Init with productId=$productId")
         onEvent(event = ProductDetailsEvent.LoadProductByProductId(productId = productId))
+    }
+
+    /**
+     * Explicit refresh API for the screen: call this from the UI when the screen returns to foreground.
+     * This guarantees fresh data even if this VM was retained on the back stack.
+     */
+    fun refresh() {
+        logger.d(LOG_TAG, "Manual refresh for productId=$productId")
+        onEvent(ProductDetailsEvent.LoadProductByProductId(productId = productId))
     }
 
     override fun onEvent(event: ProductDetailsEvent) {
@@ -69,7 +80,7 @@ class ProductDetailsViewModel @Inject constructor(
             }
 
             is ProductDetailsEvent.ProductFoundInDB -> {
-                logger.d(LOG_TAG, "Product loaded from DB: ${event.product}")
+                logger.d(LOG_TAG, "ScannedProduct loaded from DB: ${event.product}")
                 setState { CommonUiState.Success(data = event.product) }
             }
         }
@@ -80,7 +91,7 @@ class ProductDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = getProductByProductIdUseCase(productId)) {
                 is RequestResult.Success -> {
-                    logger.d(LOG_TAG, "Product loaded: ${result.data}")
+                    logger.d(LOG_TAG, "ScannedProduct loaded: ${result.data}")
                     onEvent(ProductDetailsEvent.ProductFoundInDB(product = result.data.toUi()))
                 }
 
@@ -104,10 +115,10 @@ class ProductDetailsViewModel @Inject constructor(
             logger.d(LOG_TAG, "Attempting to delete product: $product")
 
             viewModelScope.launch {
-                when (val result = deleteProductUseCase(product.toDomain())) {
+                when (val result = deleteScannedProductUseCase(product.toDomain())) {
 
                     is RequestResult.Success -> {
-                        logger.d(LOG_TAG, "Product successfully deleted")
+                        logger.d(LOG_TAG, "ScannedProduct successfully deleted")
                         sendEffect { ProductDetailsEffect.DeletionAnimation }
                         logger.d(LOG_TAG, "Animation for deletion")
                         delay(timeMillis = DELETION_ANIMATION_DELAY_MS)

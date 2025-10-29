@@ -10,6 +10,14 @@ plugins {
     alias(libs.plugins.androidx.baselineprofile)
 }
 
+// Ensure baseline profile generation runs before assembling or bundling the release
+// Wrap in afterEvaluate so the Android plugin has created variant tasks
+afterEvaluate {
+    tasks.matching { it.name == "assembleRelease" || it.name == "bundleRelease" }.configureEach {
+        dependsOn(":modules:baselineprofile:connectedAndroidTest")
+    }
+}
+
 android {
     namespace = "com.yanchelenko.piggybank"
     compileSdk = 35
@@ -62,11 +70,17 @@ dependencies {
     implementation(project(":modules:base:ui_model"))
     implementation(project(":modules:base:infrastructure"))
 
-    implementation(project(":modules:features:history:history_api"))
-    implementation(project(":modules:features:history:history_impl"))
-
     implementation(project(":modules:features:scanner:scanner_api"))
     implementation(project(":modules:features:scanner:scanner_impl"))
+
+    implementation(project(":modules:features:history_of_scans:history_of_scans_api"))
+    implementation(project(":modules:features:history_of_scans:history_of_scans_impl"))
+
+    implementation(project(":modules:features:history_of_carts:history_of_carts_api"))
+    implementation(project(":modules:features:history_of_carts:history_of_carts_impl"))
+  
+    implementation(project(":modules:features:cart:cart_api"))
+    implementation(project(":modules:features:cart:cart_impl"))
 
     implementation(project(":modules:features:product_edit:product_edit_api"))
     implementation(project(":modules:features:product_edit:product_edit_impl"))

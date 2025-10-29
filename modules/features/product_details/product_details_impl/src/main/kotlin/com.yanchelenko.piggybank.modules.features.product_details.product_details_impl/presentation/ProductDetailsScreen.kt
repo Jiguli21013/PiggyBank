@@ -1,5 +1,7 @@
 package com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation
-
+import androidx.compose.runtime.DisposableEffect
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
@@ -32,15 +34,15 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.PrimaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.SecondaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingMedium
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacerHeight
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingMedium
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacerHeight
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.R
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.FAST
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
-import com.yanchelenko.piggybank.modules.base.ui_model.mapper.trackMap
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
+import com.yanchelenko.piggybank.modules.base.ui_model.mappers.trackMap
+import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 
 @Composable
 fun ProductDetailsScreen(
@@ -70,6 +72,18 @@ internal fun ProductDetailsScreen(
     var showDeleteDialog by remember { mutableStateOf(value = false) }
     var isContentVisible by remember { mutableStateOf(value = true) }
 
+    // Re-fetch latest product data when the screen resumes (e.g., after editing)
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refresh()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer = observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer = observer) }
+    }
+
     ScreenWithEffect(
         state = state,
         effectFlow = effectFlow,
@@ -90,7 +104,7 @@ internal fun ProductDetailsScreen(
                     if (showDeleteDialog) {
                         //todo call this dialog through navigation
                         ConfirmDeleteDialog(
-                            modifier = innerModifier,
+                            modifier = Modifier,
                             onConfirm = { sendEvent(ProductDetailsEvent.DialogConfirmedDelete) },
                             onDismiss = { sendEvent(ProductDetailsEvent.DialogCancelDelete) }
                         )
@@ -126,7 +140,7 @@ internal fun ProductDetailsScreen(
 @Composable
 private fun ProductDetailsContent(
     modifier: Modifier = Modifier,
-    state: ProductUiModel,
+    state: ScannedProductUiModel,
     onEvent: (ProductDetailsEvent) -> Unit
 ) {
     RebuggerIfDebug(trackMap = state.trackMap(), composableName = "ProductDetailsContent")
@@ -178,7 +192,7 @@ private fun ProductDetailsContent(
 @Composable
 private fun ProductDetailsContentPreview(
     @PreviewParameter(ProductPreviewProvider::class)
-    product: ProductUiModel
+    product: ScannedProductUiModel
 ) {
     PiggyBankTheme {
         ProductDetailsContent(

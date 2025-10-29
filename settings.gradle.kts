@@ -48,10 +48,12 @@ project(":modules:core:database").projectDir = file("modules/core/database")
 // Base (Reusable infrastructure & UI)
 include(":modules:base:ui_kit")
 include(":modules:base:ui_model")
+include(":modules:base:resources")
 include(":modules:base:infrastructure")
 
 project(":modules:base:ui_kit").projectDir = file("modules/base/ui_kit")
 project(":modules:base:ui_model").projectDir = file("modules/base/ui_model")
+project(":modules:base:resources").projectDir = file("modules/base/resources")
 project(":modules:base:infrastructure").projectDir = file("modules/base/infrastructure")
 
 // Features: Scanner (API + Impl)
@@ -61,12 +63,26 @@ include(":modules:features:scanner:scanner_impl")
 project(":modules:features:scanner:scanner_api").projectDir = file("modules/features/scanner/scanner_api")
 project(":modules:features:scanner:scanner_impl").projectDir = file("modules/features/scanner/scanner_impl")
 
-// Features: History (API + Impl)
-include(":modules:features:history:history_api")
-include(":modules:features:history:history_impl")
+// Features: History of scans (API + Impl)
+include(":modules:features:history_of_scans:history_of_scans_api")
+include(":modules:features:history_of_scans:history_of_scans_impl")
 
-project(":modules:features:history:history_api").projectDir = file("modules/features/history/history_api")
-project(":modules:features:history:history_impl").projectDir = file("modules/features/history/history_impl")
+project(":modules:features:history_of_scans:history_of_scans_api").projectDir = file("modules/features/history_of_scans/history_of_scans_api")
+project(":modules:features:history_of_scans:history_of_scans_impl").projectDir = file("modules/features/history_of_scans/history_of_scans_impl")
+
+// Features: History of carts (API + Impl)
+include(":modules:features:history_of_carts:history_of_carts_api")
+include(":modules:features:history_of_carts:history_of_carts_impl")
+
+project(":modules:features:history_of_carts:history_of_carts_api").projectDir = file("modules/features/history_of_carts/history_of_carts_api")
+project(":modules:features:history_of_carts:history_of_carts_impl").projectDir = file("modules/features/history_of_carts/history_of_carts_impl")
+
+// Features: Cart (API + Impl)
+include(":modules:features:cart:cart_api")
+include(":modules:features:cart:cart_impl")
+
+project(":modules:features:cart:cart_api").projectDir = file("modules/features/cart/cart_api")
+project(":modules:features:cart:cart_impl").projectDir = file("modules/features/cart/cart_impl")
 
 // Features: Product Insert (API + Impl)
 include(":modules:features:product_insert:product_insert_api")

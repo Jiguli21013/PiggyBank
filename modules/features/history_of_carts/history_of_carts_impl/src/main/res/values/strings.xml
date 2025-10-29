@@ -1,0 +1,14 @@
+<resources>
+    <string name="label_store_name">Магазин</string>
+    <string name="value_store_unknown">Не выбран</string>
+    <string name="label_total_items">Количество товаров</string>
+    <string name="label_total_price">Сумма</string>
+    <string name="label_status">Статус</string>
+    <string name="value_status_active">Активна</string>
+    <string name="value_status_closed">Закрыта</string>
+    <string name="label_created_at">Создана</string>
+    <string name="label_closed_at">Закрыта в</string>
+    <string name="label_price_per_cart">Цена за корзину</string>
+
+    <string name="desc_cart_icon">Иконка корзины</string>
+</resources>

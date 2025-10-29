@@ -2,7 +2,7 @@
     <!-- Labels -->
     <string name="label_product_name">Product Name</string>
     <string name="label_weight_grams">Weight (grams)</string>
-    <string name="label_price_by_weight">Price for the current weight in grams: %1$.0f</string>
+    <string name="label_price_by_weight">Price for the current weight in grams: %1$d</string>
     <string name="label_price_per_kg">Final price per kilogram</string>
 
     <!-- Actions -->

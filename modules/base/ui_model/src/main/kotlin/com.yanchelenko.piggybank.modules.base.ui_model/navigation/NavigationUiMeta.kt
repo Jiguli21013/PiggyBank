@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import com.yanchelenko.piggybank.modules.base.ui_model.R
 
 object NavigationUiMeta {
+
     private data class Meta(
         @StringRes val titleResId: Int,
         @DrawableRes val iconResId: Int? = null
@@ -15,9 +16,17 @@ object NavigationUiMeta {
             titleResId = R.string.title_scanner,
             iconResId = R.drawable.ic_scanner_bottom_bar
         ),
-        "history" to Meta(
-            titleResId = R.string.title_history,
-            iconResId = R.drawable.ic_history_bottom_bar
+        "history_of_scans" to Meta(
+            titleResId = R.string.title_history_of_scans,
+            iconResId = R.drawable.ic_history_of_scans_bottom_bar
+        ),
+        "history_of_carts" to Meta(
+            titleResId = R.string.title_history_of_carts,
+            iconResId = R.drawable.ic_history_of_carts_bottom_bar
+        ),
+        "cart" to Meta(
+            titleResId = R.string.title_cart,
+            iconResId = R.drawable.ic_cart_bottom_bar
         ),
         "product_insert" to Meta(R.string.title_insert_product),
         "product_edit" to Meta(R.string.title_edit_product),

@@ -1,18 +1,26 @@
 package com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state
 
-import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductUiModel
-
 sealed interface InsertProductEvent {
 
     data class LoadProductByBarcode(val barcode: String) : InsertProductEvent
-    data class ProductFoundInDB(val product: ProductUiModel) : InsertProductEvent
-    data class ProductNotFoundInDB(val product: ProductUiModel) : InsertProductEvent
+    data class ProductFoundInDB(val state: InsertProductState) : InsertProductEvent
+    data class ProductNotFoundInDB(val state: InsertProductState) : InsertProductEvent
 
     data class ProductNameChanged(val name: String) : InsertProductEvent
-    data class WeightChanged(val weight: Double) : InsertProductEvent
+    data class WeightChanged(val weight: Int) : InsertProductEvent
+
     data class PriceChanged(val price: Double) : InsertProductEvent
+    data class PriceInputChanged(val input: String) : InsertProductEvent
+
     data class CurrencyChanged(val currency: String) : InsertProductEvent
 
+    data class WeightNotImportantChanged(val isChecked: Boolean) : InsertProductEvent
+
+    data object DecreaseQuantity : InsertProductEvent
+    data object IncreaseQuantity : InsertProductEvent
+
+    data object AddToCart : InsertProductEvent
+    data object RemoveFromCart : InsertProductEvent
     data object SaveProduct : InsertProductEvent
     data object GoBackToScanner : InsertProductEvent
 }

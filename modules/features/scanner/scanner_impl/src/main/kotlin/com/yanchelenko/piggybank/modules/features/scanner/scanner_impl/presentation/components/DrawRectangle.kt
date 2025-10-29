@@ -19,7 +19,7 @@ fun DrawRectangle(
             color = Color.Green,
             topLeft = Offset(x = rect.left, y = rect.top),
             size = Size(width = rect.width, height = rect.height),
-            style = Stroke(width = 5f) //todo from constants
+            style = Stroke(width = 5f) //todo constants
         )
     }
 }

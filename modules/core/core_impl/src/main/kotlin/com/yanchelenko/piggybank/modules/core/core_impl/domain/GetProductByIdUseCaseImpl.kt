@@ -5,27 +5,27 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.result.flatMap
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.toRequestResult
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductByIdUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
-import com.yanchelenko.piggybank.modules.core.core_api.models.Product
+import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.ProductNotFoundException
-import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductsRepository
+import com.yanchelenko.piggybank.modules.core.core_api.repository.ScannedProductsRepository
 import javax.inject.Inject
 
 class GetProductByIdUseCaseImpl @Inject constructor(
-    private val repository: ProductsRepository,
+    private val repository: ScannedProductsRepository,
     private val logger: Logger
 ) : GetProductByIdUseCase {
 
-    override suspend operator fun invoke(productId: Long): RequestResult<Product> {
+    override suspend operator fun invoke(productId: Long): RequestResult<ScannedProduct> {
         logger.d(LOG_TAG, "Fetching product by ID: $productId")
 
         return repository
-            .getProductById(productId = productId)
+            .getScannedProductById(productId = productId)
             .flatMap { product ->
                 if (product != null) {
-                    logger.d(LOG_TAG, "Product found: $product")
+                    logger.d(LOG_TAG, "ScannedProduct found: $product")
                     Result.success(value = product)
                 } else {
-                    logger.e(LOG_TAG, "Product with ID: $productId not found")
+                    logger.e(LOG_TAG, "ScannedProduct with ID: $productId not found")
                     Result.failure(
                         exception = ProductNotFoundException(
                             barcode = productId.toString()

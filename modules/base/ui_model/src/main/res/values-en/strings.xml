@@ -1,6 +1,8 @@
 <resources>
     <string name="title_scanner">Scanner</string>
-    <string name="title_history">History</string>
+    <string name="title_history_of_scans">History of scans</string>
+    <string name="title_history_of_carts">History of carts</string>
+    <string name="title_cart">Cart</string>
     <string name="title_insert_product">Add Product</string>
     <string name="title_edit_product">Edit Product</string>
     <string name="title_product_details">Product Details</string>

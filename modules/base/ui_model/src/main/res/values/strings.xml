@@ -1,6 +1,8 @@
 <resources>
     <string name="title_scanner">Сканер</string>
-    <string name="title_history">История</string>
+    <string name="title_history_of_scans">История сканирований</string>
+    <string name="title_history_of_carts">История корзин</string>
+    <string name="title_cart">Корзина</string>
     <string name="title_insert_product">Добавление товара</string>
     <string name="title_edit_product">Редактирование товара</string>
     <string name="title_product_details">Детали товара</string>

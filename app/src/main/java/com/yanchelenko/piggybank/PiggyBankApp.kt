@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun PiggyBankApp(
-    navDispatcher: NavigationDispatcher
+    navDispatcher: NavigationDispatcher,
+    cartItemsCount: Int
 ) {
     val context = LocalContext.current.applicationContext
 
@@ -42,6 +43,7 @@ fun PiggyBankApp(
 
         AppScaffold(
             currentRoute = currentRoute,
+            cartItemsCount = cartItemsCount,
             onNavigationSelected = { route ->
                 logger.d("Navigation", "BottomNav selected: $route")
                 coroutineScope.launch { navDispatcher.emit(NavEvent.NavigateRoot(route = route)) }

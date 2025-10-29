@@ -23,22 +23,22 @@ fun AppNavHost(
 ) {
     LaunchedEffect(Unit) {
         navDispatcher.navEvents
-            .debounce(NAVIGATION_DEBOUNCE_MS)
+            .debounce(timeoutMillis = NAVIGATION_DEBOUNCE_MS)
             .collect { event ->
 
                 logger.d("AppNavHost", "NavEvent: $event")
 
                 when (event) {
                     is NavEvent.Navigate -> {
-                        navController.navigate(event.route) {
+                        navController.navigate(route = event.route) {
                             launchSingleTop = true
                             popUpTo(navController.graph.startDestinationId) { saveState = true }
                         }
                     }
 
                     is NavEvent.NavigateRoot -> {
-                        navController.navigate(event.route) {
-                            popUpTo(0) { inclusive = true }
+                        navController.navigate(route = event.route) {
+                            popUpTo(id = 0) { inclusive = true }
                             launchSingleTop = true
                         }
                     }
@@ -53,8 +53,7 @@ fun AppNavHost(
         startDestination = AppDestination.ScannerDestination.routeForRegistration,
         modifier = modifier,
     ) {
-        featureEntries.forEach { entry ->
-            with(entry) { register() }
-        }
+        featureEntries.forEach { entry -> with(entry) { register() } }
+        logger.d("AppNavHost", "Registering: " + featureEntries.map { it.destination.routeForRegistration })
     }
 }

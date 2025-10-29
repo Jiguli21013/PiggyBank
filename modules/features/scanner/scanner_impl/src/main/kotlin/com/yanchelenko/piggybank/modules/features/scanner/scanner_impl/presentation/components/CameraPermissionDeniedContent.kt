@@ -12,9 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.yanchelenko.piggybank.modules.base.ui_kit.test.UiTestTags
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.R
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.PaddingLarge
-import com.yanchelenko.piggynank.core.ui.theme.Dimens.SpacingLarge
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingLarge
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingLarge
 
 @Composable
 fun CameraPermissionDeniedContent(
@@ -23,7 +26,8 @@ fun CameraPermissionDeniedContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(all = PaddingLarge),
+            .padding(all = PaddingLarge)
+            .semantics { contentDescription = UiTestTags.SCANNER_PERMISSION },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

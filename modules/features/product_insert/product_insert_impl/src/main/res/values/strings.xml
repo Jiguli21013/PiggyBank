@@ -1,9 +1,11 @@
 <resources>
     <string name="label_product_name">Название товара</string>
     <string name="label_weight_grams">Вес (грамм)</string>
-    <string name="label_price_by_weight">Цена за текущий вес в граммах: %1$s</string>
+    <string name="label_price_by_weight">Цена за текущий вес в граммах: %1$d</string>
     <string name="label_price_per_kg">Итоговая цена за один кг</string>
 
+    <string name="add_to_cart">Добавить в корзину</string>
+    <string name="remove_from_cart">Убрать из корзины</string>
     <string name="action_back">Назад</string>
     <string name="action_save">Сохранить</string>
 </resources>

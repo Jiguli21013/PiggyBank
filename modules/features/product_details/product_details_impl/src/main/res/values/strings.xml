@@ -11,6 +11,7 @@
     <string name="action_delete">Удалить</string>
 
     <!-- Format strings -->
-    <string name="format_grams">%1$.0f гр</string>
+    <string name="format_grams">%1$d г</string>
+
     <string name="format_price_rub">%1$.2f ₽</string>
 </resources>
