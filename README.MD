@@ -18,17 +18,26 @@ Tech stack:
 <pre><code>modules/
 ├── base/
 │   ├── infrastructure
+│   ├── resources
 │   ├── ui_kit
 │   └── ui_model
+├── baselineprofile/
 ├── core/
 │   ├── core_api
 │   ├── core_factory
 │   ├── core_impl
 │   └── database
+├── dev_tools/ 
 ├── features/
-│   ├── history/
-│   │   ├── history_api
-│   │   └── history_impl
+│   ├── cart/
+│   │   ├── cart_api
+│   │   └── cart_impl
+│   ├── history_of_carts/
+│   │   ├── history_of_carts_api
+│   │   └── history_of_carts_impl
+│   ├── history_of_scans/
+│   │   ├── history_of_scans_api
+│   │   └── history_of_scans_impl
 │   ├── product_details/
 │   │   ├── product_details_api
 │   │   └── product_details_impl
@@ -45,9 +54,8 @@ Tech stack:
 </code></pre>
 
 Planned features:
-1.	Add test coverage
-2.	Settings screen (theme selection, language switching)
-3.	Integrate baseInlineProfiler
+1. Settings screen (theme selection, language switching)
+2. Code refactor
 
 ## Screenshots
 <p>
