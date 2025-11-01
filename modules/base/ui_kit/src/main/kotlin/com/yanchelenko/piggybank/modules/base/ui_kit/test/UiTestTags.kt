@@ -16,4 +16,7 @@ object UiTestTags {
     const val HISTORY_OF_SCANS_ROOT = "history_of_scans_root"
     const val HISTORY_OF_SCANS_EMPTY = "history_of_scans_empty"
     const val HISTORY_OF_SCANS_ITEM_PREFIX = "history_of_scans_item_"
+
+    /** common */
+    const val DATE_HEADER_PREFIX = "date_header_"
 }

@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.modules.base.ui_kit.components
+package com.yanchelenko.piggybank.modules.base.ui_kit.components.fields
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding

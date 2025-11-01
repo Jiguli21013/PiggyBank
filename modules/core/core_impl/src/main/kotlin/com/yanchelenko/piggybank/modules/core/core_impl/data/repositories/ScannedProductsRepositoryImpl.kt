@@ -9,12 +9,12 @@ import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
 import com.yanchelenko.piggybank.modules.core.core_api.repository.ScannedProductsRepository
 import com.yanchelenko.piggybank.modules.core.database.dao.ScannedProductDao
 import com.yanchelenko.piggybank.modules.core.core_impl.data.mappers.toScannedProduct
-import com.yanchelenko.piggybank.modules.core.core_impl.data.mappers.toProductDbo
+import com.yanchelenko.piggybank.modules.core.core_impl.data.mappers.toScannedProductDbo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ScannedScannedProductsRepositoryImpl @Inject constructor(
+class ScannedProductsRepositoryImpl @Inject constructor(
     private val scannedProductDao: ScannedProductDao,
     private val logger: Logger
 ) : ScannedProductsRepository {
@@ -32,20 +32,11 @@ class ScannedScannedProductsRepositoryImpl @Inject constructor(
             pagingData.map { it.toScannedProduct() }
         }
     }
-    //todo delete
-    override fun getAllProductsFromDatabase(): Flow<List<ScannedProduct>> {
-        logger.d(LOG_TAG, "Observing all scanned products from DB")
-        return scannedProductDao.observeAll()
-            .map { list ->
-                logger.d(LOG_TAG, "Fetched ${list.size} products")
-                list.map { it.toScannedProduct() }
-            }
-    }
 
     override suspend fun updateProductDatabase(scannedProduct: ScannedProduct): Result<Boolean> {
         logger.d(LOG_TAG, "Updating scannedProduct: ${scannedProduct.id}")
         return runCatching {
-            val affectedRows = scannedProductDao.update(scannedProduct.toProductDbo())
+            val affectedRows = scannedProductDao.update(scannedProduct.toScannedProductDbo())
             logger.d(LOG_TAG, "Update affected $affectedRows rows")
             affectedRows > 0
         }.onFailure {
@@ -56,7 +47,7 @@ class ScannedScannedProductsRepositoryImpl @Inject constructor(
     override suspend fun getScannedProductById(productId: Long): Result<ScannedProduct> {
         logger.d(LOG_TAG, "Getting scanned product by id: $productId")
         return runCatching {
-            scannedProductDao.getById(productId = productId).toScannedProduct()
+            scannedProductDao.getById(scannedProductId = productId).toScannedProduct()
         }.onFailure {
             logger.e(LOG_TAG, "Failed to get scanned product by id=$productId: ${it.message}")
         }
@@ -74,7 +65,7 @@ class ScannedScannedProductsRepositoryImpl @Inject constructor(
     override suspend fun saveScannedProductToDatabase(scannedProduct: ScannedProduct): Result<Unit> {
         logger.d(LOG_TAG, "Saving new scannedProduct: ${scannedProduct.productName}")
         return runCatching {
-            scannedProductDao.insert(scannedProduct.toProductDbo(autoGenerateId = true))
+            scannedProductDao.insert(scannedProduct.toScannedProductDbo(autoGenerateId = true))
             logger.d(LOG_TAG, "ScannedProduct saved: ${scannedProduct.productName}")
         }.onFailure {
             logger.e(LOG_TAG, "Failed to save scannedProduct ${scannedProduct.productName}: ${it.message}")
@@ -84,7 +75,7 @@ class ScannedScannedProductsRepositoryImpl @Inject constructor(
     override suspend fun deleteScannedProductFromDatabase(scannedProduct: ScannedProduct): Result<Unit> {
         logger.d(LOG_TAG, "Deleting scannedProduct: ${scannedProduct.id}")
         return runCatching {
-            scannedProductDao.remove(scannedProduct.toProductDbo())
+            scannedProductDao.remove(scannedProduct.toScannedProductDbo())
             logger.d(LOG_TAG, "ScannedProduct deleted: ${scannedProduct.id}")
         }.onFailure {
             logger.e(LOG_TAG, "Failed to delete scannedProduct ${scannedProduct.id}: ${it.message}")
@@ -92,6 +83,6 @@ class ScannedScannedProductsRepositoryImpl @Inject constructor(
     }
 
     private companion object {
-        const val LOG_TAG = "ScannedProductsRepository"
+        const val LOG_TAG = "ScannedProductsRepositoryImpl"
     }
 }

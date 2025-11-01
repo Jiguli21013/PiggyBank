@@ -6,52 +6,34 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.yanchelenko.piggybank.modules.core.database.models.ProductDBO
-import kotlinx.coroutines.flow.Flow
+import com.yanchelenko.piggybank.modules.core.database.models.ScannedProductDBO
 
 @Dao
 interface ScannedProductDao {
-    //todo rename to ScannedProduct..
-    @Query("SELECT * FROM products")
-    suspend fun getAll(): List<ProductDBO>
 
-    @Query("SELECT * FROM products ORDER BY addedAt DESC LIMIT :limit OFFSET :offset")
-    suspend fun getPagedManual(limit: Int, offset: Int): List<ProductDBO>
+    @Query("SELECT * FROM scanned_products ORDER BY addedAt DESC")
+    fun getPagedScannedProducts(): PagingSource<Int, ScannedProductDBO>
 
-    @Query("SELECT * FROM products ORDER BY addedAt DESC")
-    fun getPagedScannedProducts(): PagingSource<Int, ProductDBO>
+    @Query("SELECT * FROM scanned_products WHERE barcode = :barcode LIMIT 1")
+    suspend fun getByBarcode(barcode: String): ScannedProductDBO?
 
-    @Query("SELECT COUNT(*) FROM products")
-    suspend fun getCount(): Int
-
-    @Query("SELECT * FROM products WHERE barcode = :barcode LIMIT 1")
-    suspend fun getByBarcode(barcode: String): ProductDBO?
-
-    @Query("SELECT * FROM products WHERE id = :productId LIMIT 1")
-    suspend fun getById(productId: Long): ProductDBO
-
-    @Query("SELECT * FROM products")
-    fun observeAll(): Flow<List<ProductDBO>>
+    @Query("SELECT * FROM scanned_products WHERE id = :scannedProductId LIMIT 1")
+    suspend fun getById(scannedProductId: Long): ScannedProductDBO
 
     @Insert
-    suspend fun insert(products: List<ProductDBO>)
-
-    @Insert
-    suspend fun insert(product: ProductDBO)
+    suspend fun insert(scannedProduct: ScannedProductDBO)
 
     /**
-     * 	0 — ничего не обновлено (нет такого id)
-     * 	1 — одна строка обновлена
+     *  0 — nothing was updated (no such id)
+     *  1 — one row was updated
      */
     @Update
-    suspend fun update(product: ProductDBO): Int
+    suspend fun update(scannedProduct: ScannedProductDBO): Int
 
     @Delete
-    suspend fun remove(products: List<ProductDBO>)
+    suspend fun remove(scannedProduct: ScannedProductDBO)
 
-    @Delete
-    suspend fun remove(product: ProductDBO)
-
-    @Query("DELETE FROM products")
+    @Query("DELETE FROM scanned_products")
     suspend fun clean()
+
 }

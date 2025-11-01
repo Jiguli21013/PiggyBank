@@ -45,8 +45,22 @@ inline fun <A : Any, B : Any, R : Any> combineResults(
     }
 
     return when {
-        first is RequestResult.Error -> RequestResult.Error<R>(error = first.error)
-        second is RequestResult.Error -> RequestResult.Error<R>(error = second.error)
+        first is RequestResult.Error && second is RequestResult.Error ->
+            RequestResult.Error(error = first.error ?: second.error)
+
+        first is RequestResult.Error && (second is RequestResult.Success || second is RequestResult.InProgress) ->
+            try {
+                RequestResult.Success(transform(null, second.data))
+            } catch (_: Throwable) {
+                RequestResult.Error(error = first.error)
+            }
+
+        second is RequestResult.Error && (first is RequestResult.Success || first is RequestResult.InProgress) ->
+            try {
+                RequestResult.Success(transform(first.data, null))
+            } catch (_: Throwable) {
+                RequestResult.Error(error = second.error)
+            }
 
         first is RequestResult.Success && second is RequestResult.Success ->
             RequestResult.Success(transform(first.data, second.data))

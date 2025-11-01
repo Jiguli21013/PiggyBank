@@ -130,7 +130,10 @@ class CartRepositoryImpl @Inject constructor(
                 cartId = activeCartId,
                 barcode = barcode
             )
-            logger.d(LOG_TAG, "Active cart $activeCartId, barcode=$barcode -> quantity=${productInCartDbo?.quantity} and item in cart id = ${productInCartDbo?.itemId}")
+            logger.d(
+                LOG_TAG,
+                "Active cart $activeCartId, barcode=$barcode -> quantity=${productInCartDbo?.quantity} and item in cart id = ${productInCartDbo?.itemId}"
+            )
             productInCartDbo.toDomain()
         }
     }
@@ -141,10 +144,10 @@ class CartRepositoryImpl @Inject constructor(
     private suspend fun createNewActiveCart(): Long {
         val newCart = CartDBO(
             id = 0, // auto-generate ID
-            storeId = null, //todo No store specified by user
+            storeId = null, //todo implement the choice of the shop
             status = "ACTIVE",
-            totalItems = 0, // можно указать 0 т.к. при закрытии корзины мы обновляем значение до актуального
-            totalPrice = 0.0, // можно указать 0 т.к. при закрытии корзины мы обновляем значение до актуального
+            totalItems = 0, // it can be set to 0 because when closing the cart we update the value to the actual one
+            totalPrice = 0.0, // it can be set to 0 because when closing the cart we update the value to the actual one
             createdAtEpochMs = System.currentTimeMillis()
         )
         val newId = cartDao.insert(cart = newCart)

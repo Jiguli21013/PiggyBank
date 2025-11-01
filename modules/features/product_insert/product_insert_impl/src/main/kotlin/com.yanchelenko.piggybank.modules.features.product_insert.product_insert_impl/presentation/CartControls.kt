@@ -18,8 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.yanchelenko.piggybank.modules.base.ui_kit.components.SecondaryButton
-import com.yanchelenko.piggybank.modules.base.ui_kit.components.ThirdButton
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.buttons.SecondaryButton
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.buttons.ThirdButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.CustomColors

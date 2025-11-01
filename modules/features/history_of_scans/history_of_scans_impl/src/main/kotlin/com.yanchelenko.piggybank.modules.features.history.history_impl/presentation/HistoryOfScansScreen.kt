@@ -121,7 +121,6 @@ fun HistoryOfScansMainContent(
     onEvent: (HistoryOfScansEvent) -> Unit,
 ) {
     Column(modifier = modifier) {
-        println("currentHistoryState --- ${currentHistoryState}")
         when (currentHistoryState) {
             is CommonUiState.Success -> {
                 if (items.itemCount > 0) {

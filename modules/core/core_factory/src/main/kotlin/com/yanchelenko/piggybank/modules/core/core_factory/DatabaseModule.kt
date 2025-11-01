@@ -19,8 +19,8 @@ import javax.inject.Singleton
 object DatabaseModule {
 
     /**
-     * Единая база данных приложения: хранит и продукты, и корзину.
-     * Добавляем onCreate callback — создаёт индексы при первом создании БД.
+     * Unified application database: stores both products and cart.
+     * Adds onCreate callback — creates indexes when the DB is first created.
      */
     @Provides
     @Singleton
@@ -30,17 +30,17 @@ object DatabaseModule {
             klass = AppDatabase::class.java,
             name = "piggybank.db"
         )
-            // Раз проекта ещё нет в релизе — просто пересоздаём схему при изменениях
+            // the project is not in release yet - recreate the schema on changes
             .fallbackToDestructiveMigration()
 
-            // Добавляем частичный индекс для одной активной корзины
+            // Add a partial index for one active cart
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    // 1️⃣ Индекс для ускоренного поиска по status
+                    // Index for faster search by status
                     db.execSQL(sql = "CREATE INDEX IF NOT EXISTS idx_carts_status ON carts(status)")
 
-                    // 2️⃣ Частичный UNIQUE индекс: максимум одна ACTIVE корзина
+                    // Partial UNIQUE index: at most one ACTIVE cart
                     db.execSQL(
                         """
                         CREATE UNIQUE INDEX IF NOT EXISTS idx_one_active_cart
@@ -53,16 +53,15 @@ object DatabaseModule {
             .build()
     }
 
-    /** DAO для таблицы продуктов */
+    /** DAO for the products table */
     @Provides
     fun provideProductDao(db: AppDatabase): ScannedProductDao = db.productsDao()
 
-    /** DAO для корзины */
+    /** DAO for the cart table */
     @Provides
     fun provideCartDao(db: AppDatabase): CartDao = db.cartDao()
 
-    /** DAO для элементов корзины */
+    /** DAO for the cart items table */
     @Provides
     fun provideCartItemDao(db: AppDatabase): ProductOfCartDao = db.cartItemDao()
-
 }

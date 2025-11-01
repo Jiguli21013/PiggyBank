@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "26748b2e4670a1dbeef95e71469934f2",
+    "identityHash": "b6a12b2378b3449642e425950dc7778d",
     "entities": [
       {
-        "tableName": "products",
+        "tableName": "scanned_products",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `barcode` TEXT NOT NULL, `productName` TEXT NOT NULL, `weight` INTEGER NOT NULL, `price` REAL NOT NULL, `pricePerKg` REAL NOT NULL, `addedAt` INTEGER NOT NULL)",
         "fields": [
           {
@@ -128,7 +128,7 @@
       },
       {
         "tableName": "cart_items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cartId` INTEGER NOT NULL, `productId` INTEGER, `barcode` TEXT NOT NULL, `name` TEXT NOT NULL, `unitPrice` REAL NOT NULL, `isWeightBased` INTEGER NOT NULL, `weightGrams` INTEGER, `quantity` INTEGER NOT NULL, `createdAtEpochMs` INTEGER NOT NULL, FOREIGN KEY(`cartId`) REFERENCES `carts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`productId`) REFERENCES `products`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cartId` INTEGER NOT NULL, `productId` INTEGER, `barcode` TEXT NOT NULL, `name` TEXT NOT NULL, `unitPrice` REAL NOT NULL, `isWeightBased` INTEGER NOT NULL, `weightGrams` INTEGER, `quantity` INTEGER NOT NULL, `createdAtEpochMs` INTEGER NOT NULL, FOREIGN KEY(`cartId`) REFERENCES `carts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`productId`) REFERENCES `scanned_products`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -239,7 +239,7 @@
             ]
           },
           {
-            "table": "products",
+            "table": "scanned_products",
             "onDelete": "SET NULL",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -255,7 +255,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '26748b2e4670a1dbeef95e71469934f2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b6a12b2378b3449642e425950dc7778d')"
     ]
   }
 }

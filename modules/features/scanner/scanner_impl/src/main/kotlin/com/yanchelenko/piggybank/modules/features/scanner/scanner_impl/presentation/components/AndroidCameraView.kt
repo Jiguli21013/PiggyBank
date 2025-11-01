@@ -30,7 +30,7 @@ import kotlinx.coroutines.delay
 fun AndroidCameraView(
     barcodeAnalyzer: BarcodeAnalyzer,
     modifier: Modifier = Modifier,
-    onEvent: (ScannerEvent) -> Unit // todo сделать входные параметры строго typed ?
+    onEvent: (ScannerEvent) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current

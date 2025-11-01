@@ -6,38 +6,32 @@ import kotlinx.coroutines.flow.Flow
 
 interface ScannedProductsRepository {
     /**
-     * Получение продуктов с использованием пагинации.
+     * Fetch products using pagination.
      */
     fun getPagedScannedProducts(): Flow<PagingData<ScannedProduct>>
 
     /**
-     * Получение продукта по ID.
+     * Fetch product by ID.
      */
     suspend fun getScannedProductById(productId: Long): Result<ScannedProduct>
 
     /**
-     * Получение продукта по штрихкоду.
+     * Fetch product by barcode.
      */
     suspend fun getScannedProductByBarcode(barcode: String): Result<ScannedProduct?>
 
     /**
-     * Сохранение продукта.
+     * Save product to database.
      */
     suspend fun saveScannedProductToDatabase(scannedProduct: ScannedProduct): Result<Unit>
 
     /**
-     * Обновление продукта.
+     * Update product in database.
      */
     suspend fun updateProductDatabase(scannedProduct: ScannedProduct): Result<Boolean>
 
     /**
-     * Получение всех продуктов без пагинации.
-     */
-    //todo delete
-    fun getAllProductsFromDatabase(): Flow<List<ScannedProduct>>
-
-    /**
-     * Удаление продукта.
+     * Delete product from database.
      */
     suspend fun deleteScannedProductFromDatabase(scannedProduct: ScannedProduct): Result<Unit>
 }

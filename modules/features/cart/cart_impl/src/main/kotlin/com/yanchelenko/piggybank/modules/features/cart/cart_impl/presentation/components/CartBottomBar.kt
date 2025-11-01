@@ -1,5 +1,6 @@
 package com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.components
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,14 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.yanchelenko.piggybank.modules.base.ui_kit.components.PrimaryButton
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.buttons.PrimaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingExtraSmall
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingSmall
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.state.CartEvent
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.state.CartScreenState
-import java.util.Locale
+import com.yanchelenko.piggybank.modules.features.cart.cart_impl.R
 
 @Composable
 fun CartBottomBar(
@@ -39,23 +40,26 @@ fun CartBottomBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = PaddingSmall, bottom = PaddingExtraSmall),
+                .padding(
+                    top = PaddingSmall,
+                    bottom = PaddingExtraSmall
+                ),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Итого за корзину:", //todo
+                text = stringResource(R.string.cart_total_label),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = String.format(Locale.getDefault(), "%.2f", state.totalPrice),//todo
+                text = stringResource(R.string.cart_total_price_format, state.totalPrice),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
         PrimaryButton(
-            text = if (state.isCartClosed) "Корзина закрыта" else "Закрыть корзину",//todo
+            text = if (state.isCartClosed) stringResource(R.string.cart_closed_button) else stringResource(R.string.cart_close_button),
             enabled = !state.isCartClosed,
             onClick = { onEvent(CartEvent.OnCloseCartClicked) },
             modifier = Modifier.fillMaxWidth(),

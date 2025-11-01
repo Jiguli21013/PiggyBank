@@ -1,8 +1,8 @@
 package com.yanchelenko.piggybank.modules.base.infrastructure.result
-//todo подумать над описанием
+
 /**
- * RequestResult представляет собой запрос обновлениях данных,
- * который может происходить из нескольких источников
+ * Represents the result of a data request or update operation.
+ * It can originate from multiple sources (e.g., network, cache, database).
  */
 public sealed class RequestResult<out E : Any>(public open val data: E? = null) {
     public class InProgress<E : Any>(

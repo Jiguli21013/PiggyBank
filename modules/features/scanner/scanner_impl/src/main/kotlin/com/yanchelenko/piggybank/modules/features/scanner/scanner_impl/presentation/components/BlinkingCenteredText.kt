@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 
-//todo move to common ?
 @Composable
 fun BlinkingCenteredText(text: String) {
     val infiniteTransition = rememberInfiniteTransition(label = "blinking")

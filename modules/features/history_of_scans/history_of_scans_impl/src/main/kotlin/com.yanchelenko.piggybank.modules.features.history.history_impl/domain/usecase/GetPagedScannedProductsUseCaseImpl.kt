@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
-//todo наследование от интерфейса?
+
+//todo наследование от интерфейса
 class GetPagedScannedProductsUseCaseImpl @Inject constructor(
     private val repository: ScannedProductsRepository,
     private val logger: Logger

@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE // если корзину удалили — её товары тоже
         ),
         ForeignKey(
-            entity = ProductDBO::class,
+            entity = ScannedProductDBO::class,
             parentColumns = ["id"],
             childColumns = ["productId"],
             onDelete = ForeignKey.SET_NULL // если товар удалили, строка в корзине остаётся

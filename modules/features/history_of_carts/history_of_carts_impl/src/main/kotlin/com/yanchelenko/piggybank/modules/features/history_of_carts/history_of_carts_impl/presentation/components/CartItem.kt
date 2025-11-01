@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.InfoCard
-import com.yanchelenko.piggybank.modules.base.ui_kit.components.ProductField
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.fields.ProductField
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.lphas.CartBackground

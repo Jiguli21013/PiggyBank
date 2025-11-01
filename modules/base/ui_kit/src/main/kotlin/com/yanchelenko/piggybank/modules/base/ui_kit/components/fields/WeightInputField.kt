@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.modules.base.ui_kit.components
+package com.yanchelenko.piggybank.modules.base.ui_kit.components.fields
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -40,7 +40,7 @@ fun WeightInputField(
         textStyle = MaterialTheme.typography.bodyLarge,
         trailingIcon = {
             Text(
-                text = if (weight > 0) String.format("%.2f кг", weight / 1000.0) else "",//todo
+                text = stringResource(R.string.label_weight_kg_format, weight / 1000.0),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 ),

@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.state.HistoryOfScansEvent
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.InfoCard
-import com.yanchelenko.piggybank.modules.base.ui_kit.components.ProductField
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.fields.ProductField
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.modules.base.ui_kit.test.UiTestTags
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel

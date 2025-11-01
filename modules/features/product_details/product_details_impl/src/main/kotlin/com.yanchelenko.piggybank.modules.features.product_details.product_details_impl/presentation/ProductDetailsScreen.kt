@@ -30,8 +30,8 @@ import com.yanchelenko.piggybank.modules.features.product_details.product_detail
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.ConfirmDeleteDialog
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.InfoCard
-import com.yanchelenko.piggybank.modules.base.ui_kit.components.PrimaryButton
-import com.yanchelenko.piggybank.modules.base.ui_kit.components.SecondaryButton
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.buttons.PrimaryButton
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.buttons.SecondaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium

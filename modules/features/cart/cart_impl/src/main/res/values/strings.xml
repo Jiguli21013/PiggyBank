@@ -4,4 +4,10 @@
     <string name="label_price_per_current_weight">Цена за текущий вес</string>
     <string name="label_price_per_kg">Цена за килограмм</string>
     <string name="label_total_price">Итоговая цена</string>
+
+    <!-- cart bottom bar -->
+    <string name="cart_total_label">Итого за корзину:</string>
+    <string name="cart_total_price_format">%.2f</string>
+    <string name="cart_closed_button">Корзина закрыта</string>
+    <string name="cart_close_button">Закрыть корзину</string>
 </resources>

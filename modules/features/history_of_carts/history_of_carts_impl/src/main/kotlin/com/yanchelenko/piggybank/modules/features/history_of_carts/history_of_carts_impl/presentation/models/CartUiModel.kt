@@ -7,7 +7,7 @@ data class CartUiModel(
     val storeName: String?,
 
     val totalItems: Int,
-    val totalPrice: Double, //todo mapper
+    val totalPrice: Double,
 
     val status: CartStatusUi,
     val createdAt: StableInstant,

@@ -4,9 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-//todo rename to scanned_products
-@Entity(tableName = "products")
-data class ProductDBO(
+@Entity(tableName = "scanned_products")
+data class ScannedProductDBO(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo("barcode") val barcode: String,
     @ColumnInfo("productName") val productName: String,

@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.components
+package com.yanchelenko.piggybank.modules.base.ui_kit.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,9 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.yanchelenko.piggybank.modules.base.infrastructure.extensions.formatAsHeader
+import com.yanchelenko.piggybank.modules.base.ui_kit.R as uiKitR
+import com.yanchelenko.piggybank.modules.base.ui_kit.extensions.formatAsHeader
+import com.yanchelenko.piggybank.modules.base.ui_kit.test.UiTestTags
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.CustomColors.SurfaceVariantSemiTransparent
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.HeaderHeight
@@ -22,7 +27,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingSmall
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.ElevationSmall
 import kotlinx.datetime.LocalDate
-//todo перенести в общий модуль
+
 @Composable
 fun DateHeader(
     modifier: Modifier,
@@ -44,9 +49,14 @@ fun DateHeader(
                 .height(
                     height = HeaderHeight
                 )
+                .semantics { contentDescription = UiTestTags.DATE_HEADER_PREFIX + date.toString() }
         ) {
+            val datePattern = stringResource(uiKitR.string.date_header_pattern)
+
             Text(
-                text = remember(date) { date.formatAsHeader() },
+                text = remember(date, datePattern) {
+                    date.formatAsHeader(pattern = datePattern)
+                },
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier

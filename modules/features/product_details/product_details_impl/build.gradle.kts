@@ -42,24 +42,18 @@ android {
 }
 
 dependencies {
-    implementation(project(":modules:features:product_details:product_details_api"))
-
-
-    implementation(project(":modules:base:ui_kit"))
-    implementation(project(":modules:base:infrastructure"))
-    implementation(project(":modules:base:ui_model"))
 
     implementation(project(":modules:core:core_api"))
-    compileOnly(project(":modules:dev_tools"))
+    implementation(project(":modules:base:ui_model"))
+    implementation(project(":modules:base:ui_kit"))
+    implementation(project(":modules:base:infrastructure"))
+    implementation(project(":modules:features:product_details:product_details_api"))
 
-
+    // debug-only instruments
+    debugImplementation(project(":modules:dev_tools"))
     debugImplementation(libs.ui.tooling)
 
-
-    implementation(libs.kotlinx.immutable)
-
-
-    // compose
+    // Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.material)
@@ -67,19 +61,17 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.navigation.runtime.android)
-
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    // Serialization / Immutable / DateTime
     implementation(libs.serialization.json)
+    implementation(libs.kotlinx.immutable)
+    implementation(libs.kotlinx.datetime)
 
-    // hilt
+    // Hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
-    //todo    debugImplementation ?
-    implementation(libs.androidx.benchmark.common)
-
 
     ksp(libs.dagger.hilt.compiler)
-    implementation(libs.kotlinx.datetime)
 }

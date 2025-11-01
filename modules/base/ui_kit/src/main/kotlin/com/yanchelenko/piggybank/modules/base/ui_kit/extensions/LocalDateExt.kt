@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.modules.base.infrastructure.extensions
+package com.yanchelenko.piggybank.modules.base.ui_kit.extensions
 
 import kotlinx.datetime.LocalDate
 import java.text.SimpleDateFormat
@@ -6,7 +6,7 @@ import java.util.Calendar
 import java.util.Locale
 
 fun LocalDate.formatAsHeader(
-    pattern: String = "dd MMMM yyyy", //todo
+    pattern: String,
     locale: Locale = Locale.getDefault()
 ): String {
     val formatter = SimpleDateFormat(pattern, locale)

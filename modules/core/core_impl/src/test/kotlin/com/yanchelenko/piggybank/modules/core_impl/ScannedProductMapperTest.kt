@@ -2,8 +2,8 @@ package com.yanchelenko.piggybank.modules.core_impl
 
 import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
 import com.yanchelenko.piggybank.modules.core.core_impl.data.mappers.toScannedProduct
-import com.yanchelenko.piggybank.modules.core.core_impl.data.mappers.toProductDbo
-import com.yanchelenko.piggybank.modules.core.database.models.ProductDBO
+import com.yanchelenko.piggybank.modules.core.core_impl.data.mappers.toScannedProductDbo
+import com.yanchelenko.piggybank.modules.core.database.models.ScannedProductDBO
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -13,7 +13,7 @@ class ScannedProductMapperTest {
     @Test
     fun `ProductDBO toDomain preserves fields`() {
         val now = Instant.parse("2025-10-08T13:00:00Z")
-        val dbo = ProductDBO(
+        val dbo = ScannedProductDBO(
             id = 1,
             barcode = "123456",
             productName = "Banana",
@@ -47,7 +47,7 @@ class ScannedProductMapperTest {
             addedAt = now
         )
 
-        val dbo = scannedProduct.toProductDbo()
+        val dbo = scannedProduct.toScannedProductDbo()
 
         assertEquals(scannedProduct.id, dbo.id)
         assertEquals(scannedProduct.barcode, dbo.barcode)

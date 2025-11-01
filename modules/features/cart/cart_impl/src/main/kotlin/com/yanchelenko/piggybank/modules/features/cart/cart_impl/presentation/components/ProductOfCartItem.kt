@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.InfoCard
-import com.yanchelenko.piggybank.modules.base.ui_kit.components.ProductField
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.fields.ProductField
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductOfCartUiModel
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.state.CartEvent
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes

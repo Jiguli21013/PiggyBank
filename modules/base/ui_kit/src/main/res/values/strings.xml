@@ -1,8 +1,11 @@
 <resources>
+    <string name="date_header_pattern">dd MMMM yyyy</string>
+
     <string name="dialog_title_delete">Удаление</string>
     <string name="dialog_text_delete_confirmation">Вы уверены, что хотите удалить этот товар?</string>
     <string name="action_delete">Удалить</string>
     <string name="action_cancel">Отмена</string>
 
     <string name="label_weight_grams">Вес (грамм)</string>
+    <string name="label_weight_kg_format">%.2f кг</string>
 </resources>

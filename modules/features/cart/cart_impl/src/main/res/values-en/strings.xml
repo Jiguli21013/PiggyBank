@@ -4,4 +4,10 @@
     <string name="label_price_per_current_weight">Price per current weight</string>
     <string name="label_price_per_kg">Price per kg</string>
     <string name="label_total_price">Total price</string>
+
+    <!-- cart bottom bar -->
+    <string name="cart_total_label">Cart total:</string>
+    <string name="cart_total_price_format">%.2f</string>
+    <string name="cart_closed_button">Cart closed</string>
+    <string name="cart_close_button">Close cart</string>
 </resources>

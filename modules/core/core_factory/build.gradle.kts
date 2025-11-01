@@ -24,16 +24,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":modules:base:infrastructure"))
-
-    implementation(project(":modules:core:database"))
     implementation(project(":modules:core:core_api"))
+    implementation(project(":modules:core:database"))
+    implementation(project(":modules:base:infrastructure"))
     implementation(project(":modules:core:core_impl")) //todo не должно быть здесь зависимости
 
-
     implementation(libs.dagger.hilt.android)
-
-    ksp(libs.dagger.hilt.compiler)
-
     implementation(libs.androidx.room.ktx)
+    ksp(libs.dagger.hilt.compiler)
 }

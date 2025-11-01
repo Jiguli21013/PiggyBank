@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 /**
- * EntryPoint для доступа к зарегистрированным FeatureEntry из Hilt.
+ * EntryPoint for accessing registered FeatureEntry instances from Hilt.
  */
 @EntryPoint
 @InstallIn(SingletonComponent::class)

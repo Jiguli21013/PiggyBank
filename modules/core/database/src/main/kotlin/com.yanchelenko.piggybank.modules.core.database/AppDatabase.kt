@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.yanchelenko.piggybank.modules.core.database.dao.ScannedProductDao
-import com.yanchelenko.piggybank.modules.core.database.models.ProductDBO
+import com.yanchelenko.piggybank.modules.core.database.models.ScannedProductDBO
 import com.yanchelenko.piggybank.modules.core.database.dao.CartDao
 import com.yanchelenko.piggybank.modules.core.database.dao.ProductOfCartDao
 import com.yanchelenko.piggybank.modules.core.database.models.CartDBO
@@ -14,7 +14,7 @@ import com.yanchelenko.piggybank.modules.core.database.models.CartItemDBO
 @TypeConverters(BigDecimalConverter::class)
 @Database(
     entities = [
-        ProductDBO::class,
+        ScannedProductDBO::class,
         CartDBO::class,
         CartItemDBO::class,
     ],

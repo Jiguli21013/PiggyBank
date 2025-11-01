@@ -32,42 +32,45 @@ android {
 }
 
 dependencies {
+    // Project modules
+    implementation(project(":modules:features:history_of_carts:history_of_carts_api"))
+
+    implementation(project(":modules:core:core_api"))
+
     implementation(project(":modules:base:ui_kit"))
     implementation(project(":modules:base:ui_model"))
     implementation(project(":modules:base:resources"))
     implementation(project(":modules:base:infrastructure"))
 
-    implementation(project(":modules:core:core_api"))
-
-    implementation(project(":modules:features:history_of_carts:history_of_carts_api"))
-
-    compileOnly(project(":modules:dev_tools"))
-
-    // compose
+    // Compose core
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.material)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.lifecycle.runtime.compose)
-    //todo debug
-    implementation(libs.androidx.ui.tooling.preview.android)
+    implementation(libs.foundation.layout.android)
 
+    // Lifecycle / ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    implementation(libs.hilt.navigation.compose)
-    implementation(libs.dagger.hilt.android)
+    // Navigation
     implementation(libs.androidx.navigation.runtime.android)
+    implementation(libs.hilt.navigation.compose)
 
-    // paging
-    implementation(libs.paging.compose)
-    implementation(libs.foundation.layout.android)
-
-    //todo это что такое
-    debugImplementation(libs.ui.tooling)
-
+    // DI (Hilt)
+    implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
 
+    // Paging
+    implementation(libs.paging.compose)
+
+    // Serialization / DateTime
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.datetime)
+
+    // Debug-only tooling
+    debugImplementation(project(":modules:dev_tools"))
+    debugImplementation(libs.androidx.ui.tooling.preview.android) // Compose Preview in IDE
+    debugImplementation(libs.ui.tooling) // Runtime UI inspection & Layout Inspector
 }
