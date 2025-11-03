@@ -21,9 +21,9 @@ interface ScannedProductsRepository {
     suspend fun getScannedProductByBarcode(barcode: String): Result<ScannedProduct?>
 
     /**
-     * Save product to database.
+     * Save product to database and return newly generated product ID.
      */
-    suspend fun saveScannedProductToDatabase(scannedProduct: ScannedProduct): Result<Unit>
+    suspend fun saveScannedProductToDatabase(scannedProduct: ScannedProduct): Result<Long>
 
     /**
      * Update product in database.

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "b6a12b2378b3449642e425950dc7778d",
+    "identityHash": "9a55d45f7ee3229d505e9f7f9cc375de",
     "entities": [
       {
         "tableName": "scanned_products",
@@ -128,7 +128,7 @@
       },
       {
         "tableName": "cart_items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cartId` INTEGER NOT NULL, `productId` INTEGER, `barcode` TEXT NOT NULL, `name` TEXT NOT NULL, `unitPrice` REAL NOT NULL, `isWeightBased` INTEGER NOT NULL, `weightGrams` INTEGER, `quantity` INTEGER NOT NULL, `createdAtEpochMs` INTEGER NOT NULL, FOREIGN KEY(`cartId`) REFERENCES `carts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`productId`) REFERENCES `scanned_products`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cartId` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `barcode` TEXT NOT NULL, `name` TEXT NOT NULL, `unitPrice` REAL NOT NULL, `isWeightImportant` INTEGER NOT NULL, `weightGrams` INTEGER, `quantity` INTEGER NOT NULL, `addedAtEpochMs` INTEGER NOT NULL, FOREIGN KEY(`cartId`) REFERENCES `carts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`productId`) REFERENCES `scanned_products`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -146,7 +146,7 @@
             "fieldPath": "productId",
             "columnName": "productId",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "barcode",
@@ -167,8 +167,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "isWeightBased",
-            "columnName": "isWeightBased",
+            "fieldPath": "isWeightImportant",
+            "columnName": "isWeightImportant",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -185,8 +185,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "createdAtEpochMs",
-            "columnName": "createdAtEpochMs",
+            "fieldPath": "addedAtEpochMs",
+            "columnName": "addedAtEpochMs",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -255,7 +255,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b6a12b2378b3449642e425950dc7778d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9a55d45f7ee3229d505e9f7f9cc375de')"
     ]
   }
 }

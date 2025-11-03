@@ -62,11 +62,12 @@ class ScannedProductsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveScannedProductToDatabase(scannedProduct: ScannedProduct): Result<Unit> {
+    override suspend fun saveScannedProductToDatabase(scannedProduct: ScannedProduct): Result<Long> {
         logger.d(LOG_TAG, "Saving new scannedProduct: ${scannedProduct.productName}")
         return runCatching {
-            scannedProductDao.insert(scannedProduct.toScannedProductDbo(autoGenerateId = true))
-            logger.d(LOG_TAG, "ScannedProduct saved: ${scannedProduct.productName}")
+            val id = scannedProductDao.insert(scannedProduct.toScannedProductDbo(autoGenerateId = true))
+            logger.d(LOG_TAG, "ScannedProduct saved: ${scannedProduct.productName} with id=$id")
+            id
         }.onFailure {
             logger.e(LOG_TAG, "Failed to save scannedProduct ${scannedProduct.productName}: ${it.message}")
         }

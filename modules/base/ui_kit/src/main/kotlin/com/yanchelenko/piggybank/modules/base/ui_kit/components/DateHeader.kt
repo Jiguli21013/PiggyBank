@@ -46,9 +46,7 @@ fun DateHeader(
                     horizontal = PaddingMedium,
                     vertical = PaddingSmall
                 )
-                .height(
-                    height = HeaderHeight
-                )
+                .height(height = HeaderHeight)
                 .semantics { contentDescription = UiTestTags.DATE_HEADER_PREFIX + date.toString() }
         ) {
             val datePattern = stringResource(uiKitR.string.date_header_pattern)

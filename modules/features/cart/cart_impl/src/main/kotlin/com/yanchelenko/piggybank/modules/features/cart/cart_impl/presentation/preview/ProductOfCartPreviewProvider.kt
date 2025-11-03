@@ -8,8 +8,8 @@ class ProductOfCartPreviewProvider : PreviewParameterProvider<ProductOfCartUiMod
     override val values: Sequence<ProductOfCartUiModel> = sequenceOf(
         // Штучный товар
         ProductOfCartUiModel(
-            cartItemId = 66,
-            productId = 101,
+            cartProductId = 66,
+            scannedProductId = 101,
             name = "Молоко 2.5%",
             barcode = "4601112233445",
             formattedPrice = "₽89.00",
@@ -21,8 +21,8 @@ class ProductOfCartPreviewProvider : PreviewParameterProvider<ProductOfCartUiMod
         ),
         // Весовой товар
         ProductOfCartUiModel(
-            cartItemId = 88,
-            productId = 202,
+            cartProductId = 88,
+            scannedProductId = 202,
             name = "Яблоки Гала",
             barcode = "4600987654321",
             formattedPrice = "₽150.00",

@@ -10,7 +10,7 @@ internal fun CartItemDBO.toProductOfCart(): ProductOfCart =
         barcode = barcode,
         name = name,
         unitPrice = unitPrice,
-        isWeightBased = isWeightBased,
+        isWeightImportant = isWeightImportant,
         weightGrams = weightGrams,
         quantity = quantity
     )

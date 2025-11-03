@@ -1,12 +1,21 @@
 package com.yanchelenko.piggybank.modules.core.core_api.models
 
-data class ProductOfCart(
-    val cartItemId: Long,
-    val productId: Long?, // для связки с scanned product
-    val barcode: String,
-    val name: String,
-    val unitPrice: Double,
-    val isWeightBased: Boolean,
-    val weightGrams: Int?,
-    val quantity: Int
-)
+/**
+ * One cart line item.
+ *
+ * Semantics:
+ * - [unitPrice]: specified price for this item.
+ * - [isWeightImportant]: defines if weight affects pricing.
+ *   - If true → price depends on weight (e.g., price per kilogram).
+ *   - If false → weight is only informational, price is per unit/pack.
+ */
+ data class ProductOfCart(
+     val cartItemId: Long,
+     val productId: Long, // link to scanned product
+     val name: String,
+     val barcode: String,
+     val unitPrice: Double,
+     val isWeightImportant: Boolean,
+     val weightGrams: Int?,
+     val quantity: Int,
+ )

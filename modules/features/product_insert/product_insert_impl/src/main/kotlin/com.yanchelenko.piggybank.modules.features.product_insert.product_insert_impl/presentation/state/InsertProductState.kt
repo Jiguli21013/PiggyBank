@@ -7,9 +7,11 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiMo
 @Immutable
 data class InsertProductState(
     val scannedProduct: ScannedProductUiModel = ScannedProductUiModel(barcode = ""),
+    val isInScannedDB: Boolean = false,
 
     val cartItemId: Long? = null, // id of cart item // if null then item not in the cart
     val quantity: Int = 0,
+
     val isInCart: Boolean = false,
 
     val priceInput: String = "",

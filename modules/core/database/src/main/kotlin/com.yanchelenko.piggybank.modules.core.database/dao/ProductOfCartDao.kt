@@ -12,7 +12,7 @@ interface ProductOfCartDao {
     @Insert
     suspend fun insert(item: CartItemDBO): Long
 
-    @Query("SELECT * FROM cart_items WHERE cartId=:cartId ORDER BY createdAtEpochMs DESC")
+    @Query("SELECT * FROM cart_items WHERE cartId=:cartId ORDER BY addedAtEpochMs DESC")
     fun getPagedCarts(cartId: Long): PagingSource<Int, CartItemDBO>
 
     /** Получить одну позицию корзины по её ID */
@@ -54,10 +54,10 @@ interface ProductOfCartDao {
     @Query("""
     SELECT
         COALESCE(SUM(quantity), 0) AS itemsCount,
-        COALESCE(SUM(CASE WHEN isWeightBased THEN (COALESCE(weightGrams, 0) * quantity) ELSE 0 END), 0) AS totalWeightGrams,
+        COALESCE(SUM(CASE WHEN isWeightImportant THEN (COALESCE(weightGrams, 0) * quantity) ELSE 0 END), 0) AS totalWeightGrams,
         COALESCE(SUM(
             CASE
-                WHEN isWeightBased THEN (unitPrice * (COALESCE(weightGrams, 0) / 1000.0) * quantity)
+                WHEN isWeightImportant THEN (unitPrice * (COALESCE(weightGrams, 0) / 1000.0) * quantity)
                 ELSE (unitPrice * quantity)
             END
         ), 0.0) AS totalPrice

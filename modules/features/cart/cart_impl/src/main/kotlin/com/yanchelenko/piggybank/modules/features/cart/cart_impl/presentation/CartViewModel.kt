@@ -93,12 +93,12 @@ class CartViewModel @Inject constructor(
                 //sendEffect { CartEffect.NavigateToProductOfCartDetails(productOfCart = event.productOfCart) }
             }
             is CartEvent.OnProductOfCartDeleteClicked -> {
-                logger.d(LOG_TAG, "Navigate dialog to delete product: cartItemId=${event.productOfCart.cartItemId}")
+                logger.d(LOG_TAG, "Navigate dialog to delete product: cartItemId=${event.productOfCart.cartProductId}")
                 sendEffect { CartEffect.NavigateToDialogDeleteProductOfCart(productOfCart = event.productOfCart) }
             }
             is CartEvent.OnProductOfCartDeleted -> {
-                logger.d(LOG_TAG, "Delete product requested: cartItemId=${event.productOfCart.cartItemId}")
-                deleteProductOfCart(productOfCartId = event.productOfCart.cartItemId)
+                logger.d(LOG_TAG, "Delete product requested: cartItemId=${event.productOfCart.cartProductId}")
+                deleteProductOfCart(productOfCartId = event.productOfCart.cartProductId)
             }
             is CartEvent.OnCloseCartClicked -> {
                 logger.d(LOG_TAG, "Close cart clicked")

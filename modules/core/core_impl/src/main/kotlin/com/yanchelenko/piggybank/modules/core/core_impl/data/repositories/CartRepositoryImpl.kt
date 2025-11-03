@@ -37,9 +37,7 @@ class CartRepositoryImpl @Inject constructor(
      */
     override fun getPagedCartProducts(): Flow<PagingData<ProductOfCart>> = flow {
         // Retrieve active cart ID safely on IO dispatcher
-        val activeCartId = withContext(Dispatchers.IO) {
-            cartDao.getActiveCartId()
-        }
+        val activeCartId = withContext(Dispatchers.IO) { cartDao.getActiveCartId() }
 
         if (activeCartId == null) {
             logger.d(LOG_TAG, "No active cart found → returning empty list")
@@ -58,7 +56,7 @@ class CartRepositoryImpl @Inject constructor(
             }
         ).flow.map { data -> data.map { it.toProductOfCart() } }
 
-        emitAll(pagingFlow)
+        emitAll(flow = pagingFlow)
     }
 
     override fun observeActiveCartTotals(): Flow<CartTotals> =
@@ -67,7 +65,10 @@ class CartRepositoryImpl @Inject constructor(
 
     override fun getPagedCarts(): Flow<PagingData<Cart>> =
         Pager(
-            config = PagingConfig(pageSize = 20, enablePlaceholders = false)
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            )
         ) {
             cartDao.pagingSourceClosedCarts()
         }.flow.map { pagingData ->
@@ -94,14 +95,14 @@ class CartRepositoryImpl @Inject constructor(
 
             val dbo = CartItemDBO(
                 cartId = activeCartId,
-                productId = productOfCart.productId?.takeIf { it > 0L }, // todo подумать над красотой
+                productId = productOfCart.productId,
                 barcode = productOfCart.barcode,
                 name = productOfCart.name,
                 unitPrice = productOfCart.unitPrice,
-                isWeightBased = productOfCart.isWeightBased,
+                isWeightImportant = productOfCart.isWeightImportant,
                 weightGrams = productOfCart.weightGrams,
                 quantity = productOfCart.quantity,
-                createdAtEpochMs = System.currentTimeMillis()
+                addedAtEpochMs = System.currentTimeMillis()
             )
 
             val insertedId = productOfCartDao.insert(dbo)

@@ -55,8 +55,9 @@ internal fun ScannedProductItem(
                 .clip(shape = AppShapes.large)
                 .clickable { onEvent(HistoryOfScansEvent.OnProductClicked(product = product)) }
         ) {
+            ProductField(label = stringResource(BaseR.string.label_scanned_product_id), value = product.productId.toString())
+
             ProductField(label = stringResource(BaseR.string.label_product_name), value = product.productName)
-            ProductField(label = stringResource(BaseR.string.label_product_id), value = product.productId.toString())
             ProductField(label = stringResource(BaseR.string.label_barcode), value = product.barcode)
             ProductField(label = stringResource(BaseR.string.label_price), value = "${product.price}")
             ProductField(label = stringResource(BaseR.string.label_weight), value = "${product.weight}")

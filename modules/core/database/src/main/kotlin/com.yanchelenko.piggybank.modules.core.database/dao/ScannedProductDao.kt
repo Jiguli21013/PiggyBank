@@ -21,7 +21,7 @@ interface ScannedProductDao {
     suspend fun getById(scannedProductId: Long): ScannedProductDBO
 
     @Insert
-    suspend fun insert(scannedProduct: ScannedProductDBO)
+    suspend fun insert(scannedProduct: ScannedProductDBO): Long // returns new scanned product ID
 
     /**
      *  0 — nothing was updated (no such id)

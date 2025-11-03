@@ -56,6 +56,7 @@ Tech stack:
 Planned features:
 1. Settings screen (theme selection, language switching)
 2. Code refactor
+3. LeakCanary
 
 ## Screenshots
 <p>

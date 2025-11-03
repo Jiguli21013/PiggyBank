@@ -119,6 +119,7 @@ fun InsertProductContent(
 
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
+    val savedText = stringResource(R.string.action_saved)
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -165,6 +166,8 @@ fun InsertProductContent(
             modifier = modifier.padding(bottom = SpacingSmall)
         )
 
+        val saveButtonText = if (state.isInScannedDB) savedText else saveText
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(space = SpacingSmall),
             modifier = Modifier.fillMaxWidth()
@@ -176,9 +179,10 @@ fun InsertProductContent(
             )
 
             PrimaryButton(
-                text = saveText,
+                text = saveButtonText,
                 onClick = { onEvent(InsertProductEvent.SaveProduct) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = !state.isInScannedDB
             )
         }
     }

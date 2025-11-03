@@ -50,7 +50,7 @@ internal fun CartList(
             count = items.itemCount,
             key = { index ->
                 val it = items.peek(index)
-                it?.cartItemId ?: "placeholder_$index"
+                it?.cartProductId ?: "placeholder_$index"
             },
             contentType = { "product_of_cart" }
         ) { index ->
@@ -65,7 +65,7 @@ internal fun CartList(
                             placementSpec = tween(durationMillis = LONG),
                             fadeOutSpec = tween(durationMillis = MEDIUM)
                         )
-                        .semantics { contentDescription = "cart_item_${item.cartItemId}" }
+                        .semantics { contentDescription = "cart_item_${item.cartProductId}" }
                 )
             }
         }

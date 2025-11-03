@@ -34,7 +34,7 @@ fun CartBottomBar(
                 horizontal = PaddingMedium,
                 vertical = PaddingSmall
             ),
-        verticalArrangement = Arrangement.spacedBy(SpacingSmall)
+        verticalArrangement = Arrangement.spacedBy(space = SpacingSmall)
     ) {
         HorizontalDivider()
         Row(
@@ -44,8 +44,8 @@ fun CartBottomBar(
                     top = PaddingSmall,
                     bottom = PaddingExtraSmall
                 ),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = stringResource(R.string.cart_total_label),

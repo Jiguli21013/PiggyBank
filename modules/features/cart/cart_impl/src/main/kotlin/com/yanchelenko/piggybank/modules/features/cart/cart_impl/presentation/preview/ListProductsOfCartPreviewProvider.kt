@@ -9,8 +9,8 @@ class ListProductsOfCartPreviewProvider :
     override val values: Sequence<List<ProductOfCartUiModel>> = sequenceOf(
         listOf(
             ProductOfCartUiModel(
-                cartItemId = 4,
-                productId = 1,
+                cartProductId = 4,
+                scannedProductId = 1,
                 name = "Хлеб бородинский",
                 barcode = "4601234567890",
                 formattedPrice = "₽45.00",
@@ -21,8 +21,8 @@ class ListProductsOfCartPreviewProvider :
                 totalPriceText = "₽45.00"
             ),
             ProductOfCartUiModel(
-                cartItemId = 7,
-                productId = 2,
+                cartProductId = 7,
+                scannedProductId = 2,
                 name = "Яблоки Гала",
                 barcode = "4600987654321",
                 formattedPrice = "₽150.00",
@@ -33,8 +33,8 @@ class ListProductsOfCartPreviewProvider :
                 totalPriceText = "₽105.00"
             ),
             ProductOfCartUiModel(
-                cartItemId = 8,
-                productId = 3,
+                cartProductId = 8,
+                scannedProductId = 3,
                 name = "Молоко 2.5%",
                 barcode = "4601112233445",
                 formattedPrice = "₽89.00",

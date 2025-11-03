@@ -139,7 +139,7 @@ class InsertProductScreenViewModel @Inject constructor(
             is InsertProductEvent.DecreaseQuantity -> {
                 logger.d(LOG_TAG, "Decrease quantity")
                 uiState.value.getData { state ->
-                    val newQty = (state.quantity - 1).coerceAtLeast(1)
+                    val newQty = (state.quantity - 1).coerceAtLeast(minimumValue = 1)
                     if (newQty != state.quantity) {
                         setState { CommonUiState.Success(data = state.copy(quantity = newQty)) }
                     }
@@ -172,14 +172,14 @@ class InsertProductScreenViewModel @Inject constructor(
                 sendEffect { InsertProductEffect.NavigateBackToScanner }
             }
 
-            is InsertProductEvent.ProductFoundInDB -> {
+            is InsertProductEvent.ProductFoundInScannedDB -> {
                 logger.d(LOG_TAG, "ScannedProduct found in DB: ${event.state}")
-                setState { CommonUiState.Success(data = event.state) }
+                setState { CommonUiState.Success(data = event.state.copy(isInScannedDB = true)) }
             }
 
-            is InsertProductEvent.ProductNotFoundInDB -> {
+            is InsertProductEvent.ProductNotFoundInScannedDB -> {
                 logger.d(LOG_TAG, "ScannedProduct not found in DB")
-                setState { CommonUiState.Success(data = event.state) }
+                setState { CommonUiState.Success(data = event.state.copy(isInScannedDB = false)) }
             }
         }
     }
@@ -191,7 +191,11 @@ class InsertProductScreenViewModel @Inject constructor(
             when (val result = initInsertProductStateInteractor(barcode = barcode)) {
                 is RequestResult.Success -> {
                     logger.d(LOG_TAG, "ScannedProduct loaded successfully: ${result.data}")
-                    onEvent(InsertProductEvent.ProductFoundInDB(state = result.data.toUiState()))
+                    if (result.data.product != null) {
+                        onEvent(InsertProductEvent.ProductFoundInScannedDB(state = result.data.toUiState()))
+                    } else {
+                        onEvent(InsertProductEvent.ProductNotFoundInScannedDB(state = InsertProductState(scannedProduct = ScannedProductUiModel(barcode = barcode))))
+                    }
                 }
 
                 is RequestResult.Error -> {
@@ -200,11 +204,12 @@ class InsertProductScreenViewModel @Inject constructor(
                         ?: "Неизвестная ошибка" //todo
                     logger.e(LOG_TAG, "Failed to load product: $message")
                     sendEffect { InsertProductEffect.ShowMessage(message) }
-                    onEvent(InsertProductEvent.ProductNotFoundInDB(state = InsertProductState(scannedProduct = ScannedProductUiModel(barcode = barcode))))
+                    onEvent(InsertProductEvent.ProductNotFoundInScannedDB(state = InsertProductState(scannedProduct = ScannedProductUiModel(barcode = barcode))))
                 }
 
                 is RequestResult.InProgress -> {
                     logger.d(LOG_TAG, "Loading in progress...")
+                    setState { CommonUiState.Loading }
                 }
             }
         }
@@ -244,13 +249,51 @@ class InsertProductScreenViewModel @Inject constructor(
         uiState.value.getData { state ->
             logger.d(LOG_TAG, "Start inserting product to cart: ${state.scannedProduct} x${state.quantity}")
             viewModelScope.launch(Dispatchers.IO) { //todo provider dispatcher io
-                when (val result = addProductToCartUseCase(productOfCart = state.scannedProduct.toCartDomain(quantity = state.quantity))) {
+                if (!state.isInScannedDB) {
+                    logger.d(LOG_TAG, "Scanned not in DB → saving before cart insert: ${state.scannedProduct}")
+                    when (val save = insertNewProductUseCase(scannedProduct = state.scannedProduct.toDomain())) {
+                        is RequestResult.Success -> {
+                            val newId = save.data
+                            logger.d(LOG_TAG, "Scanned saved successfully with id=$newId")
+                            setState {
+                                CommonUiState.Success(
+                                    data = state.copy(
+                                        isInScannedDB = true,
+                                        scannedProduct = state.scannedProduct.copy(productId = newId)
+                                    )
+                                )
+                            }
+                        }
+                        is RequestResult.Error -> {
+                            val msg = (save.error as? BaseDomainException)?.toUserMessage()
+                                ?: save.error?.message
+                                ?: "Ошибка при сохранении отсканированного товара"
+                            logger.e(LOG_TAG, "Saving scanned failed: $msg")
+                            setState { CommonUiState.Error(message = msg) }
+                            sendEffect { InsertProductEffect.ShowMessage(message = msg) }
+                            return@launch
+                        }
+                        is RequestResult.InProgress -> {
+                            logger.d(LOG_TAG, "Saving scanned in progress...")
+                            setState { CommonUiState.Loading }
+                            return@launch
+                        }
+                    }
+                }
+
+                val latestState = (uiState.value as? CommonUiState.Success)?.data ?: state
+                when (val result = addProductToCartUseCase(productOfCart = latestState.scannedProduct.toCartDomain(quantity = latestState.quantity))) {
                     is RequestResult.Success -> {
                         logger.d(LOG_TAG, "ProductOfCart successfully added to cart")
-                        setState { CommonUiState.Success(data = state.copy(
-                            cartItemId = result.data,
-                            isInCart = true
-                        )) }
+                        setState {
+                            CommonUiState.Success(
+                                data = latestState.copy(
+                                    cartItemId = result.data,
+                                    isInCart = true,
+                                    isInScannedDB = true
+                                )
+                            )
+                        }
                         sendEffect { InsertProductEffect.ShowMessage(message = "Продукт успешно добавлен в корзину") } //todo
                     }
 
@@ -280,7 +323,7 @@ class InsertProductScreenViewModel @Inject constructor(
                     is RequestResult.Success -> {
                         logger.d(LOG_TAG, "Product successfully removed from cart")
                         // Mark item as not in cart in the UI state
-                        setState { CommonUiState.Success(data = state.copy(isInCart = false)) }
+                        setState { CommonUiState.Success(data = state.copy(cartItemId = null, isInCart = false)) }
                         sendEffect { InsertProductEffect.ShowMessage(message = "Продукт удалён из корзины") } //todo
                     }
                     is RequestResult.Error -> {

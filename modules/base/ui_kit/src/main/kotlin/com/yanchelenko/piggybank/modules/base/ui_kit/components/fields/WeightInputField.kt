@@ -13,6 +13,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.R
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 
 const val MAX_WEIGHT_GRAMS = 10_000
+const val ONE_KG_FLOAT = 1_000f
 
 @Composable
 fun WeightInputField(
@@ -40,7 +41,7 @@ fun WeightInputField(
         textStyle = MaterialTheme.typography.bodyLarge,
         trailingIcon = {
             Text(
-                text = stringResource(R.string.label_weight_kg_format, weight / 1000.0),
+                text = stringResource(R.string.label_weight_kg_format, weight / ONE_KG_FLOAT),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 ),

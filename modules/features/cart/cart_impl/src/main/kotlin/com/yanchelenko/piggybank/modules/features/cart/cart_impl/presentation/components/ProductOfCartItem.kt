@@ -39,20 +39,22 @@ internal fun ProductOfCartItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = Dimens.PaddingMedium,
-                    vertical = Dimens.PaddingSmall
+                    vertical = Dimens.PaddingSmall,
+                    horizontal = Dimens.PaddingMedium
                 )
                 .clip(shape = AppShapes.large)
                 .clickable { onEvent(CartEvent.OnProductOfCartClicked(productOfCart = productOfCart)) }
         ) {
-            ProductField(label = stringResource(BaseR.string.label_product_id), value = productOfCart.productId.toString())
+            ProductField(label = stringResource(BaseR.string.label_scanned_product_id), value = productOfCart.scannedProductId.toString())
+            ProductField(label = stringResource(BaseR.string.label_cart_product_id), value = productOfCart.cartProductId.toString())
+
             ProductField(label = stringResource(BaseR.string.label_product_name), value = productOfCart.name)
             ProductField(label = stringResource(BaseR.string.label_barcode), value = productOfCart.barcode)
             ProductField(label = stringResource(BaseR.string.label_weight), value = "${productOfCart.weightText}")
 
             ProductField(
                 label = stringResource(R.string.label_price_per_current_weight),
-                value = "${productOfCart.unitPrice} for ${productOfCart.weightText} gramms" //todo mapper
+                value = "${productOfCart.unitPrice} for ${productOfCart.weightText} grams" //todo mapper
             )
             ProductField(label = stringResource(R.string.label_price_per_kg), value = "${productOfCart.formattedPricePerKg}")
             ProductField(

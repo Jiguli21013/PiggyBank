@@ -3,8 +3,8 @@ package com.yanchelenko.piggybank.modules.features.product_insert.product_insert
 sealed interface InsertProductEvent {
 
     data class LoadProductByBarcode(val barcode: String) : InsertProductEvent
-    data class ProductFoundInDB(val state: InsertProductState) : InsertProductEvent
-    data class ProductNotFoundInDB(val state: InsertProductState) : InsertProductEvent
+    data class ProductFoundInScannedDB(val state: InsertProductState) : InsertProductEvent
+    data class ProductNotFoundInScannedDB(val state: InsertProductState) : InsertProductEvent
 
     data class ProductNameChanged(val name: String) : InsertProductEvent
     data class WeightChanged(val weight: Int) : InsertProductEvent

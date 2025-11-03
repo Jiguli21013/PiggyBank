@@ -8,4 +8,5 @@
     <string name="remove_from_cart">Remove from cart</string>
     <string name="action_back">Back</string>
     <string name="action_save">Save</string>
+    <string name="action_saved">Saved</string>
 </resources>

@@ -13,17 +13,17 @@ class InsertNewProductUseCase @Inject constructor(
     private val repository: ScannedProductsRepository,
     private val logger: Logger
 ) {
-    suspend operator fun invoke(scannedProduct: ScannedProduct): RequestResult<Unit> {
+    suspend operator fun invoke(scannedProduct: ScannedProduct): RequestResult<Long> {
         val now: Instant = Clock.System.now()
         val productWithTimestamp = scannedProduct.copy(addedAt = now)
         logger.d(LOG_TAG, "Inserting scannedProduct: $productWithTimestamp")
         return repository.saveScannedProductToDatabase(scannedProduct = productWithTimestamp)
             .toRequestResult()
-            .also {
-                if (it is RequestResult.Error) {
-                    logger.e(LOG_TAG, "Insert result error: ${it.error?.message}")
-                } else {
-                    logger.d(LOG_TAG, "Insert result: $it")
+            .also { result ->
+                when (result) {
+                    is RequestResult.Success -> logger.d(LOG_TAG, "Insert result: id=${result.data}")
+                    is RequestResult.Error -> logger.e(LOG_TAG, "Insert result error: ${result.error?.message}")
+                    is RequestResult.InProgress -> logger.d(LOG_TAG, "Insert in progress...")
                 }
             }
     }
