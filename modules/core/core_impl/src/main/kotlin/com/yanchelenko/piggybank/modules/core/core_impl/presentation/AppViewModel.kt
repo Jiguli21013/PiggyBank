@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.NavigationDispatcher
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetActiveCartTotalsUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.domain.settings.ObserveAppThemeUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.models.settings.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AppViewModel @Inject constructor(
     val navDispatcher: NavigationDispatcher,
-    getActiveCartTotals: GetActiveCartTotalsUseCase
+    observeAppThemeUseCase: ObserveAppThemeUseCase,
+    getActiveCartTotals: GetActiveCartTotalsUseCase,
 ) : ViewModel() {
 
     /**
@@ -29,5 +32,13 @@ class AppViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
             initialValue = 0
+        )
+
+    val appTheme: StateFlow<AppTheme> = observeAppThemeUseCase()
+        .distinctUntilChanged()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
+            initialValue = AppTheme.SYSTEM
         )
 }

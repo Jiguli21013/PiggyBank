@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingExtraSmall
-import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 
 @Composable
 fun ProductField(

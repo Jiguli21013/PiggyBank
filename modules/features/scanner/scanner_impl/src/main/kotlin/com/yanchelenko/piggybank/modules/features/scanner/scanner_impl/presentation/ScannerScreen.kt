@@ -82,11 +82,13 @@ fun ScannerScreen(
         },
         content = { uiState, sendEvent, innerModifier ->
             when (uiState.scannerState) {
-                ScannerState.ReadyToScan -> AndroidCameraView(
-                    modifier = innerModifier.fillMaxSize(),
-                    onEvent = sendEvent,
-                    barcodeAnalyzer = barcodeAnalyzer
-                )
+                ScannerState.ReadyToScan -> {
+                    AndroidCameraView(
+                        modifier = innerModifier.fillMaxSize(),
+                        onEvent = sendEvent,
+                        barcodeAnalyzer = barcodeAnalyzer
+                    )
+                }
 
                 ScannerState.PermissionDenied -> Box(
                     modifier = innerModifier

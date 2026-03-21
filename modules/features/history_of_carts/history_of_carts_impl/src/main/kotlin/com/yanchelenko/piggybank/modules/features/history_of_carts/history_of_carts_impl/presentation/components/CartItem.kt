@@ -22,7 +22,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.lphas.CartBackground
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.R
-import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.models.CartUiModel
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.preview.CartPreviewProvider
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.state.HistoryOfCartsEvent

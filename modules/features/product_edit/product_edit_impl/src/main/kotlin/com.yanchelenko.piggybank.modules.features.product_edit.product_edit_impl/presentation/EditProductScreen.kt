@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -42,7 +41,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacerHeight
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLarge
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingMedium
-import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 
 @Composable
 fun EditProductScreen(
@@ -88,12 +87,10 @@ internal fun EditProductScreen(
         content = { uiState, sendEvent, innerModifier ->
             when (uiState) {
                 is CommonUiState.Success -> {
-                    val stableSend: (EditProductEvent) -> Unit by rememberUpdatedState(sendEvent)
-
                     EditProductContent(
                         state = uiState.data,
                         modifier = innerModifier,
-                        onEvent = stableSend
+                        onEvent = sendEvent
                     )
                 }
                 is CommonUiState.Initializing -> {

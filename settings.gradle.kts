@@ -105,3 +105,9 @@ include(":modules:features:product_details:product_details_impl")
 project(":modules:features:product_details:product_details_api").projectDir = file("modules/features/product_details/product_details_api")
 project(":modules:features:product_details:product_details_impl").projectDir = file("modules/features/product_details/product_details_impl")
 
+// Features: Settings (API + Impl)
+include(":modules:features:settings:settings_api")
+include(":modules:features:settings:settings_impl")
+
+project(":modules:features:settings:settings_api").projectDir = file("modules/features/settings/settings_api")
+project(":modules:features:settings:settings_impl").projectDir = file("modules/features/settings/settings_impl")

@@ -30,7 +30,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.test.UiTestTags
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens
-import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
 import com.yanchelenko.piggybank.modules.features.history.history_of_scans_impl.R as HistoryR
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.lphas.CartBackground

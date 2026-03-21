@@ -39,7 +39,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLa
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductState
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.trackMap
-import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 
 const val MIN_QUANTITY = 1
 const val MAX_QUANTITY = 99

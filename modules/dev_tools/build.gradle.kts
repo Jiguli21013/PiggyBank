@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":modules:core:core_api"))
 
     implementation(libs.dagger.hilt.android)
+
     ksp(libs.dagger.hilt.compiler)
 
     compileOnly(platform(libs.compose.bom))
@@ -43,4 +44,9 @@ dependencies {
     // Rebugger: API виден всегда, реализация только в debug
     compileOnly(libs.rebugger)
     debugApi(libs.rebugger)
+
+    // Leak canary
+    debugImplementation(libs.leakcanary.android)
+    androidTestImplementation(libs.leakcanary.instrumentation)
+    debugImplementation(libs.androidx.startup.runtime)
 }

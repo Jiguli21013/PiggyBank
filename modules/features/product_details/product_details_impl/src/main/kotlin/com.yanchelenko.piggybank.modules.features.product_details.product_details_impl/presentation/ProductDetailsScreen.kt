@@ -37,7 +37,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvi
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacerHeight
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingMedium
-import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.R
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.FAST
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
@@ -121,7 +121,6 @@ internal fun ProductDetailsScreen(
                             onEvent = sendEvent
                         )
                     }
-
                 }
                 is CommonUiState.Initializing -> {
                     CenteredLoader()

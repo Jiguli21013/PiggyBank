@@ -6,6 +6,13 @@ import androidx.navigation.navArgument
 
 sealed interface AppDestination : NavigationDestination {
 
+    // ---- Top Bar Screens ----
+    data object SettingsDestination : AppDestination {
+        override val routeForRegistration = "settings"
+        override val arguments = emptyList<NamedNavArgument>()
+        fun fullRoute(): String = "settings"
+    }
+
     // ---- Bottom Bar Screens ----
     data object ScannerDestination : AppDestination {
         override val routeForRegistration = "scanner"

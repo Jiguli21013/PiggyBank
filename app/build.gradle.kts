@@ -59,7 +59,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":modules:dev_tools"))
+    debugImplementation(project(":modules:dev_tools"))
 
     implementation(project(":modules:core:database"))
     implementation(project(":modules:core:core_api"))
@@ -90,6 +90,9 @@ dependencies {
 
     implementation(project(":modules:features:product_details:product_details_api"))
     implementation(project(":modules:features:product_details:product_details_impl"))
+
+    implementation(project(":modules:features:settings:settings_api"))
+    implementation(project(":modules:features:settings:settings_impl"))
 
     // Baselineprofile
     implementation(libs.profileinstaller)

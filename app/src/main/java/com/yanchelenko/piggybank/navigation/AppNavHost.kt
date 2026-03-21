@@ -21,7 +21,7 @@ fun AppNavHost(
     logger: Logger,
     modifier: Modifier = Modifier,
 ) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(navDispatcher) {
         navDispatcher.navEvents
             .debounce(timeoutMillis = NAVIGATION_DEBOUNCE_MS)
             .collect { event ->
@@ -32,7 +32,7 @@ fun AppNavHost(
                     is NavEvent.Navigate -> {
                         navController.navigate(route = event.route) {
                             launchSingleTop = true
-                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            popUpTo(id = navController.graph.startDestinationId) { saveState = true }
                         }
                     }
 

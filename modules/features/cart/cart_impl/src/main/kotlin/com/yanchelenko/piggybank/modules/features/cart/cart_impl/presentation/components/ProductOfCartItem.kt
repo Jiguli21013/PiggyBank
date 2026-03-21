@@ -23,7 +23,7 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductOfCartUiMod
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.state.CartEvent
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.AppShapes
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens
-import com.yanchelenko.piggynank.core.ui.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.R
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.preview.ProductOfCartPreviewProvider

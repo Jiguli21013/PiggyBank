@@ -29,6 +29,9 @@ Tech stack:
 │   └── database
 ├── dev_tools/ 
 ├── features/
+│   └── settings/
+│   │   ├── settings_api/
+│   │   └── settings_impl/
 │   ├── cart/
 │   │   ├── cart_api
 │   │   └── cart_impl
@@ -54,9 +57,9 @@ Tech stack:
 </code></pre>
 
 Planned features:
-1. Settings screen (theme selection, language switching)
-2. Code refactor
-3. LeakCanary
+1. Code refactor
+2. LeakCanary
+3. Button back on TopAppBar
 
 ## Screenshots
 <p>

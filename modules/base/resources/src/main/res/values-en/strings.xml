@@ -9,6 +9,9 @@
 
     <string name="label_empty_for_now">Empty for now</string>
 
+    <string name="settings_description">Settings</string>
+    <string name="btn_navigation_back">Back button</string>
+
     <string name="label_scanned_product_id">ScannedProductID</string>
     <string name="label_cart_product_id">CartProductID</string>
 </resources>
