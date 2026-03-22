@@ -1,5 +1,6 @@
 package com.yanchelenko.piggybank.di
 
+import com.yanchelenko.piggybank.modules.core.core_api.dispatchers.AppDispatchers
 import com.yanchelenko.piggybank.modules.core.core_api.domain.settings.AppLanguageManager
 import com.yanchelenko.piggybank.modules.core.core_api.domain.settings.ObserveAppLanguageUseCase
 import dagger.hilt.EntryPoint
@@ -11,4 +12,5 @@ import dagger.hilt.components.SingletonComponent
 interface AppLanguageEntryPoint {
     fun observeAppLanguageUseCase(): ObserveAppLanguageUseCase
     fun appLanguageManager(): AppLanguageManager
+    fun appDispatchers(): AppDispatchers //todo лишнее
 }

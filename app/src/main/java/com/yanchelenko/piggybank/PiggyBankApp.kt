@@ -6,7 +6,6 @@ import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.Nav
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,8 +16,6 @@ import com.yanchelenko.piggybank.di.hiltLogger
 import com.yanchelenko.piggybank.navigation.AppNavHost
 import com.yanchelenko.piggybank.ui.AppScaffold
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
-import com.yanchelenko.piggybank.modules.base.infrastructure.dispatchers.AppDispatchers
-import com.yanchelenko.piggybank.modules.base.infrastructure.dispatchers.DefaultDispatchersProvider
 import com.yanchelenko.piggybank.modules.core.core_api.models.settings.AppTheme
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.NavEvent
@@ -38,9 +35,6 @@ fun PiggyBankApp(
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
-
-    //todo подумать че с dispatchers делать
-    val dispatchers = remember { AppDispatchers(DefaultDispatchersProvider()) }
 
     val isDarkTheme = when (appTheme) {
         AppTheme.SYSTEM -> isSystemInDarkTheme()

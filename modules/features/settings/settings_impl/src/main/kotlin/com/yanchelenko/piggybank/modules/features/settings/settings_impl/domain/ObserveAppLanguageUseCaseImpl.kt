@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.modules.core.core_impl.domain.settings
+package com.yanchelenko.piggybank.modules.features.settings.settings_impl.domain
 
 import com.yanchelenko.piggybank.modules.core.core_api.domain.settings.ObserveAppLanguageUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.models.settings.AppLanguage

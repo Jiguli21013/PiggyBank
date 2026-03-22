@@ -22,7 +22,6 @@ import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.st
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.state.CartEvent
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.state.CartScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -46,7 +45,7 @@ class CartViewModel @Inject constructor(
      * MVI rule: state is updated only here, VM doesn't calculate totals itself.
      */
     private fun observeActiveCartTotals() {
-        viewModelScope.launch(Dispatchers.IO) { //todo io ?
+        viewModelScope.launch {
             getActiveCartTotalsUseCase()
                 .map { it.toCartScreenState() }
                 .collectLatest { cartScreenState ->
@@ -127,7 +126,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    private fun deleteProductOfCart(productOfCartId: Long) = viewModelScope.launch(Dispatchers.IO) {
+    private fun deleteProductOfCart(productOfCartId: Long) = viewModelScope.launch {
         logger.d(LOG_TAG, "Attempting to delete from ACTIVE cart: cartItemId=$productOfCartId")
 
         when (deleteProductOfCartUseCase(productOfCartId)) {
@@ -146,7 +145,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    private fun closeCart() = viewModelScope.launch(Dispatchers.IO) {
+    private fun closeCart() = viewModelScope.launch {
         logger.d(LOG_TAG, "Attempting to close active cart…")
 
         state.getData {

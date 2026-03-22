@@ -11,13 +11,13 @@ open class BaseRouter(
 ) : CommonRouter {
 
     override fun navigateBack() {
-        CoroutineScope(Dispatchers.Main).launch { //todo dispatchers
+        CoroutineScope(Dispatchers.Main).launch {
             navigationDispatcher.emit(event = NavEvent.NavigateBack)
         }
     }
 
     override fun navigateTo(destination: String) {
-        CoroutineScope(Dispatchers.Main).launch { //todo dispatchers
+        CoroutineScope(Dispatchers.Main).launch {
             navigationDispatcher.emit(event = NavEvent.Navigate(destination))
         }
     }

@@ -1,7 +1,7 @@
-package com.yanchelenko.piggybank.modules.core.core_impl.di
+package com.yanchelenko.piggybank.modules.features.settings.settings_impl.di
 
 import android.content.Context
-import com.yanchelenko.piggybank.modules.core.core_impl.data.SettingsDataStore
+import com.yanchelenko.piggybank.modules.features.settings.settings_impl.data.SettingsDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

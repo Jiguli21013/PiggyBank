@@ -59,7 +59,7 @@ Tech stack:
 Planned features:
 1. Code refactor
 2. LeakCanary
-3. Button back on TopAppBar
+3. возможно core_factory сейчас лишний
 
 ## Screenshots
 <p>

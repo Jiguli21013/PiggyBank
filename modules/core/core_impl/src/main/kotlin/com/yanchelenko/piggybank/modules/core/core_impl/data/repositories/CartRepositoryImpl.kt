@@ -16,7 +16,7 @@ import com.yanchelenko.piggybank.modules.core.database.dao.CartDao
 import com.yanchelenko.piggybank.modules.core.database.dao.ProductOfCartDao
 import com.yanchelenko.piggybank.modules.core.database.models.CartDBO
 import com.yanchelenko.piggybank.modules.core.database.models.CartItemDBO
-import kotlinx.coroutines.Dispatchers
+import com.yanchelenko.piggybank.modules.core.core_api.dispatchers.AppDispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -29,7 +29,8 @@ import javax.inject.Singleton
 class CartRepositoryImpl @Inject constructor(
     private val cartDao: CartDao,
     private val productOfCartDao: ProductOfCartDao,
-    private val logger: Logger
+    private val logger: Logger,
+    private val dispatchers: AppDispatchers
 ) : CartRepository {
 
     /**
@@ -37,7 +38,7 @@ class CartRepositoryImpl @Inject constructor(
      */
     override fun getPagedCartProducts(): Flow<PagingData<ProductOfCart>> = flow {
         // Retrieve active cart ID safely on IO dispatcher
-        val activeCartId = withContext(Dispatchers.IO) { cartDao.getActiveCartId() }
+        val activeCartId = withContext(dispatchers.io) { cartDao.getActiveCartId() }
 
         if (activeCartId == null) {
             logger.d(LOG_TAG, "No active cart found → returning empty list")
@@ -58,7 +59,7 @@ class CartRepositoryImpl @Inject constructor(
 
         emitAll(flow = pagingFlow)
     }
-
+    // Room сам выполняет запрос не на Main thread
     override fun observeActiveCartTotals(): Flow<CartTotals> =
         productOfCartDao.observeTotalsForActiveCart()
             .map { it.toDomain() }
@@ -79,7 +80,7 @@ class CartRepositoryImpl @Inject constructor(
      * Returns a single product from the cart by its ID.
      */
     override suspend fun getCartProductById(cartProductId: Long): Result<ProductOfCart> = runCatching {
-        withContext(Dispatchers.IO) {
+        withContext(dispatchers.io) {
             val dbo = productOfCartDao.getById(id = cartProductId)
                 ?: throw NoSuchElementException("Cart item not found: $cartProductId")
             dbo.toProductOfCart()
@@ -90,7 +91,7 @@ class CartRepositoryImpl @Inject constructor(
      * Adds a product to the active cart or creates a new one if none exists.
      */
     override suspend fun addProductToCart(productOfCart: ProductOfCart): Result<Long> = runCatching {
-        withContext(Dispatchers.IO) {
+        withContext(dispatchers.io) {
             val activeCartId = cartDao.getActiveCartId() ?: createNewActiveCart()
 
             val dbo = CartItemDBO(
@@ -115,7 +116,7 @@ class CartRepositoryImpl @Inject constructor(
      * Removes a product strictly from the active cart.
      */
     override suspend fun removeProductFromCart(productOfCartId: Long): Result<Long> = runCatching {
-        withContext(Dispatchers.IO) {
+        withContext(dispatchers.io) {
             val rows = productOfCartDao.deleteProductOfCartFromActiveCart(productOfCartId = productOfCartId)
             if (rows == 0) {
                 throw NoSuchElementException("Cart item not found in active cart: $productOfCartId")
@@ -125,7 +126,7 @@ class CartRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getProductInActiveCartByBarcode(barcode: String): Result<ProductInCart> = runCatching {
-        withContext(Dispatchers.IO) {
+        withContext(dispatchers.io) {
             val activeCartId = cartDao.getActiveCartId() ?: createNewActiveCart()
             val productInCartDbo = productOfCartDao.getProductInActiveCartByBarcode(
                 cartId = activeCartId,
@@ -160,7 +161,7 @@ class CartRepositoryImpl @Inject constructor(
         totalItems: Int,
         totalPrice: Double
     ): Result<Boolean> = runCatching {
-        withContext(Dispatchers.IO) {
+        withContext(dispatchers.io) {
             val affected = cartDao.closeActiveCart(
                 totalItems = totalItems,
                 totalPrice = totalPrice,

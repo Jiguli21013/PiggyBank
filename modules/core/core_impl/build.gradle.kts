@@ -54,8 +54,6 @@ dependencies {
     implementation(libs.paging.runtime)
     implementation(libs.kotlinx.datetime)
 
-    // Data store
-    implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.appcompat)
 
     ksp(libs.dagger.hilt.compiler)

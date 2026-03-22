@@ -23,7 +23,6 @@ import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCa
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.domain.usecase.AddProductToCartUseCase
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.domain.usecase.InitInsertProductStateInteractor
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -187,7 +186,7 @@ class InsertProductScreenViewModel @Inject constructor(
     private fun loadProductByBarcode(barcode: String) {
         logger.d(LOG_TAG, "Start loading product from DB for barcode=$barcode")
 
-        viewModelScope.launch(Dispatchers.IO) {  //todo dispatcher
+        viewModelScope.launch {
             when (val result = initInsertProductStateInteractor(barcode = barcode)) {
                 is RequestResult.Success -> {
                     logger.d(LOG_TAG, "ScannedProduct loaded successfully: ${result.data}")
@@ -218,7 +217,7 @@ class InsertProductScreenViewModel @Inject constructor(
     private fun insertProductToDB() {
         uiState.value.getData { state ->
             logger.d(LOG_TAG, "Start inserting product to DB: ${state.scannedProduct}")
-            viewModelScope.launch(Dispatchers.IO) { //todo provider dispatcher io
+            viewModelScope.launch {
                 when (val result = insertNewProductUseCase(scannedProduct = state.scannedProduct.toDomain())) {
                     is RequestResult.Success -> {
                         logger.d(LOG_TAG, "ScannedProduct successfully inserted")
@@ -248,7 +247,7 @@ class InsertProductScreenViewModel @Inject constructor(
     private fun insertProductToCartDB() {
         uiState.value.getData { state ->
             logger.d(LOG_TAG, "Start inserting product to cart: ${state.scannedProduct} x${state.quantity}")
-            viewModelScope.launch(Dispatchers.IO) { //todo provider dispatcher io
+            viewModelScope.launch {
                 if (!state.isInScannedDB) {
                     logger.d(LOG_TAG, "Scanned not in DB → saving before cart insert: ${state.scannedProduct}")
                     when (val save = insertNewProductUseCase(scannedProduct = state.scannedProduct.toDomain())) {
@@ -318,7 +317,7 @@ class InsertProductScreenViewModel @Inject constructor(
     private fun deleteProductFromCartDB() {
         uiState.value.getData { state ->
             logger.d(LOG_TAG, "Start removing product from cart cartItemId: ${state.cartItemId}")
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 when (val result = deleteProductFromCartUseCase(productOfCartId = state.cartItemId ?: return@launch)) {
                     is RequestResult.Success -> {
                         logger.d(LOG_TAG, "Product successfully removed from cart")

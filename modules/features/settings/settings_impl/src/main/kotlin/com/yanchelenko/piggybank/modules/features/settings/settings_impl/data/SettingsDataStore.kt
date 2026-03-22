@@ -1,12 +1,16 @@
-package com.yanchelenko.piggybank.modules.core.core_impl.data
+package com.yanchelenko.piggybank.modules.features.settings.settings_impl.data
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.yanchelenko.piggybank.modules.core.core_impl.data.repositories.settingsDataStore
+import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-//todo может все таки в модуль settings переместить
+
+private const val DATASTORE_NAME = "settings"
+
+val Context.settingsDataStore by preferencesDataStore(DATASTORE_NAME)
+
 class SettingsDataStore(private val context: Context) {
 
     private val dataStore = context.settingsDataStore

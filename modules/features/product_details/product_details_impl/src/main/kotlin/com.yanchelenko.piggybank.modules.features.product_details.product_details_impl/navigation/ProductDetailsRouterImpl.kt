@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ProductDetailsRouterImpl @Inject constructor(
-    private val dispatcher: NavigationDispatcher
+    private val dispatcher: NavigationDispatcher,
 ) : ProductDetailsRouter, BaseRouter(dispatcher) {
 
     override fun navigateToEditProduct(productId: Long) {

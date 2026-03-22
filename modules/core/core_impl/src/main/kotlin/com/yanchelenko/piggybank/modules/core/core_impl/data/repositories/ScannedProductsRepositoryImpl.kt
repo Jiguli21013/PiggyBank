@@ -7,16 +7,19 @@ import androidx.paging.map
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
 import com.yanchelenko.piggybank.modules.core.core_api.repository.ScannedProductsRepository
+import com.yanchelenko.piggybank.modules.core.core_api.dispatchers.AppDispatchers
 import com.yanchelenko.piggybank.modules.core.database.dao.ScannedProductDao
 import com.yanchelenko.piggybank.modules.core.core_impl.data.mappers.toScannedProduct
 import com.yanchelenko.piggybank.modules.core.core_impl.data.mappers.toScannedProductDbo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ScannedProductsRepositoryImpl @Inject constructor(
     private val scannedProductDao: ScannedProductDao,
-    private val logger: Logger
+    private val logger: Logger,
+    private val dispatchers: AppDispatchers
 ) : ScannedProductsRepository {
 
     override fun getPagedScannedProducts(): Flow<PagingData<ScannedProduct>> {
@@ -35,51 +38,61 @@ class ScannedProductsRepositoryImpl @Inject constructor(
 
     override suspend fun updateProductDatabase(scannedProduct: ScannedProduct): Result<Boolean> {
         logger.d(LOG_TAG, "Updating scannedProduct: ${scannedProduct.id}")
-        return runCatching {
-            val affectedRows = scannedProductDao.update(scannedProduct.toScannedProductDbo())
-            logger.d(LOG_TAG, "Update affected $affectedRows rows")
-            affectedRows > 0
-        }.onFailure {
-            logger.e(LOG_TAG, "Failed to update scannedProduct ${scannedProduct.id}: ${it.message}")
+        return withContext(dispatchers.io) {
+            runCatching {
+                val affectedRows = scannedProductDao.update(scannedProduct.toScannedProductDbo())
+                logger.d(LOG_TAG, "Update affected $affectedRows rows")
+                affectedRows > 0
+            }.onFailure {
+                logger.e(LOG_TAG, "Failed to update scannedProduct ${scannedProduct.id}: ${it.message}")
+            }
         }
     }
 
     override suspend fun getScannedProductById(productId: Long): Result<ScannedProduct> {
         logger.d(LOG_TAG, "Getting scanned product by id: $productId")
-        return runCatching {
-            scannedProductDao.getById(scannedProductId = productId).toScannedProduct()
-        }.onFailure {
-            logger.e(LOG_TAG, "Failed to get scanned product by id=$productId: ${it.message}")
+        return withContext(dispatchers.io) {
+            runCatching {
+                scannedProductDao.getById(scannedProductId = productId).toScannedProduct()
+            }.onFailure {
+                logger.e(LOG_TAG, "Failed to get scanned product by id=$productId: ${it.message}")
+            }
         }
     }
 
     override suspend fun getScannedProductByBarcode(barcode: String): Result<ScannedProduct?> {
         logger.d(LOG_TAG, "Getting scanned product by barcode: $barcode")
-        return runCatching {
-            scannedProductDao.getByBarcode(barcode = barcode)?.toScannedProduct()
-        }.onFailure {
-            logger.e(LOG_TAG, "Failed to get scanned product by barcode=$barcode: ${it.message}")
+        return withContext(dispatchers.io) {
+            runCatching {
+                scannedProductDao.getByBarcode(barcode = barcode)?.toScannedProduct()
+            }.onFailure {
+                logger.e(LOG_TAG, "Failed to get scanned product by barcode=$barcode: ${it.message}")
+            }
         }
     }
 
     override suspend fun saveScannedProductToDatabase(scannedProduct: ScannedProduct): Result<Long> {
         logger.d(LOG_TAG, "Saving new scannedProduct: ${scannedProduct.productName}")
-        return runCatching {
-            val id = scannedProductDao.insert(scannedProduct.toScannedProductDbo(autoGenerateId = true))
-            logger.d(LOG_TAG, "ScannedProduct saved: ${scannedProduct.productName} with id=$id")
-            id
-        }.onFailure {
-            logger.e(LOG_TAG, "Failed to save scannedProduct ${scannedProduct.productName}: ${it.message}")
+        return withContext(dispatchers.io) {
+            runCatching {
+                val id = scannedProductDao.insert(scannedProduct.toScannedProductDbo(autoGenerateId = true))
+                logger.d(LOG_TAG, "ScannedProduct saved: ${scannedProduct.productName} with id=$id")
+                id
+            }.onFailure {
+                logger.e(LOG_TAG, "Failed to save scannedProduct ${scannedProduct.productName}: ${it.message}")
+            }
         }
     }
 
     override suspend fun deleteScannedProductFromDatabase(scannedProduct: ScannedProduct): Result<Unit> {
         logger.d(LOG_TAG, "Deleting scannedProduct: ${scannedProduct.id}")
-        return runCatching {
-            scannedProductDao.remove(scannedProduct.toScannedProductDbo())
-            logger.d(LOG_TAG, "ScannedProduct deleted: ${scannedProduct.id}")
-        }.onFailure {
-            logger.e(LOG_TAG, "Failed to delete scannedProduct ${scannedProduct.id}: ${it.message}")
+        return withContext(dispatchers.io) {
+            runCatching {
+                scannedProductDao.remove(scannedProduct.toScannedProductDbo())
+                logger.d(LOG_TAG, "ScannedProduct deleted: ${scannedProduct.id}")
+            }.onFailure {
+                logger.e(LOG_TAG, "Failed to delete scannedProduct ${scannedProduct.id}: ${it.message}")
+            }
         }
     }
 

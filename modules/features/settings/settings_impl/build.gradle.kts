@@ -68,6 +68,9 @@ dependencies {
 
     implementation(libs.kotlinx.immutable)
 
+    // Data store
+    implementation(libs.androidx.datastore.preferences)
+
     // compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)

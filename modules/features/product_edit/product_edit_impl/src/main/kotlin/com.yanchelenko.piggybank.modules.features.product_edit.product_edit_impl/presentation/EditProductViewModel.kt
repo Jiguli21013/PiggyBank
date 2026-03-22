@@ -20,7 +20,6 @@ import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainExce
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -122,7 +121,7 @@ class EditProductViewModel @Inject constructor(
 
     private fun loadProductByProductId(productId: Long) {
         logger.d(LOG_TAG, "Start DB lookup for productId=$productId")
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             when (val result = getProductByProductIdUseCase(productId)) {
                 is RequestResult.Success -> {
                     logger.d(LOG_TAG, "ScannedProduct loaded: ${result.data}")
