@@ -5,14 +5,17 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.toInstant
 import com.yanchelenko.piggybank.modules.base.ui_model.models.toStable
 import com.yanchelenko.piggybank.modules.core.core_api.models.ProductOfCart
 import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
+import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
 
-fun ScannedProduct.toUi(): ScannedProductUiModel = ScannedProductUiModel(
+fun ScannedProduct.toUi(currency: AppCurrency): ScannedProductUiModel = ScannedProductUiModel(
     productId = this.id,
     barcode = this.barcode,
     productName = this.productName,
     weight = this.weight,
     price = this.price,
     pricePerKg = this.pricePerKg,
+    formattedPrice = "${this.price} ${currency.symbol}",
+    formattedPricePerKg = "${this.pricePerKg} ${currency.symbol}",
     addedAt = this.addedAt.toStable()
 )
 

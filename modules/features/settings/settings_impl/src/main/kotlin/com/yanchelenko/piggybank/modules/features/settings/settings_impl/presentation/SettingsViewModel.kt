@@ -13,6 +13,8 @@ import com.yanchelenko.piggybank.modules.features.settings.settings_impl.present
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
+import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.domain.UpdateCurrencyUseCase
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,6 +25,8 @@ class SettingsViewModel @Inject constructor(
     private val observeAppLanguageUseCase: ObserveAppLanguageUseCase,
     private val updateAppThemeUseCase: UpdateAppThemeUseCase,
     private val updateAppLanguageUseCase: UpdateAppLanguageUseCase,
+    private val observeCurrencyUseCase: ObserveCurrencyUseCase,
+    private val updateCurrencyUseCase: UpdateCurrencyUseCase,
     private val logger: Logger,
 ) : BaseViewModel<SettingsEvent, CommonUiState<SettingsState>, SettingsEffect>(
     initialState = CommonUiState.Initializing
@@ -35,10 +39,12 @@ class SettingsViewModel @Inject constructor(
             combine(
                 flow = observeAppThemeUseCase(),
                 flow2 = observeAppLanguageUseCase(),
-            ) { theme, language ->
+                flow3 = observeCurrencyUseCase(),
+            ) { theme, language, currency ->
                 SettingsState(
                     selectedTheme = theme,
                     selectedLanguage = language,
+                    selectedCurrency = currency,
                 )
             }.collectLatest { settingsState ->
                 logger.d(LOG_TAG,"settingsState -> $settingsState")
@@ -49,15 +55,22 @@ class SettingsViewModel @Inject constructor(
 
     private fun onThemeSelected(event: SettingsEvent.OnThemeSelected) {
         logger.d(LOG_TAG, "onThemeSelected(theme=${event.theme})")
-        viewModelScope.launch { //todo dispatchers io ? ViewModel знает про threading - нарушение Clean Architecture ??
+        viewModelScope.launch {
             updateAppThemeUseCase(event.theme)
         }
     }
 
     private fun onLanguageSelected(event: SettingsEvent.OnLanguageSelected) {
         logger.d(LOG_TAG, "onLanguageSelected(language=${event.language})")
-        viewModelScope.launch { //todo dispatchers io ? ViewModel знает про threading - нарушение Clean Architecture ??
+        viewModelScope.launch {
             updateAppLanguageUseCase(event.language)
+        }
+    }
+
+    private fun onCurrencySelected(event: SettingsEvent.OnCurrencySelected) {
+        logger.d(LOG_TAG, "onCurrencySelected(currency=${event.currency})")
+        viewModelScope.launch {
+            updateCurrencyUseCase(event.currency)
         }
     }
 
@@ -65,6 +78,7 @@ class SettingsViewModel @Inject constructor(
         when (event) {
             is SettingsEvent.OnThemeSelected -> onThemeSelected(event)
             is SettingsEvent.OnLanguageSelected -> onLanguageSelected(event)
+            is SettingsEvent.OnCurrencySelected -> onCurrencySelected(event)
         }
     }
 

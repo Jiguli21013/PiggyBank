@@ -60,7 +60,9 @@ dependencies {
 
     implementation(project(":modules:base:ui_kit"))
     implementation(project(":modules:base:ui_model"))
+    implementation(project(":modules:base:resources"))
     implementation(project(":modules:base:infrastructure"))
+
     compileOnly(project(":modules:dev_tools"))
 
     debugImplementation(libs.ui.tooling)

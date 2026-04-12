@@ -1,29 +1,30 @@
 package com.yanchelenko.piggybank.modules.base.ui_model.mappers
 
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductOfCartUiModel
+import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
 import com.yanchelenko.piggybank.modules.core.core_api.models.ProductOfCart
-import java.text.NumberFormat
-import java.util.Locale
 
-fun ProductOfCart.toUi(): ProductOfCartUiModel {
-    val currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
+fun ProductOfCart.toUi(currency: AppCurrency): ProductOfCartUiModel {
 
-    val formattedUnit = currencyFormatter.format(unitPrice)
+    val formattedUnit = "$unitPrice ${currency.symbol}"
     val formattedPerKg = if (isWeightImportant) formattedUnit else null
 
     val weightText = when {
-        isWeightImportant && weightGrams != null -> "$weightGrams" //todo
+        isWeightImportant && weightGrams != null -> weightGrams.toString()
         else -> "—"
     }
 
     // compute total correctly
+    /*
     val totalPrice = if (isWeightImportant) {
         unitPrice * ((weightGrams ?: 0) / 1000.0) * quantity //todo to const
     } else {
         unitPrice * quantity
     }
+     */
+    val totalPrice = unitPrice * quantity
 
-    val totalPriceText = currencyFormatter.format(totalPrice)
+    val totalPriceText = "$totalPrice ${currency.symbol}"
 
     return ProductOfCartUiModel(
         cartProductId = cartItemId,

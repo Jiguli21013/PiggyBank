@@ -55,13 +55,20 @@ internal fun ScannedProductItem(
                 .clip(shape = AppShapes.large)
                 .clickable { onEvent(HistoryOfScansEvent.OnProductClicked(product = product)) }
         ) {
+            //todo hide
             ProductField(label = stringResource(BaseR.string.label_scanned_product_id), value = product.productId.toString())
-
             ProductField(label = stringResource(BaseR.string.label_product_name), value = product.productName)
             ProductField(label = stringResource(BaseR.string.label_barcode), value = product.barcode)
-            ProductField(label = stringResource(BaseR.string.label_price), value = "${product.price}")
-            ProductField(label = stringResource(BaseR.string.label_weight), value = "${product.weight}")
-            ProductField(label = stringResource(BaseR.string.label_price_per_kg), value = "${product.pricePerKg}")
+            ProductField(label = stringResource(BaseR.string.label_price), value = product.formattedPrice)
+            ProductField(
+                label = stringResource(BaseR.string.label_weight),
+                value = stringResource(
+                    BaseR.string.weight_value,
+                    product.weight,
+                    stringResource(BaseR.string.unit_gram)
+                )
+            )
+            ProductField(label = stringResource(BaseR.string.label_price_per_kg), value = product.formattedPricePerKg)
         }
 
         IconButton(
@@ -86,7 +93,7 @@ internal fun ScannedProductItem(
             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = CartBackground),
             modifier = Modifier
                 .align(alignment = Alignment.CenterEnd)
-                .aspectRatio(ratio = 3f)
+                .aspectRatio(ratio = 3f) //todo ?
 
         )
 

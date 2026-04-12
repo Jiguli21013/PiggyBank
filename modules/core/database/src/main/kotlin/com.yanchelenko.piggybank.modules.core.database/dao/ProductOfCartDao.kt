@@ -54,13 +54,16 @@ interface ProductOfCartDao {
     @Query("""
     SELECT
         COALESCE(SUM(quantity), 0) AS itemsCount,
-        COALESCE(SUM(CASE WHEN isWeightImportant THEN (COALESCE(weightGrams, 0) * quantity) ELSE 0 END), 0) AS totalWeightGrams,
-        COALESCE(SUM(
-            CASE
-                WHEN isWeightImportant THEN (unitPrice * (COALESCE(weightGrams, 0) / 1000.0) * quantity)
-                ELSE (unitPrice * quantity)
-            END
-        ), 0.0) AS totalPrice
+        COALESCE(
+            SUM(
+                CASE 
+                    WHEN isWeightImportant THEN (COALESCE(weightGrams, 0) * quantity) 
+                    ELSE 0 
+                END
+            ), 
+            0
+        ) AS totalWeightGrams,
+        COALESCE(SUM(unitPrice * quantity), 0.0) AS totalPrice
     FROM cart_items
     WHERE cartId = (SELECT id FROM carts WHERE status = 'ACTIVE' LIMIT 1)
 """)

@@ -29,13 +29,13 @@ class InsertNewScannedProductUseCaseTest {
             productName = "Banana",
             price = 1.99,
             addedAt = Instant.DISTANT_PAST,
-            weight = 233.3,
+            weight = 233,
             pricePerKg = 12.0
         )
 
         val captured = slot<ScannedProduct>()
         // репозиторий возвращает успешный результат (тип — kotlin.Result<Unit>)
-        coEvery { repository.saveScannedProductToDatabase(capture(captured)) } returns Result.success(Unit)
+        coEvery { repository.saveScannedProductToDatabase(capture(captured)) } returns Result.success(1)
 
         // фиксируем границы времени вокруг вызова
         val before = Clock.System.now()

@@ -20,10 +20,12 @@ import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteProductFromCartUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.domain.usecase.AddProductToCartUseCase
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.domain.usecase.InitInsertProductStateInteractor
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductState
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +35,7 @@ class InsertProductScreenViewModel @Inject constructor(
     private val insertNewProductUseCase: InsertNewProductUseCase,
     private val addProductToCartUseCase: AddProductToCartUseCase,
     private val deleteProductFromCartUseCase: DeleteProductFromCartUseCase,
+    private val observeCurrencyUseCase: ObserveCurrencyUseCase,
     private val logger: Logger,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<InsertProductEvent, CommonUiState<InsertProductState>, InsertProductEffect>(
@@ -73,19 +76,23 @@ class InsertProductScreenViewModel @Inject constructor(
             is InsertProductEvent.WeightChanged -> {
                 logger.d(LOG_TAG, "Weight changed: ${event.weight}")
                 uiState.value.getData { state ->
-                    setState {
-                        val pricePerKg = getPricePerKgUseCase(
-                            weightGrams = event.weight,
-                            price = state.scannedProduct.price
-                        )
-                        CommonUiState.Success(
-                            data = state.copy(
-                                scannedProduct = state.scannedProduct.copy(
-                                    weight = event.weight,
-                                    pricePerKg = pricePerKg
+                    viewModelScope.launch {
+                        val currentCurrency = observeCurrencyUseCase().first()
+                        setState {
+                            val pricePerKg = getPricePerKgUseCase(
+                                weightGrams = event.weight,
+                                price = state.scannedProduct.price
+                            )
+                            CommonUiState.Success(
+                                data = state.copy(
+                                    scannedProduct = state.scannedProduct.copy(
+                                        weight = event.weight,
+                                        pricePerKg = pricePerKg,
+                                        formattedPricePerKg = "$pricePerKg ${currentCurrency.symbol}"
+                                    )
                                 )
                             )
-                        )
+                        }
                     }
                 }
             }
@@ -98,19 +105,23 @@ class InsertProductScreenViewModel @Inject constructor(
             is InsertProductEvent.PriceChanged -> {
                 logger.d(LOG_TAG, "Price changed: ${event.price}")
                 uiState.value.getData { state ->
-                    setState {
-                        val pricePerKg = getPricePerKgUseCase(
-                            weightGrams = state.scannedProduct.weight,
-                            price = event.price
-                        )
-                        CommonUiState.Success(
-                            data = state.copy(
-                                scannedProduct = state.scannedProduct.copy(
-                                    price = event.price,
-                                    pricePerKg = pricePerKg
+                    viewModelScope.launch {
+                        val currentCurrency = observeCurrencyUseCase().first()
+                        setState {
+                            val pricePerKg = getPricePerKgUseCase(
+                                weightGrams = state.scannedProduct.weight,
+                                price = event.price
+                            )
+                            CommonUiState.Success(
+                                data = state.copy(
+                                    scannedProduct = state.scannedProduct.copy(
+                                        price = event.price,
+                                        pricePerKg = pricePerKg,
+                                        formattedPricePerKg = "$pricePerKg ${currentCurrency.symbol}"
+                                    )
                                 )
                             )
-                        )
+                        }
                     }
                 }
             }
@@ -191,7 +202,12 @@ class InsertProductScreenViewModel @Inject constructor(
                 is RequestResult.Success -> {
                     logger.d(LOG_TAG, "ScannedProduct loaded successfully: ${result.data}")
                     if (result.data.product != null) {
-                        onEvent(InsertProductEvent.ProductFoundInScannedDB(state = result.data.toUiState()))
+                        val currentCurrency = observeCurrencyUseCase().first()
+                        onEvent(
+                            InsertProductEvent.ProductFoundInScannedDB(
+                                state = result.data.toUiState(currency = currentCurrency)
+                            )
+                        )
                     } else {
                         onEvent(InsertProductEvent.ProductNotFoundInScannedDB(state = InsertProductState(scannedProduct = ScannedProductUiModel(barcode = barcode))))
                     }

@@ -8,6 +8,7 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.dayKeyToDate
 import com.yanchelenko.piggybank.modules.base.ui_model.models.toStable
 import com.yanchelenko.piggybank.modules.core.core_api.models.Cart
 import com.yanchelenko.piggybank.modules.core.core_api.models.CartStatus
+import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.models.CartStatusUi
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.models.CartUiModel
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.models.ListItem
@@ -17,7 +18,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun PagingData<Cart>.toUiPagingData(): PagingData<CartUiModel> = this.map { it.toUi() }
+fun PagingData<Cart>.toUiPagingData(
+    currency: AppCurrency,
+): PagingData<CartUiModel> = this.map { cart ->
+    cart.toUi(currency = currency)
+}
 
 fun PagingData<CartUiModel>.withDateHeaders(
     timeZone: TimeZone = TimeZone.currentSystemDefault()
@@ -41,12 +46,14 @@ fun PagingData<CartUiModel>.withDateHeaders(
 }
 
 fun Cart.toUi(
+    currency: AppCurrency,
     storeName: String? = null, // todo потом будет связка с таблицей store
 ): CartUiModel = CartUiModel(
         id = id,
         storeName = storeName,
         totalItems = this.totalItems,
         totalPrice = this.totalPrice,
+        formattedTotalPrice = "$totalPrice ${currency.symbol}",
         status = when (status) {
             CartStatus.ACTIVE -> CartStatusUi.ACTIVE
             CartStatus.CLOSED -> CartStatusUi.CLOSED

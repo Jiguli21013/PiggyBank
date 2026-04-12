@@ -10,4 +10,6 @@
     <string name="cart_total_price_format">%.2f</string>
     <string name="cart_closed_button">Cart closed</string>
     <string name="cart_close_button">Close cart</string>
+
+    <string name="price_per_current_weight">%1$s for %2$s</string>
 </resources>

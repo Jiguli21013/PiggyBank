@@ -116,7 +116,7 @@ fun EditProductContent(
     RebuggerIfDebug(trackMap = state.scannedProduct.trackMap(), composableName = "EditProductContent")
 
     val productNameLabel = stringResource(R.string.label_product_name)
-    val priceLabel = stringResource(R.string.label_price_by_weight, state.scannedProduct.weight.toInt())
+    val priceLabel = stringResource(R.string.label_price_by_weight, state.scannedProduct.weight)
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
@@ -154,7 +154,7 @@ fun EditProductContent(
 
             ReadOnlyField(
                 label = pricePerKgLabel,
-                value = state.scannedProduct.pricePerKg.formatIfNonZero()
+                value = state.scannedProduct.formattedPricePerKg
             )
         }
 

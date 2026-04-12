@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.domain.GetPagedCartsUseCaseImpl
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.mappers.toUiPagingData
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.mappers.withDateHeaders
@@ -16,22 +17,28 @@ import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_ca
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.state.HistoryOfCartsEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
 @HiltViewModel
 class HistoryOfCartsViewModel @Inject constructor(
     private val getPagedCartsUseCase: GetPagedCartsUseCaseImpl,
+    private val observeCurrencyUseCase: ObserveCurrencyUseCase,
     private val logger: Logger
 ) : BaseViewModel<HistoryOfCartsEvent, CommonUiState<Unit>, HistoryOfCartsEffect>(
     initialState = CommonUiState.Initializing
 ) {
 
     fun pagedItems(): Flow<PagingData<ListItem>> {
-        logger.d(LOG_TAG,"invoke() called — starting to collect paged products")
-        return getPagedCartsUseCase()
-            .map { it.toUiPagingData().withDateHeaders() }
-            .cachedIn(scope = viewModelScope)
+        logger.d(LOG_TAG, "invoke() called — starting to collect paged carts")
+        return combine(
+            getPagedCartsUseCase(),
+            observeCurrencyUseCase(),
+        ) { pagingData, currency ->
+            pagingData
+                .toUiPagingData(currency = currency)
+                .withDateHeaders()
+        }.cachedIn(scope = viewModelScope)
     }
 
 

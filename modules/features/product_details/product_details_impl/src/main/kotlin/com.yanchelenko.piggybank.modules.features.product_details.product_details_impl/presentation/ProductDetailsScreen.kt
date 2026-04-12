@@ -153,8 +153,6 @@ private fun ProductDetailsContent(
     val deleteText = stringResource(R.string.action_delete)
 
     val weightValue = stringResource(R.string.format_grams, state.weight)
-    val priceValue = stringResource(R.string.format_price_rub, state.price)
-    val pricePerKgValue = stringResource(R.string.format_price_rub, state.pricePerKg)
 
     Column(
         modifier = modifier.padding(all = PaddingMedium)
@@ -163,8 +161,8 @@ private fun ProductDetailsContent(
             InfoRow(label = barcodeLabel, value = state.barcode)
             InfoRow(label = nameLabel, value = state.productName)
             InfoRow(label = weightLabel, value = weightValue)
-            InfoRow(label = priceLabel, value = priceValue)
-            InfoRow(label = pricePerKgLabel, value = pricePerKgValue)
+            InfoRow(label = priceLabel, value = state.formattedPrice)
+            InfoRow(label = pricePerKgLabel, value = state.formattedPricePerKg)
         }
 
         Spacer(modifier = Modifier.height(height = SpacerHeight))

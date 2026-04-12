@@ -4,4 +4,5 @@
     <string name="settings_theme_dark">Темная</string>
     <string name="settings_theme_title">Тема</string>
     <string name="settings_language_title">Язык</string>
+    <string name="settings_currency_title">Валюта</string>
 </resources>

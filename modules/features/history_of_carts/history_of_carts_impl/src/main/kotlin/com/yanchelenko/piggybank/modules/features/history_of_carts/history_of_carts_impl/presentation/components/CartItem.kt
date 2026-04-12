@@ -68,7 +68,7 @@ internal fun CartItem(
                     )
                     ProductField(
                         label = stringResource(R.string.label_price_per_cart),
-                        value = cart.totalPrice.toString()
+                        value = cart.formattedTotalPrice
                     )
                 }
 

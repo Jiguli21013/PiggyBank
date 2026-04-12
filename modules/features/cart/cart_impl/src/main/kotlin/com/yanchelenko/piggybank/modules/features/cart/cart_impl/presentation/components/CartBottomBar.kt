@@ -53,7 +53,7 @@ fun CartBottomBar(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = stringResource(R.string.cart_total_price_format, state.totalPrice),
+                text = state.formattedTotalPrice,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )

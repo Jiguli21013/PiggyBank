@@ -80,7 +80,7 @@ fun AppScaffold(
                 )
                 FpsOverlay(
                     modifier = Modifier
-                        .align(alignment = Alignment.BottomEnd)
+                        .align(alignment = Alignment.CenterEnd)
                         .matchParentSize()
                         .padding(all = PaddingMedium)
                 )

@@ -14,6 +14,7 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductOfCartUiMod
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteProductFromCartUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetActiveCartTotalsUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.domain.CloseCartUseCaseImpl
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.domain.GetPagedProductsOfCartUseCaseImpl
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.mappers.toCartScreenState
@@ -23,7 +24,7 @@ import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.st
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.state.CartScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +32,7 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val getPagedProductsOfCartUseCase: GetPagedProductsOfCartUseCaseImpl,
     private val getActiveCartTotalsUseCase: GetActiveCartTotalsUseCase,
+    private val observeCurrencyUseCase: ObserveCurrencyUseCase,
     private val closeCartUseCase: CloseCartUseCaseImpl,
     private val deleteProductOfCartUseCase: DeleteProductFromCartUseCase,
     private val logger: Logger
@@ -46,25 +48,31 @@ class CartViewModel @Inject constructor(
      */
     private fun observeActiveCartTotals() {
         viewModelScope.launch {
-            getActiveCartTotalsUseCase()
-                .map { it.toCartScreenState() }
-                .collectLatest { cartScreenState ->
-                    logger.d(LOG_TAG, "Active cart totals updated: $cartScreenState")
-                    setState {
-                        when (this) {
-                            is CommonUiState.Success -> CommonUiState.Success(cartScreenState)
-                            else -> CommonUiState.Success(cartScreenState)
-                        }
+            combine(
+                getActiveCartTotalsUseCase(),
+                observeCurrencyUseCase(),
+            ) { totals, currency ->
+                totals.toCartScreenState(currency = currency)
+            }.collectLatest { cartScreenState ->
+                logger.d(LOG_TAG, "Active cart totals updated: $cartScreenState")
+                setState {
+                    when (this) {
+                        is CommonUiState.Success -> CommonUiState.Success(cartScreenState)
+                        else -> CommonUiState.Success(cartScreenState)
                     }
                 }
+            }
         }
     }
 
     fun pagedItems(): Flow<PagingData<ProductOfCartUiModel>> {
         logger.d(LOG_TAG, "invoke() called — starting to collect paged products")
-        return getPagedProductsOfCartUseCase()
-            .map { it.toUiPagingData() }
-            .cachedIn(scope = viewModelScope)
+        return combine(
+            getPagedProductsOfCartUseCase(),
+            observeCurrencyUseCase(),
+        ) { pagingData, currency ->
+            pagingData.toUiPagingData(currency = currency)
+        }.cachedIn(scope = viewModelScope)
     }
 
     fun onLoadStateChanged(loadState: CombinedLoadStates, itemCount: Int) {

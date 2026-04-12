@@ -18,9 +18,10 @@ import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteScannedProductUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,16 +29,22 @@ import javax.inject.Inject
 class HistoryOfScansViewModel @Inject constructor(
     private val getPagedProductsUseCase: GetPagedScannedProductsUseCaseImpl,
     private val deleteScannedProductUseCase: DeleteScannedProductUseCase,
+    private val observeCurrencyUseCase: ObserveCurrencyUseCase,
     private val logger: Logger
 ) : BaseViewModel<HistoryOfScansEvent, CommonUiState<Unit>, HistoryOfScansEffect>(
     initialState = CommonUiState.Initializing
 ) {
 
     fun pagedItems(): Flow<PagingData<ListItem>> {
-        logger.d(LOG_TAG,"invoke() called — starting to collect paged products")
-        return getPagedProductsUseCase()
-            .map { it.toUiPagingData().withDateHeaders() }
-            .cachedIn(scope = viewModelScope)
+        logger.d(LOG_TAG, "invoke() called — starting to collect paged products")
+        return combine(
+            getPagedProductsUseCase(),
+            observeCurrencyUseCase(),
+        ) { pagingData, currency ->
+            pagingData
+                .toUiPagingData(currency = currency)
+                .withDateHeaders()
+        }.cachedIn(scope = viewModelScope)
     }
 
 

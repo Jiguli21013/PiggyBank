@@ -38,7 +38,7 @@ fun FpsOverlay(modifier: Modifier = Modifier) {
 
     Text(
         text = "$value fps",
-        style = MaterialTheme.typography.labelLarge,
+        style = MaterialTheme.typography.labelMedium,
         fontWeight = FontWeight.Bold,
         modifier = modifier
     )

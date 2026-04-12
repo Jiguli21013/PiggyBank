@@ -25,6 +25,7 @@ class ListItemPreviewProvider : PreviewParameterProvider<List<ListItem>> {
                     status = CartStatusUi.CLOSED,
                     createdAt = StableInstant.DISTANT_PAST,
                     closedAt = StableInstant.DISTANT_FUTURE,
+                    formattedTotalPrice = "10.64 $",
                     closedAtText = "18 июня"
                 )
             ),
@@ -37,6 +38,7 @@ class ListItemPreviewProvider : PreviewParameterProvider<List<ListItem>> {
                     status = CartStatusUi.CLOSED,
                     createdAt = StableInstant.DISTANT_PAST,
                     closedAt = StableInstant.DISTANT_FUTURE,
+                    formattedTotalPrice = "12.75 $",
                     closedAtText = "5 июня"
                 )
             ),
@@ -50,6 +52,7 @@ class ListItemPreviewProvider : PreviewParameterProvider<List<ListItem>> {
                     status = CartStatusUi.CLOSED,
                     createdAt = StableInstant.DISTANT_PAST,
                     closedAt = StableInstant.DISTANT_FUTURE,
+                    formattedTotalPrice = "16.50 $",
                     closedAtText = "4 июля"
                 )
             )

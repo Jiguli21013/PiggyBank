@@ -50,11 +50,26 @@ internal fun ProductOfCartItem(
 
             ProductField(label = stringResource(BaseR.string.label_product_name), value = productOfCart.name)
             ProductField(label = stringResource(BaseR.string.label_barcode), value = productOfCart.barcode)
-            ProductField(label = stringResource(BaseR.string.label_weight), value = "${productOfCart.weightText}")
+            ProductField(
+                label = stringResource(BaseR.string.label_weight),
+                value = stringResource(
+                    BaseR.string.weight_value,
+                    productOfCart.weightText ?: "—",
+                    stringResource(BaseR.string.unit_gram)
+                )
+            )
 
             ProductField(
                 label = stringResource(R.string.label_price_per_current_weight),
-                value = "${productOfCart.unitPrice} for ${productOfCart.weightText} grams" //todo mapper
+                value = stringResource(
+                    R.string.price_per_current_weight,
+                    productOfCart.unitPrice,
+                    stringResource(
+                        BaseR.string.weight_value,
+                        productOfCart.weightText ?: "—",
+                        stringResource(BaseR.string.unit_gram)
+                    )
+                )
             )
             ProductField(label = stringResource(R.string.label_price_per_kg), value = "${productOfCart.formattedPricePerKg}")
             ProductField(

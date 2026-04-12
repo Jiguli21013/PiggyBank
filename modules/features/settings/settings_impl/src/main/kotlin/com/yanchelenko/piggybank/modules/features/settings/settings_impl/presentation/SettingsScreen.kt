@@ -11,6 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
@@ -25,10 +27,12 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.core.core_api.models.settings.AppLanguage
 import com.yanchelenko.piggybank.modules.core.core_api.models.settings.AppTheme
+import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
 import com.yanchelenko.piggybank.modules.features.settings.settings_impl.R
 import com.yanchelenko.piggybank.modules.features.settings.settings_impl.presentation.components.SettingsExpandableButton
 import com.yanchelenko.piggybank.modules.features.settings.settings_impl.presentation.components.ThemeSettingsGroup
 import com.yanchelenko.piggybank.modules.features.settings.settings_impl.presentation.components.LanguageSettingsGroup
+import com.yanchelenko.piggybank.modules.features.settings.settings_impl.presentation.components.CurrencySettingsGroup
 import com.yanchelenko.piggybank.modules.features.settings.settings_impl.presentation.state.SettingsEffect
 import com.yanchelenko.piggybank.modules.features.settings.settings_impl.presentation.state.SettingsEvent
 import com.yanchelenko.piggybank.modules.features.settings.settings_impl.presentation.state.SettingsState
@@ -92,10 +96,12 @@ private fun SettingsContent(
 ) {
     var isThemeExpanded by rememberSaveable { mutableStateOf(false) }
     var isLanguageExpanded by rememberSaveable { mutableStateOf(false) }
+    var isCurrencyExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(all = PaddingMedium),
         verticalArrangement = Arrangement.spacedBy(PaddingLarge),
     ) {
@@ -128,6 +134,21 @@ private fun SettingsContent(
                 },
             )
         }
+
+        SettingsExpandableButton(
+            title = stringResource(R.string.settings_currency_title),
+            isExpanded = isCurrencyExpanded,
+            onClick = { isCurrencyExpanded = !isCurrencyExpanded },
+        )
+
+        AnimatedVisibility(visible = isCurrencyExpanded) {
+            CurrencySettingsGroup(
+                selectedCurrency = state.selectedCurrency,
+                onCurrencySelected = { currency ->
+                    onEvent(SettingsEvent.OnCurrencySelected(currency))
+                },
+            )
+        }
     }
 }
 
@@ -139,6 +160,7 @@ private fun SettingsContentPreview() {
             state = SettingsState(
                 selectedTheme = AppTheme.DARK,
                 selectedLanguage = AppLanguage.ENGLISH,
+                selectedCurrency = AppCurrency.EUR,
             ),
             onEvent = {},
         )

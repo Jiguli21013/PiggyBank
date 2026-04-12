@@ -16,6 +16,8 @@ data class ScannedProductUiModel(
 
     val price: Double = 0.0,
     val pricePerKg: Double = 0.0,
+    val formattedPrice: String = "",
+    val formattedPricePerKg: String = "",
 
     @Contextual
     val addedAt: StableInstant = DISTANT_PAST

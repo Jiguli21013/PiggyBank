@@ -16,15 +16,18 @@ import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteScannedProdu
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductByIdUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainException
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val observeCurrencyUseCase: ObserveCurrencyUseCase,
     private val getProductByProductIdUseCase: GetProductByIdUseCase,
     private val deleteScannedProductUseCase: DeleteScannedProductUseCase,
     private val logger: Logger,
@@ -92,7 +95,12 @@ class ProductDetailsViewModel @Inject constructor(
             when (val result = getProductByProductIdUseCase(productId)) {
                 is RequestResult.Success -> {
                     logger.d(LOG_TAG, "ScannedProduct loaded: ${result.data}")
-                    onEvent(ProductDetailsEvent.ProductFoundInDB(product = result.data.toUi()))
+                    val currentCurrency = observeCurrencyUseCase().first()
+                    onEvent(
+                        ProductDetailsEvent.ProductFoundInDB(
+                            product = result.data.toUi(currency = currentCurrency)
+                        )
+                    )
                 }
 
                 is RequestResult.Error -> {

@@ -1,7 +1,6 @@
 package com.yanchelenko.piggybank
 
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.isSystemInDarkTheme
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.dispatcher.NavigationDispatcher
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -36,14 +35,8 @@ fun PiggyBankApp(
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
-    val isDarkTheme = when (appTheme) {
-        AppTheme.SYSTEM -> isSystemInDarkTheme()
-        AppTheme.DARK -> true
-        AppTheme.LIGHT -> false
-    }
-
     PiggyBankTheme(
-        useDarkTheme = isDarkTheme,
+        appTheme = appTheme,
     ) {
         val coroutineScope = rememberCoroutineScope()
 

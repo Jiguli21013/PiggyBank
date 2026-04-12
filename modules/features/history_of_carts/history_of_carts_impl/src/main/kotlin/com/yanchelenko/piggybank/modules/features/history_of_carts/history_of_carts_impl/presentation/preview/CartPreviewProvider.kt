@@ -15,6 +15,7 @@ class CartPreviewProvider : PreviewParameterProvider<CartUiModel> {
             status = CartStatusUi.CLOSED,
             createdAt = StableInstant.DISTANT_PAST,
             closedAt = StableInstant.DISTANT_FUTURE,
+            formattedTotalPrice = " 10.5 $",
             closedAtText = "18 июня"
         )
     )

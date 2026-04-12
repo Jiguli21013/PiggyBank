@@ -8,6 +8,7 @@ data class CartUiModel(
 
     val totalItems: Int,
     val totalPrice: Double,
+    val formattedTotalPrice: String,
 
     val status: CartStatusUi,
     val createdAt: StableInstant,

@@ -12,6 +12,12 @@
     <string name="settings_description">Settings</string>
     <string name="btn_navigation_back">Back button</string>
 
+    <string name="unit_gram">g</string>
+    <string name="weight_value">%1$s %2$s</string>
+
+    <string name="unit_kg">kg</string>
+    <string name="price_per_kg">%1$s / %2$s</string>
+
     <string name="label_scanned_product_id">ScannedProductID</string>
     <string name="label_cart_product_id">CartProductID</string>
 </resources>

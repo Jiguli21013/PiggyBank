@@ -22,7 +22,6 @@ import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEffect
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEvent
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.R
-import com.yanchelenko.piggybank.modules.base.infrastructure.extensions.formatIfNonZero
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.fields.OutlinedInputField
@@ -40,6 +39,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductState
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.trackMap
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
 
 const val MIN_QUANTITY = 1
 const val MAX_QUANTITY = 99
@@ -117,6 +117,12 @@ fun InsertProductContent(
     val priceLabel = stringResource(R.string.label_price_by_weight, state.scannedProduct.weight)
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
 
+    val pricePerKgValue = stringResource(
+        BaseR.string.price_per_kg,
+        state.scannedProduct.formattedPricePerKg,
+        stringResource(BaseR.string.unit_kg)
+    )
+
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
     val savedText = stringResource(R.string.action_saved)
@@ -153,7 +159,7 @@ fun InsertProductContent(
 
             ReadOnlyField(
                 label = pricePerKgLabel,
-                value = state.scannedProduct.pricePerKg.formatIfNonZero()
+                value = pricePerKgValue
             )
         }
 

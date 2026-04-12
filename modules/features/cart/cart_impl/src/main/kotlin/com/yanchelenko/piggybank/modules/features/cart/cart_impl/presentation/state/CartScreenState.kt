@@ -2,8 +2,11 @@ package com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.s
 
 data class CartScreenState(
     val itemsCount: Int = 0,
+
     val totalWeightGrams: Int = 0,
+
     val totalPrice: Double = 0.0,
+    val formattedTotalPrice: String = "",
 
     val isCartClosed: Boolean = false
 )
