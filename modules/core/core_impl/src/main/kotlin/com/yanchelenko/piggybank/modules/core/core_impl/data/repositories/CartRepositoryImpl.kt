@@ -59,6 +59,11 @@ class CartRepositoryImpl @Inject constructor(
 
         emitAll(flow = pagingFlow)
     }
+
+    override suspend fun isProductInActiveCart(productId: Long): Boolean {
+        return productOfCartDao.isProductInActiveCart(productId)
+    }
+
     // Room сам выполняет запрос не на Main thread
     override fun observeActiveCartTotals(): Flow<CartTotals> =
         productOfCartDao.observeTotalsForActiveCart()

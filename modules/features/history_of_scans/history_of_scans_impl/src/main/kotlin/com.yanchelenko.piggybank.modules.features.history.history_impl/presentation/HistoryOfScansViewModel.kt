@@ -5,7 +5,6 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.yanchelenko.piggybank.modules.features.history.history_impl.domain.usecase.GetPagedScannedProductsUseCaseImpl
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.models.ListItem
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.mappers.toUiPagingData
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.mappers.withDateHeaders
@@ -19,6 +18,7 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiMo
 import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteScannedProductUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryOfScansViewModel @Inject constructor(
-    private val getPagedProductsUseCase: GetPagedScannedProductsUseCaseImpl,
+    private val productRepository: ProductRepository,
     private val deleteScannedProductUseCase: DeleteScannedProductUseCase,
     private val observeCurrencyUseCase: ObserveCurrencyUseCase,
     private val logger: Logger
@@ -38,7 +38,7 @@ class HistoryOfScansViewModel @Inject constructor(
     fun pagedItems(): Flow<PagingData<ListItem>> {
         logger.d(LOG_TAG, "invoke() called — starting to collect paged products")
         return combine(
-            getPagedProductsUseCase(),
+            productRepository.getPagedProductsWithCurrentVersion(),
             observeCurrencyUseCase(),
         ) { pagingData, currency ->
             pagingData
@@ -104,7 +104,14 @@ class HistoryOfScansViewModel @Inject constructor(
 
             is RequestResult.Error -> {
                 logger.e(LOG_TAG, "Error deleting product: ${result.error?.message}")
-                sendEffect { HistoryOfScansEffect.ShowError("Ошибка при удалении") } //todo
+                //todo message to res
+                val message = if (result.error?.message == PRODUCT_IN_ACTIVE_CART_ERROR_MESSAGE) {
+                    "Нельзя удалить товар, пока он находится в корзине"
+                } else {
+                    "Ошибка при удалении"
+                }
+
+                sendEffect { HistoryOfScansEffect.ShowError(message) } //todo move to resources
             }
 
             is RequestResult.InProgress -> {
@@ -114,6 +121,7 @@ class HistoryOfScansViewModel @Inject constructor(
     }
 
     private companion object {
+        const val PRODUCT_IN_ACTIVE_CART_ERROR_MESSAGE = "Scanned product is in active cart"
         const val NO_ITEMS_COUNT = 0
         const val LOG_TAG = "HistoryOfScansVM"
     }

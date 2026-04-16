@@ -19,6 +19,8 @@ interface CartRepository {
     /** Live totals of the active cart. */
     fun observeActiveCartTotals(): Flow<CartTotals>
 
+    suspend fun isProductInActiveCart(productId: Long): Boolean
+
     /**
      * Получение продукта из корзины по ID.
      */

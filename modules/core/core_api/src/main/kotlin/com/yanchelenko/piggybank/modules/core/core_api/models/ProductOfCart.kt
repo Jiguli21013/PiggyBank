@@ -11,7 +11,7 @@ package com.yanchelenko.piggybank.modules.core.core_api.models
  */
  data class ProductOfCart(
      val cartItemId: Long,
-     val productId: Long, // link to scanned product
+     val productId: Long?, // nullable: linked product may be deleted later
      val name: String,
      val barcode: String,
      val unitPrice: Double,

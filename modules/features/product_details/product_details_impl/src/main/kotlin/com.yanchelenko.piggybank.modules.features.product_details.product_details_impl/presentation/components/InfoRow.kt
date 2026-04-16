@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.features.product_details.presentation.components
+package com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

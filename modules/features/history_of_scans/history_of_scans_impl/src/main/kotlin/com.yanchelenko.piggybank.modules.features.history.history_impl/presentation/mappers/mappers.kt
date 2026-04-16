@@ -3,19 +3,32 @@ package com.yanchelenko.piggybank.modules.features.history.history_impl.presenta
 import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toUi
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
+import com.yanchelenko.piggybank.modules.base.ui_model.models.StableInstant
 import com.yanchelenko.piggybank.modules.base.ui_model.models.dayKey
 import com.yanchelenko.piggybank.modules.base.ui_model.models.dayKeyToDate
 import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
-import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
+import com.yanchelenko.piggybank.modules.core.core_api.models.ProductWithCurrentVersion
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.models.ListItem
 import kotlinx.datetime.TimeZone
 
-fun PagingData<ScannedProduct>.toUiPagingData(
+fun PagingData<ProductWithCurrentVersion>.toUiPagingData(
     currency: AppCurrency,
-): PagingData<ScannedProductUiModel> = this.map { scannedProduct ->
-    scannedProduct.toUi(currency = currency)
+): PagingData<ScannedProductUiModel> = this.map { item ->
+    val product = item.product
+    val currentVersion = item.currentVersion
+
+    ScannedProductUiModel(
+        productId = product.id,
+        barcode = product.barcode,
+        productName = product.productName,
+        weight = currentVersion.weightGrams,
+        price = currentVersion.price,
+        pricePerKg = currentVersion.pricePerKg,
+        formattedPrice = currentVersion.price.toCurrencyText(currency = currency),
+        formattedPricePerKg = currentVersion.pricePerKg.toCurrencyText(currency = currency),
+        addedAt = currentVersion.createdAt.toStable(),
+    )
 }
 
 fun PagingData<ScannedProductUiModel>.withDateHeaders(
@@ -37,4 +50,12 @@ fun PagingData<ScannedProductUiModel>.withDateHeaders(
             else -> null
         }
     }
+}
+//todo вынести
+private fun Double.toCurrencyText(currency: AppCurrency): String {
+    return "$this ${currency.symbol}"
+}
+
+private fun kotlinx.datetime.Instant.toStable(): StableInstant {
+    return StableInstant(epochMillis = toEpochMilliseconds())
 }

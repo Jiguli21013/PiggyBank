@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE // если корзину удалили — её товары тоже
         ),
         ForeignKey(
-            entity = ScannedProductDBO::class,
+            entity = ProductDBO::class,
             parentColumns = ["id"],
             childColumns = ["productId"],
             onDelete = ForeignKey.SET_NULL // если товар удалили, строка в корзине остаётся
@@ -31,7 +31,7 @@ import androidx.room.PrimaryKey
 data class CartItemDBO(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo("cartId") val cartId: Long,
-    @ColumnInfo("productId") val productId: Long,
+    @ColumnInfo("productId") val productId: Long?, // nullable because FK uses SET_NULL
     @ColumnInfo("barcode") val barcode: String,
     @ColumnInfo("name") val name: String,
     @ColumnInfo("unitPrice") val unitPrice: Double,

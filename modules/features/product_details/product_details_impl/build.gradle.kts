@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":modules:core:core_api"))
     implementation(project(":modules:base:ui_model"))
     implementation(project(":modules:base:ui_kit"))
+    implementation(project(":modules:base:resources"))
     implementation(project(":modules:base:infrastructure"))
     implementation(project(":modules:features:product_details:product_details_api"))
 

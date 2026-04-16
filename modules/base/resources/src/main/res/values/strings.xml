@@ -20,4 +20,9 @@
 
     <string name="label_scanned_product_id">ScannedProductID</string>
     <string name="label_cart_product_id">CartProductID</string>
+
+    <string name="action_save_new_values">Сохранить новые значения</string>
+
+    <string name="label_previous_price">Предыдущая цена</string>
+    <string name="label_previous_weight">Предыдущий вес</string>
 </resources>

@@ -10,6 +10,15 @@
     <string name="action_edit">Изменить</string>
     <string name="action_delete">Удалить</string>
 
+    <!-- Change history -->
+    <string name="title_change_history">История изменений</string>
+    <string name="label_previous_price">Предыдущая цена</string>
+    <string name="label_current_price">Текущая цена</string>
+    <string name="label_price_difference">Разница по цене</string>
+    <string name="label_previous_weight">Предыдущий вес</string>
+    <string name="label_current_weight">Текущий вес</string>
+    <string name="label_weight_difference">Разница по весу</string>
+
     <!-- Format strings -->
     <string name="format_grams">%1$d г</string>
 

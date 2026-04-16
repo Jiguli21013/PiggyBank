@@ -34,14 +34,15 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.fields.ReadOnlyF
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.buttons.SecondaryButton
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.fields.PriceInputField
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.fields.WeightInputField
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.ChangedValueHint
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
-import com.yanchelenko.piggybank.modules.base.ui_model.mappers.trackMap
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacerHeight
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLarge
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
 
 @Composable
 fun EditProductScreen(
@@ -113,13 +114,22 @@ fun EditProductContent(
     state: EditProductState,
     onEvent: (EditProductEvent) -> Unit
 ) {
-    RebuggerIfDebug(trackMap = state.scannedProduct.trackMap(), composableName = "EditProductContent")
+    RebuggerIfDebug(trackMap = state.trackMap(), composableName = "EditProductContent")
 
     val productNameLabel = stringResource(R.string.label_product_name)
     val priceLabel = stringResource(R.string.label_price_by_weight, state.scannedProduct.weight)
     val pricePerKgLabel = stringResource(R.string.label_price_per_kg)
     val backText = stringResource(R.string.action_back)
     val saveText = stringResource(R.string.action_save)
+
+    val previousPriceLabel = stringResource(BaseR.string.label_previous_price)
+    val previousWeightLabel = stringResource(BaseR.string.label_previous_weight)
+
+    val previousPriceValue =
+        state.previousPrice?.let { "$it" } ?: "—"
+
+    val previousWeightValue =
+        state.previousWeight?.let { "$it г" } ?: "—" //todo г
 
     Column(
         modifier = modifier
@@ -144,6 +154,14 @@ fun EditProductContent(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            if (state.hasWeightChanged) {
+                ChangedValueHint(
+                    label = previousWeightLabel,
+                    value = previousWeightValue,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
             PriceInputField(
                 value = state.priceInput,
                 onTextChange = { onEvent(EditProductEvent.PriceInputChanged(it)) },
@@ -151,6 +169,14 @@ fun EditProductContent(
                 label = priceLabel,
                 modifier = Modifier.fillMaxWidth()
             )
+
+            if (state.hasPriceChanged) {
+                ChangedValueHint(
+                    label = previousPriceLabel,
+                    value = previousPriceValue,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
             ReadOnlyField(
                 label = pricePerKgLabel,

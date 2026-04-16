@@ -10,7 +10,7 @@ package com.yanchelenko.piggybank.modules.base.ui_model.models
  */
 data class ProductOfCartUiModel(
     val cartProductId: Long, // id from cart item
-    val scannedProductId: Long, // id from scanned product
+    val scannedProductId: Long?, // nullable: linked product may be deleted later
     val name: String,
     val barcode: String,
     val formattedPrice: String,

@@ -6,6 +6,17 @@ import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiMo
 @Immutable
 data class EditProductState(
     val scannedProduct: ScannedProductUiModel,
-
+    val previousPrice: Double? = null,
+    val previousWeight: Int? = null,
+    val isInScannedDB: Boolean = true,
     val priceInput: String,
-)
+) {
+    val hasPriceChanged: Boolean
+        get() = previousPrice != null && previousPrice != scannedProduct.price
+
+    val hasWeightChanged: Boolean
+        get() = previousWeight != null && previousWeight != scannedProduct.weight
+
+    val hasAnyTrackedChanges: Boolean
+        get() = hasPriceChanged || hasWeightChanged
+}

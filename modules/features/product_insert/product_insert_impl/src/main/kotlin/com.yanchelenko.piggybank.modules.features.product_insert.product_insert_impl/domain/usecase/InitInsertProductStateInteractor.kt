@@ -3,8 +3,9 @@ package com.yanchelenko.piggybank.modules.features.product_insert.product_insert
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.combineResults
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
+import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductWithCurrentVersionByBarcodeUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.models.GetProductWithCurrentVersionByBarcodeResult
 import com.yanchelenko.piggybank.modules.core.core_api.models.ProductInCart
-import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -18,14 +19,18 @@ import javax.inject.Inject
  * Returns a single consolidated domain DTO [ProductInitResultDomain].
  */
 class InitInsertProductStateInteractor @Inject constructor(
-    private val getProductByBarcodeUseCase: GetProductByBarcodeUseCase,
+    private val getProductWithCurrentVersionByBarcodeUseCase: GetProductWithCurrentVersionByBarcodeUseCase,
     private val getProductInActiveCartUseCase: GetProductInActiveCartUseCaseImpl,
     private val logger: Logger,
 ) {
 
     suspend operator fun invoke(barcode: String): RequestResult<ProductInitResultDomain> = coroutineScope {
-        val productDeferred = async { getProductByBarcodeUseCase(barcode = barcode) } // RequestResult<ScannedProduct>
-        val quantityDeferred = async { getProductInActiveCartUseCase(barcode = barcode) } // RequestResult<ProductInCart>
+        val productDeferred = async {
+            getProductWithCurrentVersionByBarcodeUseCase(barcode = barcode)
+        }
+        val quantityDeferred = async {
+            getProductInActiveCartUseCase(barcode = barcode)
+        }
 
         val productResult = productDeferred.await()
         val inCartResult = quantityDeferred.await()
@@ -35,15 +40,20 @@ class InitInsertProductStateInteractor @Inject constructor(
 
         combineResults(
             first = productResult,
-            second = inCartResult
-        ) { product: ScannedProduct?, inCart: ProductInCart? ->
-            logger.d(LOG_TAG, "Combining -> product=${product?.productName}, price=${product?.price}, inCartQty=${inCart?.quantity}, inCartId=${inCart?.itemId}")
+            second = inCartResult,
+        ) { combinedProductResult: GetProductWithCurrentVersionByBarcodeResult?, inCart: ProductInCart? ->
+            logger.d(
+                LOG_TAG,
+                "Combining -> productResult=$combinedProductResult, inCartQty=${inCart?.quantity}, inCartId=${inCart?.itemId}"
+            )
+            val resolvedProductResult = combinedProductResult
+                ?: GetProductWithCurrentVersionByBarcodeResult.NotFound
             ProductInitResultDomain(
                 barcode = barcode,
-                product = product,
+                productResult = resolvedProductResult,
                 quantityInCart = inCart?.quantity ?: 0,
                 cartItemId = inCart?.itemId,
-                isInCart = (inCart?.quantity ?: 0) > 0
+                isInCart = (inCart?.quantity ?: 0) > 0,
             )
         }
     }
@@ -55,15 +65,16 @@ class InitInsertProductStateInteractor @Inject constructor(
 
 /**
  * Pure domain DTO for initializing the InsertProduct flow.
- * - [product] may be null if it wasn't found; the ViewModel maps this to a UI placeholder.
+ * - [productResult] explicitly describes whether the product was found,
+ *   not found, or found without a current version.
  * - [quantityInCart] is 0 when the product is not present in the active cart.
- * - [cartItemId] id of the product is present in the active cart.
+ * - [cartItemId] id of the product if it is present in the active cart.
  * - [isInCart] indicates whether the product is present in the active cart.
  */
 data class ProductInitResultDomain(
     val barcode: String,
-    val product: ScannedProduct?,
+    val productResult: GetProductWithCurrentVersionByBarcodeResult,
     val quantityInCart: Int,
     val cartItemId: Long?,
-    val isInCart: Boolean
+    val isInCart: Boolean,
 )

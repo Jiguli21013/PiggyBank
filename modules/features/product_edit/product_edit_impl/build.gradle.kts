@@ -48,6 +48,8 @@ dependencies {
     implementation(project(":modules:base:ui_kit"))
     implementation(project(":modules:base:infrastructure"))
     implementation(project(":modules:base:ui_model"))
+    implementation(project(":modules:base:resources"))
+
     compileOnly(project(":modules:dev_tools"))
 
 

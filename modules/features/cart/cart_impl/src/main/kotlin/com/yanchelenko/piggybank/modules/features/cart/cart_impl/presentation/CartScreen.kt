@@ -85,7 +85,7 @@ internal fun CartMainScreen(
             .semantics { contentDescription = "cart_root" },
         onEffect = { effect ->
             when (effect) {
-                is CartEffect.NavigateToProductOfCartDetails -> onNavigateToProductOfCartDetails(effect.productOfCart.scannedProductId)
+                is CartEffect.NavigateToProductOfCartDetails -> onNavigateToProductOfCartDetails(effect.productOfCart.scannedProductId ?: return@ScreenWithEffect)
                 is CartEffect.NavigateToDialogDeleteProductOfCart -> { dialogProduct = effect.productOfCart }
                 is CartEffect.NavigateToHistoryOfCarts -> onNavigateToHistoryOfCarts.invoke()
                 is CartEffect.ShowMessage -> Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()

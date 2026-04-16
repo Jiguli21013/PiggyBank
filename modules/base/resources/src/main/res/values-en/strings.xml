@@ -20,4 +20,9 @@
 
     <string name="label_scanned_product_id">ScannedProductID</string>
     <string name="label_cart_product_id">CartProductID</string>
+
+    <string name="action_save_new_values">Save new values</string>
+
+    <string name="label_previous_price">Previous price</string>
+    <string name="label_previous_weight">Previous weight</string>
 </resources>

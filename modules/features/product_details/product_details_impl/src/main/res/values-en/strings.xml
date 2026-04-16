@@ -10,6 +10,15 @@
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
 
+    <!-- Change history -->
+    <string name="title_change_history">Change history</string>
+    <string name="label_previous_price">Previous price</string>
+    <string name="label_current_price">Current price</string>
+    <string name="label_price_difference">Difference</string>
+    <string name="label_previous_weight">Previous weight</string>
+    <string name="label_current_weight">Current weight</string>
+    <string name="label_weight_difference">Weight difference</string>
+
     <!-- Format strings -->
     <string name="format_grams">%1$d g</string>
     <string name="format_price_rub">%1$.2f ₽</string>

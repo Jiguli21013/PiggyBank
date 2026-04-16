@@ -5,6 +5,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.yanchelenko.piggybank.modules.core.database.AppDatabase
 import com.yanchelenko.piggybank.modules.core.database.dao.CartDao
+import com.yanchelenko.piggybank.modules.core.database.dao.ProductDao
+import com.yanchelenko.piggybank.modules.core.database.dao.ProductVersionDao
 import com.yanchelenko.piggybank.modules.core.database.dao.ProductOfCartDao
 import com.yanchelenko.piggybank.modules.core.database.dao.ScannedProductDao
 import dagger.Module
@@ -56,6 +58,14 @@ object DatabaseModule {
     /** DAO for the products table */
     @Provides
     fun provideProductDao(db: AppDatabase): ScannedProductDao = db.productsDao()
+
+    /** DAO for the versioned products table */
+    @Provides
+    fun provideVersionedProductDao(db: AppDatabase): ProductDao = db.productDao()
+
+    /** DAO for the product versions table */
+    @Provides
+    fun provideProductVersionDao(db: AppDatabase): ProductVersionDao = db.productVersionDao()
 
     /** DAO for the cart table */
     @Provides

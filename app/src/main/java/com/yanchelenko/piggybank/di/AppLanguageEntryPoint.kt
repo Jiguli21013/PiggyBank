@@ -12,5 +12,5 @@ import dagger.hilt.components.SingletonComponent
 interface AppLanguageEntryPoint {
     fun observeAppLanguageUseCase(): ObserveAppLanguageUseCase
     fun appLanguageManager(): AppLanguageManager
-    fun appDispatchers(): AppDispatchers //todo лишнее
+    fun appDispatchers(): AppDispatchers
 }

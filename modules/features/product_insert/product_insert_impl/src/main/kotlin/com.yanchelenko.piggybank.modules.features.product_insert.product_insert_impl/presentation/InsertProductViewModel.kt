@@ -2,7 +2,9 @@ package com.yanchelenko.piggybank.modules.features.product_insert.product_insert
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.domain.usecase.InsertNewProductUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.domain.SaveProductVersionIfChangedResult
+import com.yanchelenko.piggybank.modules.core.core_api.domain.SaveProductVersionIfChangedUseCase
+import kotlinx.datetime.Clock
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEffect
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEvent
 import com.yanchelenko.piggybank.modules.core.core_api.domain.mapper.toUserMessage
@@ -16,11 +18,11 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.getData
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.updateDataSuccess
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toCartDomain
-import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toDomain
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.domain.DeleteProductFromCartUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.models.GetProductWithCurrentVersionByBarcodeResult
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.domain.usecase.AddProductToCartUseCase
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.domain.usecase.InitInsertProductStateInteractor
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductState
@@ -32,7 +34,7 @@ import javax.inject.Inject
 class InsertProductScreenViewModel @Inject constructor(
     private val initInsertProductStateInteractor: InitInsertProductStateInteractor,
     private val getPricePerKgUseCase: GetPricePerKgUseCase,
-    private val insertNewProductUseCase: InsertNewProductUseCase,
+    private val saveProductVersionIfChangedUseCase: SaveProductVersionIfChangedUseCase,
     private val addProductToCartUseCase: AddProductToCartUseCase,
     private val deleteProductFromCartUseCase: DeleteProductFromCartUseCase,
     private val observeCurrencyUseCase: ObserveCurrencyUseCase,
@@ -201,15 +203,26 @@ class InsertProductScreenViewModel @Inject constructor(
             when (val result = initInsertProductStateInteractor(barcode = barcode)) {
                 is RequestResult.Success -> {
                     logger.d(LOG_TAG, "ScannedProduct loaded successfully: ${result.data}")
-                    if (result.data.product != null) {
-                        val currentCurrency = observeCurrencyUseCase().first()
-                        onEvent(
-                            InsertProductEvent.ProductFoundInScannedDB(
-                                state = result.data.toUiState(currency = currentCurrency)
+                    when (result.data.productResult) {
+                        is GetProductWithCurrentVersionByBarcodeResult.Found -> {
+                            val currentCurrency = observeCurrencyUseCase().first()
+                            onEvent(
+                                InsertProductEvent.ProductFoundInScannedDB(
+                                    state = result.data.toUiState(currency = currentCurrency)
+                                )
                             )
-                        )
-                    } else {
-                        onEvent(InsertProductEvent.ProductNotFoundInScannedDB(state = InsertProductState(scannedProduct = ScannedProductUiModel(barcode = barcode))))
+                        }
+
+                        is GetProductWithCurrentVersionByBarcodeResult.NotFound,
+                        is GetProductWithCurrentVersionByBarcodeResult.ProductWithoutCurrentVersion -> {
+                            onEvent(
+                                InsertProductEvent.ProductNotFoundInScannedDB(
+                                    state = InsertProductState(
+                                        scannedProduct = ScannedProductUiModel(barcode = barcode)
+                                    )
+                                )
+                            )
+                        }
                     }
                 }
 
@@ -234,11 +247,36 @@ class InsertProductScreenViewModel @Inject constructor(
         uiState.value.getData { state ->
             logger.d(LOG_TAG, "Start inserting product to DB: ${state.scannedProduct}")
             viewModelScope.launch {
-                when (val result = insertNewProductUseCase(scannedProduct = state.scannedProduct.toDomain())) {
+                when (val result = saveProductVersionIfChangedUseCase(
+                    params = SaveProductVersionIfChangedUseCase.Params(
+                        barcode = state.scannedProduct.barcode,
+                        productName = state.scannedProduct.productName,
+                        weightGrams = state.scannedProduct.weight,
+                        price = state.scannedProduct.price,
+                        pricePerKg = state.scannedProduct.pricePerKg,
+                        changedAt = Clock.System.now(),
+                    )
+                )) {
                     is RequestResult.Success -> {
-                        logger.d(LOG_TAG, "ScannedProduct successfully inserted")
-                        setState { CommonUiState.Success(data = state) }
-                        sendEffect { InsertProductEffect.ShowMessage(message = "Продукт успешно сохранён") } //todo
+                        logger.d(LOG_TAG, "Product version save result: ${result.data}")
+
+                        val productId = result.data.productId()
+                        setState {
+                            CommonUiState.Success(
+                                data = state.copy(
+                                    isInScannedDB = true,
+                                    scannedProduct = state.scannedProduct.copy(productId = productId)
+                                )
+                            )
+                        }
+
+                        val message = when (result.data) {
+                            is SaveProductVersionIfChangedResult.NewProductCreated -> "Продукт успешно сохранён"
+                            is SaveProductVersionIfChangedResult.NewVersionCreated -> "Изменения успешно сохранены"
+                            is SaveProductVersionIfChangedResult.NoChanges -> "Изменений не обнаружено"
+                        }
+
+                        sendEffect { InsertProductEffect.ShowMessage(message = message) } //todo
                         sendEffect { InsertProductEffect.NavigateBackToScanner }
                     }
 
@@ -266,15 +304,24 @@ class InsertProductScreenViewModel @Inject constructor(
             viewModelScope.launch {
                 if (!state.isInScannedDB) {
                     logger.d(LOG_TAG, "Scanned not in DB → saving before cart insert: ${state.scannedProduct}")
-                    when (val save = insertNewProductUseCase(scannedProduct = state.scannedProduct.toDomain())) {
+                    when (val save = saveProductVersionIfChangedUseCase(
+                        params = SaveProductVersionIfChangedUseCase.Params(
+                            barcode = state.scannedProduct.barcode,
+                            productName = state.scannedProduct.productName,
+                            weightGrams = state.scannedProduct.weight,
+                            price = state.scannedProduct.price,
+                            pricePerKg = state.scannedProduct.pricePerKg,
+                            changedAt = Clock.System.now(),
+                        )
+                    )) {
                         is RequestResult.Success -> {
-                            val newId = save.data
-                            logger.d(LOG_TAG, "Scanned saved successfully with id=$newId")
+                            val productId = save.data.productId()
+                            logger.d(LOG_TAG, "Product version save before cart insert succeeded: ${save.data}")
                             setState {
                                 CommonUiState.Success(
                                     data = state.copy(
                                         isInScannedDB = true,
-                                        scannedProduct = state.scannedProduct.copy(productId = newId)
+                                        scannedProduct = state.scannedProduct.copy(productId = productId)
                                     )
                                 )
                             }
@@ -355,6 +402,14 @@ class InsertProductScreenViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun SaveProductVersionIfChangedResult.productId(): Long {
+        return when (this) {
+            is SaveProductVersionIfChangedResult.NewProductCreated -> productId
+            is SaveProductVersionIfChangedResult.NewVersionCreated -> productId
+            is SaveProductVersionIfChangedResult.NoChanges -> productId
         }
     }
 

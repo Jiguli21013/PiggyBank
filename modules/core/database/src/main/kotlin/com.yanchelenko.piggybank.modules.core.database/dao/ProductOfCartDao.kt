@@ -19,6 +19,18 @@ interface ProductOfCartDao {
     @Query("SELECT * FROM cart_items WHERE id = :id LIMIT 1")
     suspend fun getById(id: Long): CartItemDBO?
 
+    @Query(
+        """
+    SELECT EXISTS(
+        SELECT 1
+        FROM cart_items
+        WHERE cartId = (SELECT id FROM carts WHERE status = 'ACTIVE' LIMIT 1)
+          AND productId = :productId
+    )
+    """
+    )
+    suspend fun isProductInActiveCart(productId: Long): Boolean
+
     @Query("UPDATE cart_items SET quantity=:quantity WHERE id=:id")
     suspend fun updateQuantity(id: Long, quantity: Int)
 

@@ -1,4 +1,5 @@
 package com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation
+
 import androidx.compose.runtime.DisposableEffect
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,10 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.yanchelenko.piggybank.features.product_details.presentation.components.InfoRow
+import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.components.InfoRow
 import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEffect
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEvent
+import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsState
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.ConfirmDeleteDialog
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.InfoCard
@@ -41,8 +45,11 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.R
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.FAST
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
-import com.yanchelenko.piggybank.modules.base.ui_model.mappers.trackMap
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
+import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.components.ProductChangeHistoryCard
+import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.components.toSignedGramsText
+import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
 
 @Composable
 fun ProductDetailsScreen(
@@ -72,7 +79,7 @@ internal fun ProductDetailsScreen(
     var showDeleteDialog by remember { mutableStateOf(value = false) }
     var isContentVisible by remember { mutableStateOf(value = true) }
 
-    // Re-fetch latest product data when the screen resumes (e.g., after editing)
+    // Re-fetch latest product data when the screen resumes (after editing)
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -139,7 +146,7 @@ internal fun ProductDetailsScreen(
 @Composable
 private fun ProductDetailsContent(
     modifier: Modifier = Modifier,
-    state: ScannedProductUiModel,
+    state: ProductDetailsState,
     onEvent: (ProductDetailsEvent) -> Unit
 ) {
     RebuggerIfDebug(trackMap = state.trackMap(), composableName = "ProductDetailsContent")
@@ -152,17 +159,51 @@ private fun ProductDetailsContent(
     val editText = stringResource(R.string.action_edit)
     val deleteText = stringResource(R.string.action_delete)
 
-    val weightValue = stringResource(R.string.format_grams, state.weight)
+    val changeHistoryTitle = stringResource(R.string.title_change_history)
+    val previousPriceLabel = stringResource(R.string.label_previous_price)
+    val currentPriceLabel = stringResource(R.string.label_current_price)
+    val priceDifferenceLabel = stringResource(R.string.label_price_difference)
+    val previousWeightLabel = stringResource(R.string.label_previous_weight)
+    val currentWeightLabel = stringResource(R.string.label_current_weight)
+    val weightDifferenceLabel = stringResource(R.string.label_weight_difference)
+    val gramUnit = stringResource(BaseR.string.unit_gram)
+    val weightValue = stringResource(R.string.format_grams, state.product.weight)
+    val previousWeightValue = state.previousWeight?.let { stringResource(R.string.format_grams, it) }
+    val weightDeltaValue = state.weightDelta?.toSignedGramsText(gramUnit)
 
     Column(
         modifier = modifier.padding(all = PaddingMedium)
     ) {
-        InfoCard(modifier = Modifier.fillMaxWidth()) {
-            InfoRow(label = barcodeLabel, value = state.barcode)
-            InfoRow(label = nameLabel, value = state.productName)
-            InfoRow(label = weightLabel, value = weightValue)
-            InfoRow(label = priceLabel, value = state.formattedPrice)
-            InfoRow(label = pricePerKgLabel, value = state.formattedPricePerKg)
+        Column(
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .verticalScroll(rememberScrollState())
+        ) {
+            InfoCard(modifier = Modifier.fillMaxWidth()) {
+                InfoRow(label = barcodeLabel, value = state.product.barcode)
+                InfoRow(label = nameLabel, value = state.product.productName)
+                InfoRow(label = weightLabel, value = weightValue)
+                InfoRow(label = priceLabel, value = state.product.formattedPrice)
+                InfoRow(label = pricePerKgLabel, value = state.product.formattedPricePerKg)
+            }
+
+            if (state.hasAnyChanges) {
+                Spacer(modifier = Modifier.height(height = SpacingSmall))
+
+                ProductChangeHistoryCard(
+                    state = state,
+                    changeHistoryTitle = changeHistoryTitle,
+                    previousPriceLabel = previousPriceLabel,
+                    currentPriceLabel = currentPriceLabel,
+                    priceDifferenceLabel = priceDifferenceLabel,
+                    previousWeightLabel = previousWeightLabel,
+                    currentWeightLabel = currentWeightLabel,
+                    weightDifferenceLabel = weightDifferenceLabel,
+                    previousWeightValue = previousWeightValue,
+                    weightValue = weightValue,
+                    weightDeltaValue = weightDeltaValue,
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(height = SpacerHeight))
@@ -193,7 +234,13 @@ private fun ProductDetailsContentPreview(
 ) {
     PiggyBankTheme {
         ProductDetailsContent(
-            state = product,
+            state = ProductDetailsState(
+                product = product,
+                previousPrice = product.price - 5.0,
+                previousWeight = product.weight - 50,
+                hasPriceChanged = true,
+                hasWeightChanged = true,
+            ),
             onEvent = {}
         )
     }

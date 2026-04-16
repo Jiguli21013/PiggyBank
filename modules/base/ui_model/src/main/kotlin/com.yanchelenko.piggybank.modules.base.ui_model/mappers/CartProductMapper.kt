@@ -14,14 +14,6 @@ fun ProductOfCart.toUi(currency: AppCurrency): ProductOfCartUiModel {
         else -> "—"
     }
 
-    // compute total correctly
-    /*
-    val totalPrice = if (isWeightImportant) {
-        unitPrice * ((weightGrams ?: 0) / 1000.0) * quantity //todo to const
-    } else {
-        unitPrice * quantity
-    }
-     */
     val totalPrice = unitPrice * quantity
 
     val totalPriceText = "$totalPrice ${currency.symbol}"

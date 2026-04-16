@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yanchelenko.piggybank.modules.base.ui_kit.components.ChangedValueHint
 import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEffect
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEvent
@@ -37,7 +38,6 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLarge
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductState
-import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.trackMap
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
 
@@ -50,6 +50,7 @@ fun InsertProductMainScreen(
     onNavigateBack: () -> Unit
 ) {
     val viewModel: InsertProductScreenViewModel = hiltViewModel()
+
     InsertProductMainScreen(
         viewModel = viewModel,
         modifier = modifier,
@@ -127,13 +128,22 @@ fun InsertProductContent(
     val saveText = stringResource(R.string.action_save)
     val savedText = stringResource(R.string.action_saved)
 
+    val saveNewValuesText = stringResource(BaseR.string.action_save_new_values)
+    val previousPriceLabel = stringResource(BaseR.string.label_previous_price)
+    val previousWeightLabel = stringResource(BaseR.string.label_previous_weight)
+
+    val previousPriceValue = state.previousPrice?.let { "$it" } ?: "—"
+    val previousWeightValue = state.previousWeight?.let { stringResource(BaseR.string.unit_gram, it) } ?: "—"
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxSize()
             .padding(all = PaddingMedium),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(SpacingExtraLarge)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(SpacingExtraLarge)
+        ) {
 
             OutlinedInputField(
                 value = state.scannedProduct.productName,
@@ -149,6 +159,14 @@ fun InsertProductContent(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            if (state.hasWeightChanged) {
+                ChangedValueHint(
+                    label = previousWeightLabel,
+                    value = previousWeightValue,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
             PriceInputField(
                 value = state.priceInput,
                 label = priceLabel,
@@ -156,6 +174,14 @@ fun InsertProductContent(
                 onPriceChange = { price -> onEvent(InsertProductEvent.PriceChanged(price)) },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            if (state.hasPriceChanged) {
+                ChangedValueHint(
+                    label = previousPriceLabel,
+                    value = previousPriceValue,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
             ReadOnlyField(
                 label = pricePerKgLabel,
@@ -174,22 +200,35 @@ fun InsertProductContent(
 
         val saveButtonText = if (state.isInScannedDB) savedText else saveText
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(space = SpacingSmall),
+        Column(
+            verticalArrangement = Arrangement.spacedBy(SpacingSmall),
             modifier = Modifier.fillMaxWidth()
         ) {
-            SecondaryButton(
-                text = backText,
-                onClick = { onEvent(InsertProductEvent.GoBackToScanner) },
-                modifier = Modifier.weight(1f)
-            )
+            if (state.isInScannedDB && state.hasAnyTrackedChanges) {
+                PrimaryButton(
+                    text = saveNewValuesText,
+                    onClick = { onEvent(InsertProductEvent.SaveProduct) },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
 
-            PrimaryButton(
-                text = saveButtonText,
-                onClick = { onEvent(InsertProductEvent.SaveProduct) },
-                modifier = Modifier.weight(1f),
-                enabled = !state.isInScannedDB
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(space = SpacingSmall),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                SecondaryButton(
+                    text = backText,
+                    onClick = { onEvent(InsertProductEvent.GoBackToScanner) },
+                    modifier = Modifier.weight(1f)
+                )
+
+                PrimaryButton(
+                    text = saveButtonText,
+                    onClick = { onEvent(InsertProductEvent.SaveProduct) },
+                    modifier = Modifier.weight(1f),
+                    enabled = !state.isInScannedDB
+                )
+            }
         }
     }
 }

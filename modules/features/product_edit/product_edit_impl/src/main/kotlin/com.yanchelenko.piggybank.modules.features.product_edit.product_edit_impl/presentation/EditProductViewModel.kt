@@ -11,14 +11,18 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.getData
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.updateDataSuccess
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
-import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toDomain
-import com.yanchelenko.piggybank.modules.base.ui_model.mappers.toUi
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
-import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductByIdUseCase
-import com.yanchelenko.piggybank.modules.core.core_api.domain.UpdateProductUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductWithCurrentVersionByIdUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
+import com.yanchelenko.piggybank.modules.base.ui_model.models.StableInstant
+import kotlinx.datetime.Instant
+import com.yanchelenko.piggybank.modules.core.core_api.domain.SaveProductVersionIfChangedResult
+import com.yanchelenko.piggybank.modules.core.core_api.domain.SaveProductVersionIfChangedUseCase
+import kotlinx.datetime.Clock
 import com.yanchelenko.piggybank.modules.core.core_api.exceptions.BaseDomainException
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.domain.ObserveCurrencyUseCase
+import com.yanchelenko.piggybank.modules.core.core_api.models.GetProductWithCurrentVersionByIdResult
 import com.yanchelenko.piggybank.modules.core.core_api.navigation.destinations.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
@@ -27,8 +31,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditProductViewModel @Inject constructor(
-    private val updateProductUseCase: UpdateProductUseCase,
-    private val getProductByProductIdUseCase: GetProductByIdUseCase,
+    private val saveProductVersionIfChangedUseCase: SaveProductVersionIfChangedUseCase,
+    private val getProductWithCurrentVersionByIdUseCase: GetProductWithCurrentVersionByIdUseCase,
     private val getPricePerKgUseCase: GetPricePerKgUseCase,
     private val observeCurrencyUseCase: ObserveCurrencyUseCase,
     private val logger: Logger,
@@ -114,6 +118,9 @@ class EditProductViewModel @Inject constructor(
                     CommonUiState.Success(
                         data = EditProductState(
                             scannedProduct = event.product,
+                            previousPrice = event.product.price,
+                            previousWeight = event.product.weight,
+                            isInScannedDB = true,
                             priceInput = if (event.product.price == 0.0) "" else event.product.price.toString()
                         )
                     )
@@ -125,11 +132,40 @@ class EditProductViewModel @Inject constructor(
     private fun loadProductByProductId(productId: Long) {
         logger.d(LOG_TAG, "Start DB lookup for productId=$productId")
         viewModelScope.launch {
-            when (val result = getProductByProductIdUseCase(productId)) {
+            when (val result = getProductWithCurrentVersionByIdUseCase(productId)) {
                 is RequestResult.Success -> {
-                    logger.d(LOG_TAG, "ScannedProduct loaded: ${result.data}")
+                    logger.d(LOG_TAG, "ProductWithCurrentVersion loaded: ${result.data}")
                     val currentCurrency = observeCurrencyUseCase().first()
-                    onEvent(EditProductEvent.ProductFoundInDB(product = result.data.toUi(currency = currentCurrency)))
+
+                    when (val productResult = result.data) {
+                        is GetProductWithCurrentVersionByIdResult.Found -> {
+                            val product = productResult.product.product
+                            val currentVersion = productResult.product.currentVersion
+
+                            onEvent(
+                                EditProductEvent.ProductFoundInDB(
+                                    product = com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel(
+                                        productId = product.id,
+                                        barcode = product.barcode,
+                                        productName = product.productName,
+                                        weight = currentVersion.weightGrams,
+                                        price = currentVersion.price,
+                                        pricePerKg = currentVersion.pricePerKg,
+                                        formattedPrice = currentVersion.price.toCurrencyText(currency = currentCurrency),
+                                        formattedPricePerKg = currentVersion.pricePerKg.toCurrencyText(currency = currentCurrency),
+                                        addedAt = currentVersion.createdAt.toStable(),
+                                    )
+                                )
+                            )
+                        }
+
+                        is GetProductWithCurrentVersionByIdResult.NotFound,
+                        is GetProductWithCurrentVersionByIdResult.ProductWithoutCurrentVersion -> {
+                            val message = "Продукт не найден" //todo move to resources
+                            logger.e(LOG_TAG, "Error loading product: $message")
+                            sendEffect { EditProductEffect.ShowMessage(message) }
+                        }
+                    }
                 }
 
                 is RequestResult.Error -> {
@@ -137,7 +173,7 @@ class EditProductViewModel @Inject constructor(
                         ?: result.error?.message
                         ?: "Неизвестная ошибка" //todo
                     logger.e(LOG_TAG, "Error loading product: $message")
-                    sendEffect { EditProductEffect.ShowMessage("Ошибка загрузки продукта: $message") }//todo to res
+                    sendEffect { EditProductEffect.ShowMessage("Ошибка загрузки продукта: $message") } //todo to res
                 }
 
                 is RequestResult.InProgress -> {
@@ -152,11 +188,27 @@ class EditProductViewModel @Inject constructor(
             logger.d(LOG_TAG, "Start updating product: ${state.scannedProduct}")
 
             viewModelScope.launch {
-                when (val result = updateProductUseCase(state.scannedProduct.toDomain())) {
+                when (val result = saveProductVersionIfChangedUseCase(
+                    params = SaveProductVersionIfChangedUseCase.Params(
+                        barcode = state.scannedProduct.barcode,
+                        productName = state.scannedProduct.productName,
+                        weightGrams = state.scannedProduct.weight,
+                        price = state.scannedProduct.price,
+                        pricePerKg = state.scannedProduct.pricePerKg,
+                        changedAt = Clock.System.now(),
+                    )
+                )) {
                     is RequestResult.Success -> {
-                        logger.d(LOG_TAG, "ScannedProduct successfully updated")
+                        logger.d(LOG_TAG, "Product version save result: ${result.data}")
                         setState { CommonUiState.Success(data = state) }
-                        sendEffect { EditProductEffect.ShowMessage("Продукт успешно изменён") } //todo
+
+                        val message = when (result.data) {
+                            is SaveProductVersionIfChangedResult.NewProductCreated -> "Продукт успешно сохранён"
+                            is SaveProductVersionIfChangedResult.NewVersionCreated -> "Изменения успешно сохранены"
+                            is SaveProductVersionIfChangedResult.NoChanges -> "Изменений не обнаружено"
+                        }
+
+                        sendEffect { EditProductEffect.ShowMessage(message) } //todo move to resources
                         sendEffect { EditProductEffect.NavigateBack }
                     }
 
@@ -174,6 +226,14 @@ class EditProductViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun Double.toCurrencyText(currency: AppCurrency): String {
+        return "$this ${currency.symbol}"
+    }
+
+    private fun Instant.toStable(): StableInstant {
+        return StableInstant(epochMillis = toEpochMilliseconds())
     }
 
     private companion object {

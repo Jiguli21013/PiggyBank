@@ -3,7 +3,6 @@ package com.yanchelenko.piggybank.modules.features.product_insert.product_insert
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
 import com.yanchelenko.piggybank.modules.core.core_api.models.ScannedProduct
 import com.yanchelenko.piggybank.modules.core.core_api.repository.ScannedProductsRepository
-import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.domain.usecase.InsertNewProductUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
