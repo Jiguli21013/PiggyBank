@@ -18,7 +18,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.base.infrastructure.extensions.formatIfNonZero
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state.EditProductEffect
@@ -40,6 +39,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLarge
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.dev_tools.TrackStateRecomposition
 import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
 
 @Composable
@@ -112,7 +112,10 @@ fun EditProductContent(
     state: EditProductState,
     onEvent: (EditProductEvent) -> Unit
 ) {
-    RebuggerIfDebug(trackMap = state.trackMap(), composableName = "EditProductContent")
+    TrackStateRecomposition(
+        composableName = "EditProductContent",
+        trackMap = state.trackMap()
+    )
 
     val productNameLabel = stringResource(R.string.label_product_name)
     val priceLabel = stringResource(R.string.label_price_by_weight, state.scannedProduct.weight)

@@ -30,7 +30,7 @@ class HistoryOfScansViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     private val deleteScannedProductUseCase: DeleteScannedProductUseCase,
     private val observeCurrencyUseCase: ObserveCurrencyUseCase,
-    private val logger: Logger
+    private val logger: Logger,
 ) : BaseViewModel<HistoryOfScansEvent, CommonUiState<Unit>, HistoryOfScansEffect>(
     initialState = CommonUiState.Initializing
 ) {

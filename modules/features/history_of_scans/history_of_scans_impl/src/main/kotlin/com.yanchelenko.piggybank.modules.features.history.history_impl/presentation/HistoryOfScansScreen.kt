@@ -127,11 +127,16 @@ fun HistoryOfScansMainContent(
                     HistoryOfScansList(
                         items = items,
                         onEvent = onEvent,
-                        modifier = modifier.semantics { contentDescription = UiTestTags.HISTORY_OF_SCANS_LIST }
+                        modifier = modifier
+                            .semantics {
+                                contentDescription = UiTestTags.HISTORY_OF_SCANS_LIST
+                            }
                     )
                 } else {
                     Box(
-                        modifier = Modifier.fillMaxSize().semantics { contentDescription = UiTestTags.HISTORY_OF_SCANS_EMPTY },
+                        modifier = Modifier.fillMaxSize().semantics {
+                            contentDescription = UiTestTags.HISTORY_OF_SCANS_EMPTY
+                        },
                         contentAlignment = androidx.compose.ui.Alignment.Center
                     ) {
                         Text(

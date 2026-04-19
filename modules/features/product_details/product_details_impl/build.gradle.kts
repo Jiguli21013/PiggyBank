@@ -51,7 +51,7 @@ dependencies {
     implementation(project(":modules:features:product_details:product_details_api"))
 
     // debug-only instruments
-    debugImplementation(project(":modules:dev_tools"))
+    implementation(project(":modules:dev_tools"))
     debugImplementation(libs.ui.tooling)
 
     // Compose

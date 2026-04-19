@@ -18,13 +18,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.LONG
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.MEDIUM
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductOfCartUiModel
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.preview.ListProductsOfCartPreviewProvider
 import com.yanchelenko.piggybank.modules.features.cart.cart_impl.presentation.state.CartEvent
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.dev_tools.TrackStateRecomposition
 
 @Composable
 internal fun CartList(
@@ -33,13 +33,13 @@ internal fun CartList(
     onEvent: (CartEvent) -> Unit,
 ) {
 
-    RebuggerIfDebug(
+    TrackStateRecomposition(
         composableName = "CartList",
         trackMap = mapOf(
             "itemCount" to items.itemCount,
-            "loadState.refresh" to items.loadState.refresh::class.simpleName,
-            "loadState.append" to items.loadState.append::class.simpleName,
-            "snapshotHash" to items.itemSnapshotList.items.hashCode()
+            "refreshState" to items.loadState.refresh::class.simpleName,
+            "appendState" to items.loadState.append::class.simpleName,
+            "snapshotSize" to items.itemSnapshotList.items.size
         )
     )
 
@@ -102,20 +102,19 @@ fun PreviewHistoryListContent(
     @PreviewParameter(ListProductsOfCartPreviewProvider::class, limit = 1)
     items: List<ProductOfCartUiModel>
 ) {
-    CartList(
+    CartListPreviewContent(
         list = items,
         modifier = Modifier
     )
 }
 // only for @Preview
 @Composable
-private fun CartList(
+private fun CartListPreviewContent(
     modifier: Modifier = Modifier,
     list: List<ProductOfCartUiModel>,
 ) {
     LazyColumn(modifier = modifier) {
         items(list) { item ->
-
             ProductOfCartItem(
                 productOfCart = item,
                 onEvent = {}

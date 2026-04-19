@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.ChangedValueHint
-import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEffect
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductEvent
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.R
@@ -39,6 +38,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLa
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
 import com.yanchelenko.piggybank.modules.features.product_insert.product_insert_impl.presentation.state.InsertProductState
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
+import com.yanchelenko.piggybank.modules.dev_tools.TrackStateRecomposition
 import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
 
 const val MIN_QUANTITY = 1
@@ -112,7 +112,10 @@ fun InsertProductContent(
     modifier: Modifier = Modifier,
     onEvent: (InsertProductEvent) -> Unit,
 ) {
-    RebuggerIfDebug(trackMap = state.trackMap(), composableName = "InsertProductContent")
+    TrackStateRecomposition(
+        composableName = "InsertProductContent",
+        trackMap = state.trackMap()
+    )
 
     val productNameLabel = stringResource(R.string.label_product_name)
     val priceLabel = stringResource(R.string.label_price_by_weight, state.scannedProduct.weight)
@@ -244,7 +247,7 @@ private fun InsertProductMainContentPreview(
 ) {
     PiggyBankTheme {
         InsertProductContent(
-            state =  InsertProductState(),
+            state = InsertProductState(),
             onEvent = {}
         )
     }

@@ -35,7 +35,7 @@ class CartViewModel @Inject constructor(
     private val observeCurrencyUseCase: ObserveCurrencyUseCase,
     private val closeCartUseCase: CloseCartUseCaseImpl,
     private val deleteProductOfCartUseCase: DeleteProductFromCartUseCase,
-    private val logger: Logger
+    private val logger: Logger,
 ) : BaseViewModel<CartEvent, CommonUiState<CartScreenState>, CartEffect>(
     initialState = CommonUiState.Initializing
 ) {

@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.LONG
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.MEDIUM
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.DateHeader
@@ -27,6 +26,7 @@ import com.yanchelenko.piggybank.modules.features.history.history_impl.presentat
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.preview.ListItemPreviewProvider
 import com.yanchelenko.piggybank.modules.features.history.history_impl.presentation.state.HistoryOfScansEvent
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.dev_tools.TrackStateRecomposition
 
 @Composable
 internal fun HistoryOfScansList(
@@ -35,13 +35,13 @@ internal fun HistoryOfScansList(
     onEvent: (HistoryOfScansEvent) -> Unit,
 ) {
 
-    RebuggerIfDebug(
+    TrackStateRecomposition(
         composableName = "HistoryOfScansList",
         trackMap = mapOf(
             "itemCount" to items.itemCount,
-            "loadState.refresh" to items.loadState.refresh::class.simpleName,
-            "loadState.append" to items.loadState.append::class.simpleName,
-            "snapshotHash" to items.itemSnapshotList.items.hashCode()
+            "refreshState" to items.loadState.refresh::class.simpleName,
+            "appendState" to items.loadState.append::class.simpleName,
+            "snapshotSize" to items.itemSnapshotList.items.size
         )
     )
 
@@ -119,14 +119,14 @@ fun PreviewHistoryListContent(
     @PreviewParameter(ListItemPreviewProvider::class, limit = 1)
     items: List<ListItem>
 ) {
-    HistoryOfScansList(
+    HistoryOfScansListPreviewContent(
         list = items,
         modifier = Modifier
     )
 }
 // only for @Preview
 @Composable
-private fun HistoryOfScansList(
+private fun HistoryOfScansListPreviewContent(
     modifier: Modifier = Modifier,
     list: List<ListItem>,
 ) {

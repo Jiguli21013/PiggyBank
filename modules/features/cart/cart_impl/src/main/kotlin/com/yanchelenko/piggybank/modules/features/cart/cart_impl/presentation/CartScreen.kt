@@ -132,7 +132,7 @@ fun CartMainContent(
                     CartList(
                         items = items,
                         onEvent = onEvent,
-                        modifier = Modifier.weight(1f) //todo тут modifier или Modifier
+                        modifier = Modifier.weight(1f)
                     )
 
                     if (items.itemCount > 0) {

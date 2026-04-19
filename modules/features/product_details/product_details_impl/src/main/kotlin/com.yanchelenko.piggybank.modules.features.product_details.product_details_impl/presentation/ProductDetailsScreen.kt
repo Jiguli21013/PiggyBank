@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.components.InfoRow
-import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
+
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEffect
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsEvent
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.state.ProductDetailsState
@@ -48,6 +48,7 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingSmall
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
+import com.yanchelenko.piggybank.modules.dev_tools.TrackStateRecomposition
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.components.ProductChangeHistoryCard
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.components.toSignedGramsText
 import com.yanchelenko.piggybank.modules.base.resources.R as BaseR
@@ -150,7 +151,10 @@ private fun ProductDetailsContent(
     state: ProductDetailsState,
     onEvent: (ProductDetailsEvent) -> Unit
 ) {
-    RebuggerIfDebug(trackMap = state.trackMap(), composableName = "ProductDetailsContent")
+    TrackStateRecomposition(
+        composableName = "ProductDetailsContent",
+        trackMap = state.trackMap()
+    )
 
     val barcodeLabel = stringResource(R.string.label_barcode)
     val nameLabel = stringResource(R.string.label_product_name)

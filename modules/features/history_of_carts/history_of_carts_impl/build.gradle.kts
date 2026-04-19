@@ -70,7 +70,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     // Debug-only tooling
-    debugImplementation(project(":modules:dev_tools"))
-    debugImplementation(libs.androidx.ui.tooling.preview.android) // Compose Preview in IDE
+    implementation(project(":modules:dev_tools"))
+    implementation(libs.androidx.ui.tooling.preview.android) // Compose Preview annotations available for all variants
     debugImplementation(libs.ui.tooling) // Runtime UI inspection & Layout Inspector
 }

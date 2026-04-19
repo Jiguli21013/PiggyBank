@@ -59,7 +59,7 @@ android {
 }
 
 dependencies {
-    debugImplementation(project(":modules:dev_tools"))
+    implementation(project(":modules:dev_tools"))
 
     implementation(project(":modules:core:database"))
     implementation(project(":modules:core:core_api"))

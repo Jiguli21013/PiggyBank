@@ -24,7 +24,7 @@ import javax.inject.Inject
 class HistoryOfCartsViewModel @Inject constructor(
     private val getPagedCartsUseCase: GetPagedCartsUseCaseImpl,
     private val observeCurrencyUseCase: ObserveCurrencyUseCase,
-    private val logger: Logger
+    private val logger: Logger,
 ) : BaseViewModel<HistoryOfCartsEvent, CommonUiState<Unit>, HistoryOfCartsEffect>(
     initialState = CommonUiState.Initializing
 ) {

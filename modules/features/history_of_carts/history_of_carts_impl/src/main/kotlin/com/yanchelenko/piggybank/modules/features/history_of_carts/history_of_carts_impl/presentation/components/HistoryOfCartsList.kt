@@ -18,10 +18,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.yanchelenko.piggybank.modules.dev_tools.RebuggerIfDebug
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.LONG
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.DateHeader
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
+import com.yanchelenko.piggybank.modules.dev_tools.TrackStateRecomposition
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.models.ListItem
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.preview.ListItemPreviewProvider
 import com.yanchelenko.piggybank.modules.features.history_of_carts.history_of_carts_impl.presentation.state.HistoryOfCartsEvent
@@ -33,13 +33,13 @@ internal fun HistoryOfCartsList(
     onEvent: (HistoryOfCartsEvent) -> Unit,
 ) {
 
-    RebuggerIfDebug(
-        composableName = "HistoryOfScansList",
+    TrackStateRecomposition(
+        composableName = "HistoryOfCartsList",
         trackMap = mapOf(
             "itemCount" to items.itemCount,
-            "loadState.refresh" to items.loadState.refresh::class.simpleName,
-            "loadState.append" to items.loadState.append::class.simpleName,
-            "snapshotHash" to items.itemSnapshotList.items.hashCode()
+            "refreshState" to items.loadState.refresh::class.simpleName,
+            "appendState" to items.loadState.append::class.simpleName,
+            "snapshotSize" to items.itemSnapshotList.items.size
         )
     )
 
@@ -113,14 +113,14 @@ fun PreviewHistoryOfCartsListContent(
     @PreviewParameter(ListItemPreviewProvider::class, limit = 1)
     items: List<ListItem>
 ) {
-    HistoryOfCartsList(
+    HistoryOfCartsListPreviewContent(
         list = items,
         modifier = Modifier
     )
 }
 // only for @Preview
 @Composable
-private fun HistoryOfCartsList(
+private fun HistoryOfCartsListPreviewContent(
     modifier: Modifier = Modifier,
     list: List<ListItem>,
 ) {
