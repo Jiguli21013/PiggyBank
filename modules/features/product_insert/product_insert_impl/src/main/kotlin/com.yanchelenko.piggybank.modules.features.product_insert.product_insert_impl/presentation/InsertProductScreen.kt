@@ -132,8 +132,11 @@ fun InsertProductContent(
     val previousPriceLabel = stringResource(BaseR.string.label_previous_price)
     val previousWeightLabel = stringResource(BaseR.string.label_previous_weight)
 
-    val previousPriceValue = state.previousPrice?.let { "$it" } ?: "—"
-    val previousWeightValue = state.previousWeight?.let { stringResource(BaseR.string.unit_gram, it) } ?: "—"
+    val previousPriceValue =
+        state.previousPrice?.let { "$it" } ?: "—"
+
+    val previousWeightValue =
+        state.previousWeight?.let { "$it " + stringResource(BaseR.string.unit_gram) } ?: "—"
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,

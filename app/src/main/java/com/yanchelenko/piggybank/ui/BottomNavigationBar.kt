@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -36,6 +38,7 @@ fun BottomNavigationBar(
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
+
         items.forEach { destination ->
             val isSelected = currentRoute == destination.routeForRegistration
 
@@ -71,7 +74,14 @@ fun BottomNavigationBar(
                             )
                         }
                     },
-                    label = { Text(text = titleText) }
+                    label = {
+                        Text(
+                            text = titleText,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.labelSmall,
+                        )
+                    }
                 )
             }
         }

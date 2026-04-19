@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 
 object AppColors {
     // Dark theme
-    val PrimaryDark = Color(0xFF7A5CFA)
+    val PrimaryDark = Color(0xFF3F6141)
     val SecondaryDark = Color(0xFF3C3F4A)
     val BackgroundDark = Color(0xFF161C2D)
     val SurfaceDark = Color(0xFF1B1F36)
@@ -15,13 +15,13 @@ object AppColors {
     val ErrorDark = Color(0xFFFF4C4C)
 
     // Light theme
-    val PrimaryLight = Color(0xFF6848F1)
-    val SecondaryLight = Color(0xFFF2F1FB)
-    val BackgroundLight = Color(0xFFFFFFFF)
-    val SurfaceLight = Color(0xFFF8F8FF)
-    val TextPrimaryLight = Color(0xFF1C1C1E)
-    val TextSecondaryLight = Color(0xFF5A5A5F)
-    val ErrorLight = Color(0xFFD32F2F)
+    val PrimaryLight = Color(0xFF7FC98F)
+    val SecondaryLight = Color(0xFFBBDCF6)
+    val BackgroundLight = Color(0xFFF6F9FC)
+    val SurfaceLight = Color(0xFFDEE6EA)
+    val TextPrimaryLight = Color(0xFF2E3A46)
+    val TextSecondaryLight = Color(0xFF6F7E8C)
+    val ErrorLight = Color(0xFFE35454)
 }
 
 object CustomColors {

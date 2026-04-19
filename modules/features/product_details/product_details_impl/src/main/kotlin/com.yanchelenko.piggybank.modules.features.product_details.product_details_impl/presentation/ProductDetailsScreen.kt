@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,12 +40,12 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.buttons.Secondar
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
 import com.yanchelenko.piggybank.modules.base.ui_kit.preview.ProductPreviewProvider
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
-import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacerHeight
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.R
 import com.yanchelenko.piggybank.modules.base.ui_kit.animations.AnimationDurations.FAST
 import com.yanchelenko.piggybank.modules.base.ui_kit.components.CenteredLoader
+import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingSmall
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingSmall
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 import com.yanchelenko.piggybank.modules.features.product_details.product_details_impl.presentation.components.ProductChangeHistoryCard
@@ -172,11 +173,13 @@ private fun ProductDetailsContent(
     val weightDeltaValue = state.weightDelta?.toSignedGramsText(gramUnit)
 
     Column(
-        modifier = modifier.padding(all = PaddingMedium)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(all = PaddingMedium)
     ) {
         Column(
             modifier = Modifier
-                .weight(1f, fill = false)
+                .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
             InfoCard(modifier = Modifier.fillMaxWidth()) {
@@ -191,6 +194,10 @@ private fun ProductDetailsContent(
                 Spacer(modifier = Modifier.height(height = SpacingSmall))
 
                 ProductChangeHistoryCard(
+                    modifier = Modifier
+                        .padding(
+                            bottom = PaddingSmall
+                        ),
                     state = state,
                     changeHistoryTitle = changeHistoryTitle,
                     previousPriceLabel = previousPriceLabel,
@@ -206,7 +213,8 @@ private fun ProductDetailsContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(height = SpacerHeight))
+
+        HorizontalDivider(modifier = Modifier.padding(bottom = PaddingMedium))
 
         Row(
             modifier = Modifier.fillMaxWidth(),

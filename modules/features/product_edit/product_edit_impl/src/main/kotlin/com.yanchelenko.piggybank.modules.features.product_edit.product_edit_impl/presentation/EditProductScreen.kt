@@ -4,11 +4,10 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,7 +37,6 @@ import com.yanchelenko.piggybank.modules.base.ui_kit.components.ChangedValueHint
 import com.yanchelenko.piggybank.modules.base.ui_kit.mvi.ScreenWithEffect
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.PaddingMedium
-import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacerHeight
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingExtraLarge
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.Dimens.SpacingMedium
 import com.yanchelenko.piggybank.modules.base.ui_kit.theme.PiggyBankTheme
@@ -129,7 +127,7 @@ fun EditProductContent(
         state.previousPrice?.let { "$it" } ?: "—"
 
     val previousWeightValue =
-        state.previousWeight?.let { "$it г" } ?: "—" //todo г
+        state.previousWeight?.let { "$it " + stringResource(BaseR.string.unit_gram)  } ?: "—"
 
     Column(
         modifier = modifier
@@ -184,23 +182,28 @@ fun EditProductContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(SpacerHeight))
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(SpacingMedium),
+        Column(
+            verticalArrangement = Arrangement.spacedBy(PaddingMedium),
             modifier = Modifier.fillMaxWidth()
         ) {
-            SecondaryButton(
-                text = backText,
-                onClick = { onEvent(EditProductEvent.GoBackToScanner) },
-                modifier = Modifier.weight(1f)
-            )
+            HorizontalDivider(modifier = Modifier.fillMaxWidth())
 
-            PrimaryButton(
-                text = saveText,
-                onClick = { onEvent(EditProductEvent.SaveProduct) },
-                modifier = Modifier.weight(1f)
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(SpacingMedium),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                SecondaryButton(
+                    text = backText,
+                    onClick = { onEvent(EditProductEvent.GoBackToScanner) },
+                    modifier = Modifier.weight(1f)
+                )
+
+                PrimaryButton(
+                    text = saveText,
+                    onClick = { onEvent(EditProductEvent.SaveProduct) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
 }
