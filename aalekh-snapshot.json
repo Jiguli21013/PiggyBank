@@ -78,7 +78,6 @@
         ":modules:core:core_impl>:modules:base:infrastructure",
         ":modules:core:core_impl>:modules:core:core_api",
         ":modules:core:core_impl>:modules:core:database",
-        ":modules:core:database>:modules:core:core_api",
         ":modules:dev_tools>:modules:core:core_api",
         ":modules:features:cart:cart_api>:modules:core:core_api",
         ":modules:features:cart:cart_impl>:modules:base:infrastructure",
@@ -147,9 +146,9 @@
     "metrics": {
         "cycleCount": 0,
         "godModuleCount": 0,
-        "ccd": 151,
+        "ccd": 149,
         "tanglePercent": 0.0,
-        "averageInstability": 0.3497252747252748,
+        "averageInstability": 0.34336146944842605,
         "criticalPathLength": 6
     },
     "aalekhVersion": "0.7.0"

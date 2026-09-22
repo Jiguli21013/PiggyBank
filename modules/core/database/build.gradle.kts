@@ -34,7 +34,6 @@ dependencies {
     implementation(libs.paging.runtime) // Pager, CachedPagingData
     implementation(libs.room.paging)
     implementation(libs.play.services.analytics.impl)
-    implementation(project(":modules:core:core_api")) // RoomPagingSource
     
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)

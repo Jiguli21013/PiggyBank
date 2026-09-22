@@ -35,7 +35,6 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.androidx.compose.runtime)
 
-    implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
 
     implementation(libs.androidx.ui.tooling.preview.android)
