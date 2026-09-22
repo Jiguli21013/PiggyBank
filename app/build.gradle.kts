@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+
     alias(libs.plugins.kotlin.compose)
 
     alias(libs.plugins.dagger.hilt.android)
@@ -50,9 +50,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     buildFeatures {
         compose = true
     }
@@ -68,6 +65,7 @@ dependencies {
 
     implementation(project(":modules:base:ui_kit"))
     implementation(project(":modules:base:ui_model"))
+    implementation(project(":modules:base:resources"))
     implementation(project(":modules:base:infrastructure"))
 
     implementation(project(":modules:features:scanner:scanner_api"))
