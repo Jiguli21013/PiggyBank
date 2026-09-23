@@ -34,19 +34,25 @@ interface CartDao {
     @Query("SELECT id FROM carts WHERE status='ACTIVE' LIMIT 1")
     fun getActiveCartIdBlocking(): Long?
 
-    /** Закрыть корзину по id и обновить totalItems и totalPrice */
+    /** Atomically closes the active cart with totals calculated from its stored items. */
     @Query("""
     UPDATE carts
     SET 
         status = 'CLOSED',
         closedAtEpochMs = :timestamp,
-        totalItems = :totalItems,
-        totalPrice = :totalPrice
+        totalItems = (
+            SELECT COALESCE(SUM(quantity), 0)
+            FROM cart_items
+            WHERE cartId = carts.id
+        ),
+        totalPrice = (
+            SELECT COALESCE(SUM(unitPrice * quantity), 0.0)
+            FROM cart_items
+            WHERE cartId = carts.id
+        )
     WHERE status = 'ACTIVE'
 """)
     suspend fun closeActiveCart(
-        timestamp: Long,
-        totalItems: Int,
-        totalPrice: Double
+        timestamp: Long
     ): Int
 }

@@ -32,13 +32,13 @@ fun AppNavHost(
                     is NavEvent.Navigate -> {
                         navController.navigate(route = event.route) {
                             launchSingleTop = true
-                            popUpTo(id = navController.graph.startDestinationId) { saveState = true }
                         }
                     }
 
                     is NavEvent.NavigateRoot -> {
+                        if (navController.currentDestination?.route == event.route) return@collect
                         navController.navigate(route = event.route) {
-                            popUpTo(id = 0) { inclusive = true }
+                            popUpTo(id = navController.graph.id) { inclusive = false }
                             launchSingleTop = true
                         }
                     }

@@ -19,6 +19,6 @@ class CartRouterImpl @Inject constructor(
 
     override fun openHistoryOfCarts() {
         val route = AppDestination.HistoryOfCartsDestination.fullRoute()
-        navigateTo(destination = route)
+        navigateRoot(destination = route)
     }
 }

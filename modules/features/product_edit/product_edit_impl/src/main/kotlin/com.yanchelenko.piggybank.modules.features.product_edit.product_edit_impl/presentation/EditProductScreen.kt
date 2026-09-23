@@ -181,7 +181,7 @@ fun EditProductContent(
 
             ReadOnlyField(
                 label = pricePerKgLabel,
-                value = state.scannedProduct.formattedPricePerKg
+                value = state.formattedPricePerKg
             )
         }
 

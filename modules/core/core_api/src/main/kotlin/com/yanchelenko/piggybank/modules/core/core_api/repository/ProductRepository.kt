@@ -20,11 +20,10 @@ interface ProductRepository {
 
     suspend fun createProduct(product: Product): Result<Long>
 
-    suspend fun createProductVersion(version: ProductVersion): Result<Long>
+    /** Atomically replaces the current version, or creates one if none exists. */
+    suspend fun replaceCurrentVersion(version: ProductVersion): Result<Long>
 
     suspend fun updateProductName(productId: Long, productName: String, ): Result<Boolean>
-
-    suspend fun clearCurrentVersion(productId: Long): Result<Boolean>
 
     suspend fun deleteProduct(productId: Long): Result<Boolean>
 }

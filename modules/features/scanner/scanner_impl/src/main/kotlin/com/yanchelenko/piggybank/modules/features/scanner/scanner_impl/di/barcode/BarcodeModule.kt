@@ -7,7 +7,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.data.vision.BarcodeAnalyzer
-import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.domain.Scanner
+import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.data.vision.Scanner
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +41,8 @@ object BarcodeModule {
             Barcode.FORMAT_CODE_128,
             Barcode.FORMAT_EAN_8,
             Barcode.FORMAT_EAN_13,
+            Barcode.FORMAT_UPC_A,
+            Barcode.FORMAT_UPC_E,
             Barcode.FORMAT_AZTEC
         )
 

@@ -69,9 +69,9 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun createProductVersion(version: ProductVersion): Result<Long> {
+    override suspend fun replaceCurrentVersion(version: ProductVersion): Result<Long> {
         return runCatching {
-            productVersionDao.insert(version = version.toDbo())
+            productVersionDao.replaceCurrentVersion(version = version.toDbo())
         }
     }
 
@@ -84,12 +84,6 @@ class ProductRepositoryImpl @Inject constructor(
                 productId = productId,
                 productName = productName,
             ) > 0
-        }
-    }
-
-    override suspend fun clearCurrentVersion(productId: Long): Result<Boolean> {
-        return runCatching {
-            productVersionDao.clearCurrentVersion(productId = productId) > 0
         }
     }
 

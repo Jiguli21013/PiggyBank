@@ -17,5 +17,4 @@ class SettingsRouterImpl @Inject constructor(
         navigateTo(destination = route)
     }
 
-    override fun navigateBack() { navigateBack() }
 }

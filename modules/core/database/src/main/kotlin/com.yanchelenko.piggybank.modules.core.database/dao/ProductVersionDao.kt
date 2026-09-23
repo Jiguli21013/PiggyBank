@@ -40,6 +40,14 @@ interface ProductVersionDao {
     @Insert
     suspend fun insert(version: ProductVersionDBO): Long
 
+    /** Keeps the previous current version intact if inserting the replacement fails. */
+    @Transaction
+    suspend fun replaceCurrentVersion(version: ProductVersionDBO): Long {
+        require(version.isCurrent) { "The replacement version must be current" }
+        clearCurrentVersion(productId = version.productId)
+        return insert(version = version)
+    }
+
     @Update
     suspend fun update(version: ProductVersionDBO): Int
 

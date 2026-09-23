@@ -8,7 +8,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.BaseViewModel
 import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.CommonUiState
-import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.getData
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ProductOfCartUiModel
 import com.yanchelenko.piggybank.modules.core.core_api.debugTools.Logger
@@ -156,22 +155,12 @@ class CartViewModel @Inject constructor(
     private fun closeCart() = viewModelScope.launch {
         logger.d(LOG_TAG, "Attempting to close active cart…")
 
-        state.getData {
-            val totalItems = it.itemsCount
-            val totalPrice = it.totalPrice
-
-            val result = closeCartUseCase(
-                totalItems = totalItems,
-                totalPrice = totalPrice
-            )
-
-            result.onSuccess { closed ->
-                if (closed) {
-                    onEvent(CartEvent.CartCloseSucceeded)
-                }
-            }.onFailure { e ->
-                onEvent(CartEvent.CartCloseFailed(e.message ?: "Не удалось закрыть корзину"))
+        closeCartUseCase().onSuccess { closed ->
+            if (closed) {
+                onEvent(CartEvent.CartCloseSucceeded)
             }
+        }.onFailure { e ->
+            onEvent(CartEvent.CartCloseFailed(e.message ?: "Не удалось закрыть корзину"))
         }
     }
 

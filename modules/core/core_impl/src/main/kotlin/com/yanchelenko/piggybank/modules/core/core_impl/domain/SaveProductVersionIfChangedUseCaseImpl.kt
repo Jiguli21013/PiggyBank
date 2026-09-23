@@ -186,10 +186,6 @@ class SaveProductVersionIfChangedUseCaseImpl @Inject constructor(
     ): SaveProductVersionIfChangedResult.NewVersionCreated {
         logger.d(LOG_TAG, "Creating new version for productId=${existingProduct.id}")
 
-        productRepository
-            .clearCurrentVersion(productId = existingProduct.id)
-            .getOrThrow()
-
         val newVersionId = createCurrentVersion(
             productId = existingProduct.id,
             params = params,
@@ -209,7 +205,7 @@ class SaveProductVersionIfChangedUseCaseImpl @Inject constructor(
         params: SaveProductVersionIfChangedUseCase.Params,
     ): Long {
         return productRepository
-            .createProductVersion(
+            .replaceCurrentVersion(
                 version = ProductVersion(
                     id = 0,
                     productId = productId,

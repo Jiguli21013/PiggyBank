@@ -26,6 +26,8 @@ import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentat
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.state.ScannerEffect
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.state.ScannerEvent
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.state.ScannerState
+import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.R
+import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.domain.BarcodeValidationError
 
 //todo preview
 @Composable
@@ -64,7 +66,11 @@ fun ScannerScreen(
                 }
 
                 is ScannerEffect.ShowError -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                    val messageRes = when (effect.error) {
+                        BarcodeValidationError.UNSUPPORTED_FORMAT -> R.string.scanner_unsupported_barcode
+                        BarcodeValidationError.INVALID_VALUE -> R.string.scanner_invalid_barcode
+                    }
+                    Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
                 }
 
                 is ScannerEffect.RequestSystemCameraPermission -> {

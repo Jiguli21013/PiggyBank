@@ -1,10 +1,14 @@
 package com.yanchelenko.piggybank.modules.features.product_edit.product_edit_impl.presentation.state
 
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
+import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
 
 sealed interface EditProductEvent {
     data class LoadProductByProductId(val productId: Long) : EditProductEvent
-    data class ProductFoundInDB(val product: ScannedProductUiModel) : EditProductEvent
+    data class ProductFoundInDB(
+        val product: ScannedProductUiModel,
+        val currency: AppCurrency,
+    ) : EditProductEvent
 
     data class ProductNameChanged(val name: String) : EditProductEvent
     data class WeightChanged(val weight: Int) : EditProductEvent

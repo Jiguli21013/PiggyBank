@@ -13,7 +13,6 @@ import com.yanchelenko.piggybank.modules.base.infrastructure.mvi.updateDataSucce
 import com.yanchelenko.piggybank.modules.base.infrastructure.result.RequestResult
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetPricePerKgUseCase
 import com.yanchelenko.piggybank.modules.core.core_api.domain.GetProductWithCurrentVersionByIdUseCase
-import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
 import com.yanchelenko.piggybank.modules.base.ui_model.models.StableInstant
 import kotlinx.datetime.Instant
 import com.yanchelenko.piggybank.modules.core.core_api.domain.SaveProductVersionIfChangedResult
@@ -118,6 +117,7 @@ class EditProductViewModel @Inject constructor(
                     CommonUiState.Success(
                         data = EditProductState(
                             scannedProduct = event.product,
+                            currency = event.currency,
                             previousPrice = event.product.price,
                             previousWeight = event.product.weight,
                             isInScannedDB = true,
@@ -151,10 +151,9 @@ class EditProductViewModel @Inject constructor(
                                         weight = currentVersion.weightGrams,
                                         price = currentVersion.price,
                                         pricePerKg = currentVersion.pricePerKg,
-                                        formattedPrice = currentVersion.price.toCurrencyText(currency = currentCurrency),
-                                        formattedPricePerKg = currentVersion.pricePerKg.toCurrencyText(currency = currentCurrency),
                                         addedAt = currentVersion.createdAt.toStable(),
-                                    )
+                                    ),
+                                    currency = currentCurrency,
                                 )
                             )
                         }
@@ -226,10 +225,6 @@ class EditProductViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun Double.toCurrencyText(currency: AppCurrency): String {
-        return "$this ${currency.symbol}"
     }
 
     private fun Instant.toStable(): StableInstant {

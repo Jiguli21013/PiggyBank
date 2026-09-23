@@ -10,15 +10,18 @@ import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentat
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.state.ScannerUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.domain.ScannedBarcode
+import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.domain.ValidateProductBarcodeUseCase
 
 @HiltViewModel
 class ScannerViewModel @Inject constructor(
     private val permissionManager: PermissionManager,
     private val logger: Logger,
+    private val validateProductBarcode: ValidateProductBarcodeUseCase,
 ) : BaseViewModel<ScannerEvent, ScannerUiState, ScannerEffect>(
     initialState = ScannerUiState()
 ) {
-    private var lastScannedBarcode: String? = null
+    private var lastScannedBarcode: ScannedBarcode? = null
 
     override fun onEvent(event: ScannerEvent) {
         logger.d(LOG_TAG, "Received event: $event")
@@ -34,13 +37,18 @@ class ScannerViewModel @Inject constructor(
         }
     }
 
-    private fun handleBarcode(barcode: String) {
+    private fun handleBarcode(barcode: ScannedBarcode) {
         if (barcode == lastScannedBarcode) {
             logger.d(LOG_TAG, "Duplicate barcode scan ignored: $barcode")
             return
         }
         lastScannedBarcode = barcode
-        sendEffect { ScannerEffect.NavigateToInsertProduct(barcode) }
+        val error = validateProductBarcode(barcode)
+        if (error != null) {
+            sendEffect { ScannerEffect.ShowError(error) }
+            return
+        }
+        sendEffect { ScannerEffect.NavigateToInsertProduct(barcode.value) }
     }
 
     private fun checkCameraPermission() {

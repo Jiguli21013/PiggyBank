@@ -25,6 +25,7 @@ import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.R
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.data.vision.BarcodeAnalyzer
 import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.presentation.state.ScannerEvent
 import kotlinx.coroutines.delay
+import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.domain.ScannedBarcode
 
 @Composable
 fun AndroidCameraView(
@@ -35,21 +36,21 @@ fun AndroidCameraView(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    var barcode by remember { mutableStateOf<String?>(value = null) }
+    var barcode by remember { mutableStateOf<ScannedBarcode?>(value = null) }
     var boundingRect by remember { mutableStateOf<Rect?>(value = null) }
-    var qrCodeDetected by remember { mutableStateOf(value = false) }
+    var barcodeDetected by remember { mutableStateOf(value = false) }
 
     val cameraController = remember { LifecycleCameraController(context) }
 
     val analyzer = remember {
         barcodeAnalyzer.buildAnalyzer(
             onResult = {
-                barcode = it.rawValue
+                barcode = it.barcode
                 boundingRect = it.boundingBox
-                qrCodeDetected = true
+                barcodeDetected = true
             },
             onNotFound = {
-                qrCodeDetected = false
+                barcodeDetected = false
             }
         )
     }
@@ -72,10 +73,11 @@ fun AndroidCameraView(
             .semantics { contentDescription = UiTestTags.SCANNER_PREVIEW }
     )
 
-    if (qrCodeDetected && barcode != null) {
-        LaunchedEffect(barcode) {
+    val scannedBarcode = barcode
+    if (barcodeDetected && scannedBarcode != null) {
+        LaunchedEffect(scannedBarcode) {
             delay(timeMillis = 150)
-            onEvent(ScannerEvent.OnBarcodeScanned(barcode = barcode!!))
+            onEvent(ScannerEvent.OnBarcodeScanned(barcode = scannedBarcode))
         }
         DrawRectangle(rect = boundingRect?.toComposeRect())
     } else {

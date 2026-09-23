@@ -11,9 +11,8 @@ import javax.inject.Singleton
 class ProductInsertRouterImpl @Inject constructor(
     dispatcher: NavigationDispatcher
 ) : ProductInsertRouter, BaseRouter(dispatcher) {
-    override fun navigateBack() { navigateBack() }
     override fun navigateToScanner() {
         val route = AppDestination.ScannerDestination.fullRoute()
-        navigateTo(destination = route)
+        navigateRoot(destination = route)
     }
 }

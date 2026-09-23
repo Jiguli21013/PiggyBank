@@ -1,5 +1,7 @@
 <resources>
     <string name="hint_point_to_barcode">Наведите на штрих-код</string>
+    <string name="scanner_unsupported_barcode">Этот формат кода не поддерживается. Наведите камеру на штрих-код товара EAN или UPC.</string>
+    <string name="scanner_invalid_barcode">Не удалось прочитать корректный штрих-код товара. Попробуйте отсканировать его ещё раз.</string>
 
     <string name="scanner_permission_text">Для работы сканера необходимо разрешение на доступ к камере.</string>
     <string name="scanner_open_settings">Открыть настройки</string>

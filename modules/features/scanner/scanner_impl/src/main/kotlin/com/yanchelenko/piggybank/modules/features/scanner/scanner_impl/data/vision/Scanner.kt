@@ -1,4 +1,4 @@
-package com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.domain
+package com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.data.vision
 
 import com.google.mlkit.vision.barcode.common.Barcode
 

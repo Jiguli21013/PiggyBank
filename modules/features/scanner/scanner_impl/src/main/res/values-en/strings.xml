@@ -1,5 +1,7 @@
 <resources>
     <string name="hint_point_to_barcode">Point at the barcode</string>
+    <string name="scanner_unsupported_barcode">This code format is not supported. Point the camera at the product’s EAN or UPC barcode.</string>
+    <string name="scanner_invalid_barcode">Could not read a valid product barcode. Please scan it again.</string>
 
     <string name="scanner_permission_text">Camera access permission is required for the scanner to work.</string>
     <string name="scanner_open_settings">Open settings</string>

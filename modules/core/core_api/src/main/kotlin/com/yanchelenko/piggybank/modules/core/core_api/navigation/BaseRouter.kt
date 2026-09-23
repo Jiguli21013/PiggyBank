@@ -21,4 +21,10 @@ open class BaseRouter(
             navigationDispatcher.emit(event = NavEvent.Navigate(destination))
         }
     }
+
+    protected fun navigateRoot(destination: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            navigationDispatcher.emit(event = NavEvent.NavigateRoot(destination))
+        }
+    }
 }

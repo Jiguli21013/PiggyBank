@@ -162,14 +162,9 @@ class CartRepositoryImpl @Inject constructor(
         return newId
     }
 
-    override suspend fun closeActiveCart(
-        totalItems: Int,
-        totalPrice: Double
-    ): Result<Boolean> = runCatching {
+    override suspend fun closeActiveCart(): Result<Boolean> = runCatching {
         withContext(dispatchers.io) {
             val affected = cartDao.closeActiveCart(
-                totalItems = totalItems,
-                totalPrice = totalPrice,
                 timestamp = System.currentTimeMillis()
             )
             logger.d(LOG_TAG, "closeActiveCart affected=$affected")

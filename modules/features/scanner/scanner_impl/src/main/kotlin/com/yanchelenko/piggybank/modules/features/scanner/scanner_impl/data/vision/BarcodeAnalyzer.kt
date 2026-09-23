@@ -3,8 +3,6 @@ package com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.data.vis
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.yanchelenko.piggybank.modules.features.scanner.scanner_impl.domain.Scanner
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
@@ -15,7 +13,7 @@ class BarcodeAnalyzer @Inject constructor(
 ) {
 
     fun buildAnalyzer(
-        onResult: (Barcode) -> Unit,
+        onResult: (DetectedBarcode) -> Unit,
         onNotFound: () -> Unit
     ): ImageAnalysis.Analyzer {
         return MlKitAnalyzer(
@@ -27,7 +25,7 @@ class BarcodeAnalyzer @Inject constructor(
             if (barcodes != null) {
                 scanner.analyzeBarcodes(
                     barcodes = barcodes,
-                    onResult = onResult,
+                    onResult = { onResult(it.toDetectedBarcode()) },
                     onNotFound = onNotFound
                 )
             }

@@ -31,7 +31,7 @@ android {
 
     testOptions {
         unitTests.all {
-            it.isEnabled = false
+            it.useJUnitPlatform()
         }
     }
 
@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit.jupiter)
+
     implementation(project(":modules:features:scanner:scanner_api"))
 
     implementation(project(":modules:core:core_api"))

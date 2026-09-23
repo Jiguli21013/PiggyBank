@@ -6,9 +6,5 @@ import javax.inject.Inject
 class CloseCartUseCaseImpl @Inject constructor(
     private val repository: CartRepository
 ) {
-    suspend operator fun invoke(totalItems: Int, totalPrice: Double): Result<Boolean> =
-        repository.closeActiveCart(
-            totalItems = totalItems,
-            totalPrice = totalPrice
-        )
+    suspend operator fun invoke(): Result<Boolean> = repository.closeActiveCart()
 }

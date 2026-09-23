@@ -2,6 +2,7 @@ package com.yanchelenko.piggybank.modules.features.product_edit.product_edit_imp
 
 import androidx.compose.runtime.Immutable
 import com.yanchelenko.piggybank.modules.base.ui_model.models.ScannedProductUiModel
+import com.yanchelenko.piggybank.modules.core.core_api.models.AppCurrency
 
 @Immutable
 data class EditProductState(
@@ -10,7 +11,11 @@ data class EditProductState(
     val previousWeight: Int? = null,
     val isInScannedDB: Boolean = true,
     val priceInput: String,
+    val currency: AppCurrency = AppCurrency.EUR,
 ) {
+    val formattedPricePerKg: String
+        get() = "${scannedProduct.pricePerKg} ${currency.symbol}"
+
     val hasPriceChanged: Boolean
         get() = previousPrice != null && previousPrice != scannedProduct.price
 

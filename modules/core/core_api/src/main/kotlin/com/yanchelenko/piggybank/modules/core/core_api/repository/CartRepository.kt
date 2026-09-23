@@ -43,8 +43,8 @@ interface CartRepository {
     suspend fun getProductInActiveCartByBarcode(barcode: String): Result<ProductInCart>
 
     /**
-     * Closes the active cart if present.
+     * Atomically closes the active cart if present, calculating totals from its stored items.
      * @return Result<Boolean> — true if a cart was closed, false if there was no active cart.
      */
-    suspend fun closeActiveCart(totalItems: Int, totalPrice: Double): Result<Boolean>
+    suspend fun closeActiveCart(): Result<Boolean>
 }
